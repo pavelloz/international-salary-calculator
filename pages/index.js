@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo, useCallback } from "react";
 import Head from "next/head";
-import { getExchangeRates } from "./utils";
+import { getExchangeRates } from "../lib/utils";
 
 export default function Home() {
   const [rates, setRates] = useState([]);
