@@ -20,13 +20,11 @@ export default async function handler(_req) {
       return output;
     });
 
-  return new Response(
-    JSON.stringify(data, {
-      status: 200,
-      headers: {
-        "Content-Type": "application/json",
-        "Cache-Control": "max-age=0, s-maxage=3600",
-      },
-    })
-  );
+  return new Response(JSON.stringify(data), {
+    status: 200,
+    headers: {
+      "Content-Type": "application/json",
+      "Cache-Control": "max-age=0, s-maxage=3600, stale-while-revalidate",
+    },
+  });
 }
