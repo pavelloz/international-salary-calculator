@@ -1,11 +1,16 @@
-import { useState, useEffect, useMemo, useCallback } from "react";
+import { useState, useEffect, useMemo } from "react";
 import Head from "next/head";
 import { getExchangeRates } from "../lib/utils";
+
+import ExchangeRatesList from "../components/ExchangeRatesList";
+import SalaryInput from "../components/SalaryInput";
+import OutputSalary from "../components/OutputSalary";
 
 export default function Home() {
   const [rates, setRates] = useState([]);
   const [salary, setSalary] = useState(5000);
   const [currency, setCurrency] = useState("usd");
+  const [period, setPeriod] = useState("h");
 
   const monthlySalary = useMemo(() => {
     return parseInt(salary * rates[currency], 10);
@@ -15,51 +20,34 @@ export default function Home() {
     return parseInt(monthlySalary * 12, 10);
   }, [monthlySalary]);
 
+  const hourlySalary = useMemo(() => {
+    return parseInt(monthlySalary / 160, 10);
+  }, [monthlySalary]);
+
   useEffect(() => {
     getExchangeRates().then(setRates);
   }, []);
 
   return (
-    <>
+    <div className="grid grid-cols-3 w-10/12 mx-auto my-8">
       <Head>
         <title>International Salary Calculator</title>
       </Head>
 
-      <main className="container px-4 md:px-0 max-w-6xl mx-auto">
-        <p>
-          <label htmlFor="monthly-salary">Monthly</label>
-          <input
-            id="monthly-salary"
-            name="monthly-salary"
-            type="number"
-            value={salary}
-            onChange={({ target: { value } }) =>
-              setSalary(() => parseInt(value, 10))
-            }
-            placeholder="Salary"
-            pattern="/\d*/"
-          />
-        </p>
+      <SalaryInput
+        salary={salary}
+        setSalary={setSalary}
+        setCurrency={setCurrency}
+        setPeriod={setPeriod}
+      />
 
-        <p>
-          <label htmlFor="currency">
-            Currency
-            <select
-              id="surrency"
-              onChange={({ target: { value } }) => setCurrency(value)}
-            >
-              <option value="usd">USD</option>
-              <option value="eur">EUR</option>
-              <option value="gbp">GBP</option>
-              <option value="chf">CHF</option>
-            </select>
-          </label>
-        </p>
-        <p>Monthly: {monthlySalary} PLN</p>
-        <p>Yearly: {yearlySalary} PLN</p>
-        {/* TODO: Add contract type selector */}
-        {/* TODO: Add est. gross, net */}
-      </main>
-    </>
+      <OutputSalary
+        hourlySalary={hourlySalary}
+        monthlySalary={monthlySalary}
+        yearlySalary={yearlySalary}
+      />
+
+      <ExchangeRatesList rates={rates} />
+    </div>
   );
 }

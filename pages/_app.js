@@ -7,7 +7,7 @@ function MyApp({ Component, pageProps }) {
       document
         .querySelector("body")
         .classList.add(
-          "bg-gray-200",
+          "bg-gray-100",
           "font-sans",
           "leading-normal",
           "tracking-normal"

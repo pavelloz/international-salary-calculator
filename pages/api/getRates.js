@@ -3,24 +3,28 @@ export const config = {
 };
 
 const CURRENCIES = ["usd", "gbp", "eur", "chf"];
+const API_URL =
+  "https://api.nbp.pl/api/exchangerates/tables/a/last/1/?format=json";
+
+const round = (num) => parseFloat(num.toFixed(2));
 
 export default async function handler(_req) {
-  const url =
-    "https://api.nbp.pl/api/exchangerates/tables/a/last/1/?format=json";
-
-  const data = await fetch(url)
+  const data = await fetch(API_URL)
     .then((data) => data.json())
     .then((data) => data[0]?.rates)
     .then((rates) => {
-      const output = rates.reduce((prev, cur) => {
-        if (!CURRENCIES.includes(cur.code.toLowerCase())) return { ...prev };
+      return rates.reduce((prev, cur) => {
         let { code, mid } = cur;
-        return { ...prev, [code.toLowerCase()]: parseFloat(mid.toFixed(3)) };
-      }, {});
-      return output;
-    });
+        code = code.toLowerCase();
 
-  return new Response(JSON.stringify(data), {
+        if (!CURRENCIES.includes(code)) return { ...prev };
+
+        return { ...prev, [code]: round(mid) };
+      }, {});
+    })
+    .then((data) => JSON.stringify(data));
+
+  return new Response(data, {
     status: 200,
     headers: {
       "Content-Type": "application/json",
