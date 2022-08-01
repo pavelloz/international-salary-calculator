@@ -28,6 +28,7 @@ export default function Home() {
     getExchangeRates().then(setRates);
   }, []);
 
+  // TODO: Use zustand to get rid off prop drilling
   return (
     <div className="grid grid-cols-3 w-10/12 mx-auto my-8">
       <Head>
