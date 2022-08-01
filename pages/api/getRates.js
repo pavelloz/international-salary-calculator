@@ -4,7 +4,7 @@ export const config = {
 
 const CURRENCIES = ["usd", "gbp", "eur", "chf"];
 
-export default async function handler(_req, res) {
+export default async function handler(_req) {
   const url =
     "https://api.nbp.pl/api/exchangerates/tables/a/last/1/?format=json";
 
@@ -20,8 +20,13 @@ export default async function handler(_req, res) {
       return output;
     });
 
-  res.setHeader("Cache-Control", "max-age=0, s-maxage=3600");
-  res.setHeader("Content-Type", "application/json");
-
-  return res.status(200).json(data);
+  return new Response(
+    JSON.stringify(data, {
+      status: 200,
+      headers: {
+        "Content-Type": "application/json",
+        "Cache-Control": "max-age=0, s-maxage=3600",
+      },
+    })
+  );
 }
