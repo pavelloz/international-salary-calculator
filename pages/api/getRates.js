@@ -32,7 +32,7 @@ export default async function handler(_req) {
     status: 200,
     headers: {
       "Content-Type": "application/json",
-      "Cache-Control": "max-age=0, s-maxage=3600, stale-while-revalidate",
+      "Cache-Control": "max-age=3600, s-maxage=86400, stale-while-revalidate", // cache response to not hammer the API
     },
   });
 }

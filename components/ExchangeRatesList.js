@@ -6,7 +6,7 @@ const ExchangeRatesList = ({ rates }) => {
         {Object.keys(rates).map((rate) => {
           return (
             <li key={rate}>
-              {rate}: {rates[rate]}
+              {rate.toUpperCase()}: {rates[rate]}
             </li>
           );
         })}

@@ -10,7 +10,7 @@ export default function Home() {
   const [rates, setRates] = useState([]);
   const [salary, setSalary] = useState(10000);
   const [currency, setCurrency] = useState("usd");
-  const [period, setPeriod] = useState("h");
+  const [period, setPeriod] = useState("m");
 
   const monthlySalary = useMemo(() => {
     return parseInt(salary * rates[currency], 10);
@@ -23,6 +23,10 @@ export default function Home() {
   const hourlySalary = useMemo(() => {
     return parseInt(monthlySalary / 160, 10);
   }, [monthlySalary]);
+
+  const dailySalary = useMemo(() => {
+    return parseInt(hourlySalary * 8, 10);
+  }, [hourlySalary]);
 
   useEffect(() => {
     getExchangeRates().then(setRates);
@@ -38,11 +42,13 @@ export default function Home() {
         salary={salary}
         setSalary={setSalary}
         setCurrency={setCurrency}
+        period={period}
         setPeriod={setPeriod}
       />
 
       <OutputSalary
         hourlySalary={hourlySalary}
+        dailySalary={dailySalary}
         monthlySalary={monthlySalary}
         yearlySalary={yearlySalary}
       />

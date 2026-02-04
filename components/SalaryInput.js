@@ -1,9 +1,10 @@
-const SalaryInput = ({ salary, setSalary, setCurrency, setPeriod }) => {
+const SalaryInput = ({ salary, setSalary, setCurrency, period, setPeriod }) => {
   return (
     <div className="flex items-start">
       <select
         id="period"
         onChange={({ target: { value } }) => setPeriod(value)}
+        value={period}
       >
         <option value="h">Hourly</option>
         <option value="m">Monthly</option>
