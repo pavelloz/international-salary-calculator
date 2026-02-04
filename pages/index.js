@@ -7,11 +7,14 @@ import SalaryInput from "../components/SalaryInput";
 import OutputSalary from "../components/OutputSalary";
 
 export default function Home() {
-  const [rates, setRates] = useState([]);
+  const [rates, setRates] = useState({});
+  const [fetchedAt, setFetchedAt] = useState('');
   const [salary, setSalary] = useState(10000);
   const [currency, setCurrency] = useState("usd");
   const [period, setPeriod] = useState("m");
 
+
+  // TODO: Move into OutputSalary
   const monthlySalary = useMemo(() => {
     return parseInt(salary * rates[currency], 10);
   }, [salary, rates, currency]);
@@ -29,7 +32,10 @@ export default function Home() {
   }, [hourlySalary]);
 
   useEffect(() => {
-    getExchangeRates().then(setRates);
+    getExchangeRates().then((response) => {
+      setRates(response.rates);
+      setFetchedAt(response.fetched_at);
+    });
   }, []);
 
   return (
@@ -37,6 +43,8 @@ export default function Home() {
       <Head>
         <title>International Salary Calculator for Polish folks</title>
       </Head>
+
+      {/* Add header */}
 
       <SalaryInput
         salary={salary}
@@ -53,7 +61,8 @@ export default function Home() {
         yearlySalary={yearlySalary}
       />
 
-      <ExchangeRatesList rates={rates} />
+        
+      <ExchangeRatesList rates={rates} fetchedAt={fetchedAt} />
     </div>
   );
 }

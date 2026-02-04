@@ -1,7 +1,13 @@
-const ExchangeRatesList = ({ rates }) => {
+const ExchangeRatesList = ({ rates, fetchedAt }) => {
+  if (!rates) {
+    return <div>Loading...</div>;
+  }
+
+  const formattedFetchedAt = new Date(fetchedAt).toLocaleTimeString()
+
   return (
     <div>
-      <h3>Rates</h3>
+      <h3>Exchange rates (fetched at: {formattedFetchedAt})</h3>
       <ul>
         {Object.keys(rates).map((rate) => {
           return (
