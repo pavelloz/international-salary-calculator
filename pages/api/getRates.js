@@ -1,6 +1,5 @@
-export const config = {
-  runtime: "experimental-edge",
-};
+export const runtime = 'edge'; 
+export const preferredRegion = ['fra1', 'arn1', 'dub1'];
 
 const CURRENCIES = ["usd", "gbp", "eur", "chf"];
 const API_URL =
@@ -8,23 +7,28 @@ const API_URL =
 
 const round = (num) => parseFloat(num.toFixed(2));
 
-export default async function handler(_req) {
-  const data = await fetch(API_URL)
-    .then((data) => data.json())
-    .then((data) => data[0]?.rates)
-    .then((rates) => {
-      return rates.reduce((prev, cur) => {
-        let { code, mid } = cur;
-        code = code.toLowerCase();
+const fetchRates = async () => {
+    try {
+      const response = await fetch(API_URL);
+      const [{ rates }] = await response.json(); // Destructuring assuming data[0] exists
 
-        if (!CURRENCIES.includes(code)) return { ...prev };
-
-        return { ...prev, [code]: round(mid) };
+      const filteredRates = rates.reduce((acc, { code, mid }) => {
+        const lowerCode = code.toLowerCase();
+        if (CURRENCIES.includes(lowerCode)) {
+          acc[lowerCode] = round(mid);
+        }
+        return acc;
       }, {});
-    })
-    .then((data) => JSON.stringify(data));
 
-  return new Response(data, {
+      return JSON.stringify(filteredRates);
+    } catch (error) {
+      console.error("Failed to fetch rates:", error);
+      return JSON.stringify({});
+    }
+}
+
+export default async function handler(_req) {
+  return new Response(await fetchRates(), {
     status: 200,
     headers: {
       "Content-Type": "application/json",

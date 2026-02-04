@@ -10,18 +10,19 @@
     "deploy:prod": "vercel deploy --prod"
   },
   "dependencies": {
-    "next": "12.2.3",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
-    "zustand": "^4.0.0"
+    "next": "16.1.6",
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
+    "zustand": "^5.0.11"
   },
   "devDependencies": {
-    "@tailwindcss/forms": "^0.5.2",
-    "autoprefixer": "^10.4.8",
-    "axios": "^0.27.2",
-    "eslint": "8.20.0",
-    "eslint-config-next": "12.2.3",
-    "postcss": "^8.4.14",
-    "tailwindcss": "^3.1.7"
+    "@tailwindcss/forms": "^0.5.11",
+    "@tailwindcss/postcss": "^4.1.18",
+    "autoprefixer": "^10.4.24",
+    "axios": "^1.13.4",
+    "eslint": "9.39.2",
+    "eslint-config-next": "16.1.6",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.18"
   }
 }

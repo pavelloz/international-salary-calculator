@@ -8,7 +8,7 @@ import OutputSalary from "../components/OutputSalary";
 
 export default function Home() {
   const [rates, setRates] = useState([]);
-  const [salary, setSalary] = useState(5000);
+  const [salary, setSalary] = useState(10000);
   const [currency, setCurrency] = useState("usd");
   const [period, setPeriod] = useState("h");
 
@@ -28,11 +28,10 @@ export default function Home() {
     getExchangeRates().then(setRates);
   }, []);
 
-  // TODO: Use zustand to get rid off prop drilling
   return (
-    <div className="grid grid-cols-3 w-10/12 mx-auto my-8">
+    <div className="w-10/12 mx-auto my-8">
       <Head>
-        <title>International Salary Calculator</title>
+        <title>International Salary Calculator for Polish folks</title>
       </Head>
 
       <SalaryInput
