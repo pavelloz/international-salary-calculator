@@ -3,7 +3,7 @@ const OutputSalary = ({ hourlySalary, dailySalary, monthlySalary, yearlySalary }
   // TODO: Add est. gross, net
 
   if (!hourlySalary || !dailySalary || !monthlySalary || !yearlySalary) {
-    return <div>Loading...</div>;
+    return <div>Please provide salary in given currency</div>;
   }
 
   return (

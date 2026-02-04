@@ -7,7 +7,7 @@ const ExchangeRatesList = ({ rates, fetchedAt }) => {
 
   return (
     <div>
-      <h3>Exchange rates (fetched at: {formattedFetchedAt})</h3>
+      <h3>Exchange rates (last updated at: {formattedFetchedAt})</h3>
       <ul>
         {Object.keys(rates).map((rate) => {
           return (

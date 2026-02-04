@@ -39,7 +39,7 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="w-10/12 mx-auto my-8">
+    <div className="w-full mx-auto m-8 prose lg:prose-xl">
       <Head>
         <title>International Salary Calculator for Polish folks</title>
       </Head>
