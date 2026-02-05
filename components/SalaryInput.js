@@ -1,7 +1,7 @@
 const SalaryInput = ({ salary, setSalary, setCurrency, period, setPeriod }) => {
   const isNumber = (value) => {
     return !isNaN(parseInt(value, 10));
-  }
+  };
   return (
     <div className="flex justify-between">
       {/* This select doesnt work. Fix it */}
@@ -22,10 +22,10 @@ const SalaryInput = ({ salary, setSalary, setCurrency, period, setPeriod }) => {
         name="monthly-salary"
         value={salary}
         onChange={({ target: { value } }) => {
-          if (value === '' || isNumber(value) === false) {
-            setSalary(0)
+          if (value === "" || isNumber(value) === false) {
+            setSalary(0);
           } else {
-            setSalary(() => parseInt(value, 10))
+            setSalary(() => parseInt(value, 10));
           }
         }}
         placeholder="Salary"

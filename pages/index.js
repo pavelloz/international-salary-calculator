@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect } from "react";
 import Head from "next/head";
 import { getExchangeRates } from "../lib/utils";
 
@@ -8,34 +8,20 @@ import OutputSalary from "../components/OutputSalary";
 
 export default function Home() {
   const [rates, setRates] = useState({});
-  const [fetchedAt, setFetchedAt] = useState('');
+  const [fetchedAt, setFetchedAt] = useState("");
   const [salary, setSalary] = useState(10000);
   const [currency, setCurrency] = useState("usd");
   const [period, setPeriod] = useState("m");
 
+  const fetchRates = async () => {
+    const { rates, fetched_at } = await getExchangeRates();
 
-  // TODO: Move into OutputSalary
-  const monthlySalary = useMemo(() => {
-    return parseInt(salary * rates[currency], 10);
-  }, [salary, rates, currency]);
-
-  const yearlySalary = useMemo(() => {
-    return parseInt(monthlySalary * 12, 10);
-  }, [monthlySalary]);
-
-  const hourlySalary = useMemo(() => {
-    return parseInt(monthlySalary / 160, 10);
-  }, [monthlySalary]);
-
-  const dailySalary = useMemo(() => {
-    return parseInt(hourlySalary * 8, 10);
-  }, [hourlySalary]);
+    setRates(rates);
+    setFetchedAt(fetched_at);
+  };
 
   useEffect(() => {
-    getExchangeRates().then((response) => {
-      setRates(response.rates);
-      setFetchedAt(response.fetched_at);
-    });
+    fetchRates();
   }, []);
 
   return (
@@ -54,14 +40,8 @@ export default function Home() {
         setPeriod={setPeriod}
       />
 
-      <OutputSalary
-        hourlySalary={hourlySalary}
-        dailySalary={dailySalary}
-        monthlySalary={monthlySalary}
-        yearlySalary={yearlySalary}
-      />
+      <OutputSalary salary={salary} rates={rates} currency={currency} />
 
-        
       <ExchangeRatesList rates={rates} fetchedAt={fetchedAt} />
     </div>
   );

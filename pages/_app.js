@@ -10,9 +10,9 @@ function MyApp({ Component, pageProps }) {
           "bg-gray-100",
           "font-sans",
           "leading-normal",
-          "tracking-normal"
+          "tracking-normal",
         ),
-    []
+    [],
   );
 
   return <Component {...pageProps} />;

@@ -3,7 +3,7 @@ const ExchangeRatesList = ({ rates, fetchedAt }) => {
     return <div>Loading...</div>;
   }
 
-  const formattedFetchedAt = new Date(fetchedAt).toLocaleTimeString()
+  const formattedFetchedAt = new Date(fetchedAt).toLocaleTimeString();
 
   return (
     <div>
