@@ -1,17 +1,15 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import Head from "next/head";
 import { getExchangeRates } from "../lib/utils";
+
+import useRatesStore from "../stores/useRatesStore";
 
 import ExchangeRatesList from "../components/ExchangeRatesList";
 import SalaryInput from "../components/SalaryInput";
 import OutputSalary from "../components/OutputSalary";
 
 export default function Home() {
-  const [rates, setRates] = useState({});
-  const [fetchedAt, setFetchedAt] = useState("");
-  const [salary, setSalary] = useState(10000);
-  const [currency, setCurrency] = useState("usd");
-  const [period, setPeriod] = useState("m");
+  const { setRates, setFetchedAt } = useRatesStore();
 
   const fetchRates = async () => {
     const { rates, fetched_at } = await getExchangeRates();
@@ -32,17 +30,9 @@ export default function Home() {
 
       {/* Add header */}
 
-      <SalaryInput
-        salary={salary}
-        setSalary={setSalary}
-        setCurrency={setCurrency}
-        period={period}
-        setPeriod={setPeriod}
-      />
-
-      <OutputSalary salary={salary} rates={rates} currency={currency} />
-
-      <ExchangeRatesList rates={rates} fetchedAt={fetchedAt} />
+      <SalaryInput />
+      <OutputSalary />
+      <ExchangeRatesList />
     </div>
   );
 }

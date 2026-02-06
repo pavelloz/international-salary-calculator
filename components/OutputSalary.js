@@ -1,6 +1,10 @@
-const OutputSalary = ({ salary, rates, currency }) => {
+import useRatesStore from "../stores/useRatesStore";
+
+const OutputSalary = () => {
   // TODO: Add contract type selector
   // TODO: Add est. gross, net
+
+  const { rates, salary, currency } = useRatesStore();
 
   if (!rates) return null;
 

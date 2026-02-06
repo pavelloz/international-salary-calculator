@@ -1,4 +1,8 @@
-const ExchangeRatesList = ({ rates, fetchedAt }) => {
+import useRatesStore from "../stores/useRatesStore";
+
+const ExchangeRatesList = () => {
+  const { rates, fetchedAt } = useRatesStore();
+
   if (!rates) {
     return <div>Loading...</div>;
   }

@@ -1,4 +1,8 @@
-const SalaryInput = ({ salary, setSalary, setCurrency, period, setPeriod }) => {
+import useRatesStore from "../stores/useRatesStore";
+
+const SalaryInput = () => {
+  const { salary, setSalary, setCurrency, period, setPeriod } = useRatesStore();
+
   const isNumber = (value) => {
     return !isNaN(parseInt(value, 10));
   };
