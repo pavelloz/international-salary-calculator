@@ -1,6 +1,6 @@
 import useRatesStore from "../stores/useRatesStore";
 
-const OutputSalary = () => {
+export default () => {
   // TODO: Add contract type selector
   // TODO: Add est. gross, net
 
@@ -22,5 +22,3 @@ const OutputSalary = () => {
     </div>
   );
 };
-
-export default OutputSalary;

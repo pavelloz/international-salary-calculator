@@ -1,6 +1,6 @@
 import useRatesStore from "../stores/useRatesStore";
 
-const SalaryInput = () => {
+export default () => {
   const { salary, setSalary, setCurrency, period, setPeriod } = useRatesStore();
 
   const isNumber = (value) => {
@@ -49,4 +49,3 @@ const SalaryInput = () => {
     </div>
   );
 };
-export default SalaryInput;

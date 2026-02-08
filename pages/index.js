@@ -9,7 +9,7 @@ import OutputSalary from "../components/OutputSalary";
 
 const ExchangeRatesList = lazy(() => import("../components/ExchangeRatesList"));
 
-export default function Home() {
+export default () => {
   const { setRates, setFetchedAt } = useRatesStore();
 
   const fetchRates = async () => {
@@ -38,4 +38,4 @@ export default function Home() {
       </Suspense>
     </div>
   );
-}
+};

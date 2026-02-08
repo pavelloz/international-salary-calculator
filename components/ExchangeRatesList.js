@@ -1,8 +1,8 @@
 import Link from "next/link";
 import useRatesStore from "../stores/useRatesStore";
 
-const ExchangeRatesList = () => {
-  const { rates, fetchedAt, salary, currency } = useRatesStore();
+export default () => {
+  const { rates, fetchedAt, currency } = useRatesStore();
 
   const formattedFetchedAt = new Date(fetchedAt).toLocaleTimeString();
   const selectedRate = rates[currency];
@@ -20,5 +20,3 @@ const ExchangeRatesList = () => {
     </div>
   );
 };
-
-export default ExchangeRatesList;
