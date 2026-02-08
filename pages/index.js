@@ -2,17 +2,17 @@ import { useEffect, Suspense } from "react";
 import dynamic from "next/dynamic";
 import Layout from "./layout";
 
-import { getExchangeRates } from "./lib/getExchangeRates";
+import { getExchangeRates } from "../lib/getExchangeRates";
 
-import useRatesStore from "./stores/useRatesStore";
+import useRatesStore from "../stores/useRatesStore";
 
-import SalaryInput from "./components/SalaryInput";
+import SalaryInput from "../components/SalaryInput";
 
-const SalaryOutput = dynamic(() => import("./components/SalaryOutput"), {
+const SalaryOutput = dynamic(() => import("../components/SalaryOutput"), {
   ssr: false,
 });
 const ExchangeRatesList = dynamic(
-  () => import("./components/ExchangeRatesList"),
+  () => import("../components/ExchangeRatesList"),
   { ssr: false },
 );
 
