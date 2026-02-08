@@ -18,11 +18,11 @@ export default () => {
     <>
       <h3 className="w-full">Salary in PLN</h3>
 
-      <ul className="flex justify-between flex-wrap list-none pl-0!">
-        <li>{formatSalary(salaries.hourly)} / hour</li>
-        <li>{formatSalary(salaries.daily)} / day</li>
-        <li>{formatSalary(salaries.monthly)} / month</li>
-        <li>{formatSalary(salaries.yearly)} / year</li>
+      <ul className="md:flex justify-between flex-wrap list-none pl-0!">
+        <li className="pl-0">{formatSalary(salaries.hourly)} / hour</li>
+        <li className="pl-0">{formatSalary(salaries.daily)} / day</li>
+        <li className="pl-0">{formatSalary(salaries.monthly)} / month</li>
+        <li className="pl-0">{formatSalary(salaries.yearly)} / year</li>
       </ul>
     </>
   );
