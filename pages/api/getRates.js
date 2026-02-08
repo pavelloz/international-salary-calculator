@@ -1,5 +1,4 @@
 export const runtime = "edge";
-export const preferredRegion = ["fra1", "arn1", "dub1"];
 
 const CURRENCIES = ["usd", "gbp", "eur", "chf"];
 const API_URL =
