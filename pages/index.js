@@ -1,6 +1,6 @@
 import { useEffect, lazy, Suspense } from "react";
 import Head from "next/head";
-import { getExchangeRates } from "../lib/utils";
+import { getExchangeRates } from "../lib/getExchangeRates";
 
 import useRatesStore from "../stores/useRatesStore";
 
