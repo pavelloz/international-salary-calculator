@@ -1,27 +1,21 @@
 import useRatesStore from "../stores/useRatesStore";
 import { calculateSalaries, formatSalary } from "../lib/calculateSalaries";
 
-const formatCurrency = (value) => {
-  if (isNaN(value)) return null;
-  return value.toLocaleString("pl-PL", {
-    style: "currency",
-    currency: "PLN",
-    maximumSignificantDigits: 3,
-  });
-};
-
 export default () => {
   // TODO: Add contract type selector
   // TODO: Add est. gross, net
 
-  const { rates, salary, currency, period } = useRatesStore();
+  const rates = useRatesStore((state) => state.rates);
+  const salary = useRatesStore((state) => state.salary);
+  const currency = useRatesStore((state) => state.currency);
+  const period = useRatesStore((state) => state.period);
 
   if (!rates) return null;
 
   const salaries = calculateSalaries(salary, period, rates[currency]);
 
   return (
-    <div className="border-t border-gray-600">
+    <>
       <h3 className="w-full">Salary in PLN</h3>
 
       <ul className="flex justify-between flex-wrap list-none pl-0!">
@@ -30,6 +24,6 @@ export default () => {
         <li>{formatSalary(salaries.monthly)} / month</li>
         <li>{formatSalary(salaries.yearly)} / year</li>
       </ul>
-    </div>
+    </>
   );
 };

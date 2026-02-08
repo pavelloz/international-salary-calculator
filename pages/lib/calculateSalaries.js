@@ -32,7 +32,7 @@ const formatSalary = (value) => {
   return value.toLocaleString("pl-PL", {
     style: "currency",
     currency: "PLN",
-    maximumSignificantDigits: 3,
+    maximumSignificantDigits: 7,
   });
 };
 

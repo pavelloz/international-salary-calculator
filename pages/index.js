@@ -1,41 +1,54 @@
-import { useEffect, lazy, Suspense } from "react";
-import Head from "next/head";
-import { getExchangeRates } from "../lib/getExchangeRates";
+import { useEffect, Suspense } from "react";
+import dynamic from "next/dynamic";
+import Layout from "./layout";
 
-import useRatesStore from "../stores/useRatesStore";
+import { getExchangeRates } from "./lib/getExchangeRates";
 
-import SalaryInput from "../components/SalaryInput";
+import useRatesStore from "./stores/useRatesStore";
 
-const SalaryOutput = lazy(() => import("../components/SalaryOutput"));
-const ExchangeRatesList = lazy(() => import("../components/ExchangeRatesList"));
+import SalaryInput from "./components/SalaryInput";
 
-export default () => {
-  const { setRates, setFetchedAt } = useRatesStore();
+const SalaryOutput = dynamic(() => import("./components/SalaryOutput"), {
+  ssr: false,
+});
+const ExchangeRatesList = dynamic(
+  () => import("./components/ExchangeRatesList"),
+  { ssr: false },
+);
 
-  const fetchRates = async () => {
-    const { rates, fetched_at } = await getExchangeRates();
-
-    setRates(rates);
-    setFetchedAt(fetched_at);
-  };
+export default function HomePage() {
+  const setRates = useRatesStore((state) => state.setRates);
+  const setFetchedAt = useRatesStore((state) => state.setFetchedAt);
 
   useEffect(() => {
+    const fetchRates = async () => {
+      try {
+        const { rates, fetched_at } = await getExchangeRates();
+        setRates(rates);
+        setFetchedAt(fetched_at);
+      } catch (e) {
+        console.error("Rates fetch failed", e);
+      }
+    };
+
     fetchRates();
-  }, []);
+  }, [setRates, setFetchedAt]);
 
   return (
-    <div className="w-full mx-auto m-8 prose lg:prose-xl">
-      <Head>
-        <title>International Salary Calculator for Polish folks</title>
-      </Head>
-
-      {/* Add header */}
-
+    <>
       <SalaryInput />
+
+      <hr className="border-t border-gray-500" />
+
       <SalaryOutput />
-      <Suspense fallback="Loading exchange rates...">
-        <ExchangeRatesList />
-      </Suspense>
-    </div>
+
+      <hr className="border-t border-gray-500" />
+
+      <ExchangeRatesList />
+    </>
   );
+}
+
+HomePage.getLayout = function getLayout(page) {
+  return <Layout>{page}</Layout>;
 };

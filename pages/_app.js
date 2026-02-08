@@ -1,21 +1,7 @@
-import { useEffect } from "react";
 import "../styles/globals.css";
 
-function MyApp({ Component, pageProps }) {
-  useEffect(
-    () =>
-      document
-        .querySelector("body")
-        .classList.add(
-          "bg-gray-100",
-          "font-sans",
-          "leading-normal",
-          "tracking-normal",
-        ),
-    [],
-  );
+export default ({ Component, pageProps }) => {
+  const getLayout = Component.getLayout || ((page) => page);
 
-  return <Component {...pageProps} />;
-}
-
-export default MyApp;
+  return getLayout(<Component {...pageProps} />);
+};
