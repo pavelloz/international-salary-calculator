@@ -7,35 +7,35 @@ export default () => {
     return !isNaN(parseInt(value, 10));
   };
   return (
-    <div className="flex justify-between">
-      {/* This select doesnt work. Fix it */}
+    <div className="flex justify-between flex-wrap pb-8">
+      <h3 className="w-full">Salary in foreign currency</h3>
       <select
         className="space-x-4"
         id="period"
-        onChange={({ target: { value } }) => setPeriod(value)}
+        onChange={({ target: { value } }) => {
+          setPeriod(value);
+        }}
         value={period}
       >
-        <option value="h">Hourly</option>
-        <option value="m">Monthly</option>
-        <option value="y">Yearly</option>
+        <option value="hourly">Hourly</option>
+        <option value="daily">Daily</option>
+        <option value="monthly">Monthly</option>
+        <option value="yearly">Yearly</option>
       </select>
-
       <input
         className="space-x-4"
         id="monthly-salary"
         name="monthly-salary"
-        value={salary}
+        defaultValue={salary || 0}
         onChange={({ target: { value } }) => {
           if (value === "" || isNumber(value) === false) {
             setSalary(0);
           } else {
-            setSalary(() => parseInt(value, 10));
+            setSalary(parseInt(value, 10));
           }
         }}
-        placeholder="Salary"
         pattern="/\d*/"
       />
-
       <select
         className="space-x-4"
         id="currency"

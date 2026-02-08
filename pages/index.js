@@ -5,8 +5,8 @@ import { getExchangeRates } from "../lib/utils";
 import useRatesStore from "../stores/useRatesStore";
 
 import SalaryInput from "../components/SalaryInput";
-import OutputSalary from "../components/OutputSalary";
 
+const SalaryOutput = lazy(() => import("../components/SalaryOutput"));
 const ExchangeRatesList = lazy(() => import("../components/ExchangeRatesList"));
 
 export default () => {
@@ -32,7 +32,7 @@ export default () => {
       {/* Add header */}
 
       <SalaryInput />
-      <OutputSalary />
+      <SalaryOutput />
       <Suspense fallback="Loading exchange rates...">
         <ExchangeRatesList />
       </Suspense>

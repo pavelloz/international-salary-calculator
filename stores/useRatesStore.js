@@ -5,7 +5,7 @@ const useRatesStore = create()((set) => ({
   fetchedAt: "",
   salary: 10000,
   currency: "usd",
-  period: "m",
+  period: "monthly",
   setRates: (rates) => set({ rates }),
   setFetchedAt: (fetchedAt) => set({ fetchedAt }),
   setSalary: (salary) => set({ salary }),
