@@ -1,8 +1,7 @@
 export const runtime = "edge";
 
 const CURRENCIES = ["usd", "gbp", "eur", "chf"];
-const API_URL =
-  "https://api.nbp.pl/api/exchangerates/tables/a/last/1/?format=json";
+const API_URL = process.env.FX_RATES_URL;
 
 const fetchRates = async () => {
   let fetched_at = +new Date();
