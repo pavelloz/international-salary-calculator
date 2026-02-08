@@ -1,6 +1,8 @@
 import useRatesStore from "../stores/useRatesStore";
 import { calculateSalaries, formatSalary } from "../lib/calculateSalaries";
 
+import { calculateFlatTax12, calculateLinearTax19 } from "../lib/getZUSRates";
+
 export default () => {
   // TODO: Add contract type selector
   // TODO: Add est. gross, net
@@ -13,16 +15,26 @@ export default () => {
   if (!rates) return null;
 
   const salaries = calculateSalaries(salary, period, rates[currency]);
+  const postZUS = calculateFlatTax12(salaries.monthly);
 
   return (
     <>
       <h3 className="w-full">Salary in PLN</h3>
 
+      <h4>Gross</h4>
       <ul className="md:flex justify-between flex-wrap list-none pl-0!">
         <li className="pl-0">{formatSalary(salaries.hourly)} / hour</li>
         <li className="pl-0">{formatSalary(salaries.daily)} / day</li>
         <li className="pl-0">{formatSalary(salaries.monthly)} / month</li>
         <li className="pl-0">{formatSalary(salaries.yearly)} / year</li>
+      </ul>
+
+      <h4>B2B LumpSum tax (12% PIT, big ZUS)</h4>
+      <ul className="md:flex justify-between flex-wrap list-none pl-0!">
+        <li className="pl-0">{formatSalary(postZUS.hourly)} / hour</li>
+        <li className="pl-0">{formatSalary(postZUS.daily)} / day</li>
+        <li className="pl-0">{formatSalary(postZUS.monthly)} / month</li>
+        <li className="pl-0">{formatSalary(postZUS.yearly)} / year</li>
       </ul>
     </>
   );

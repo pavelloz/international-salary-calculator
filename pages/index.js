@@ -22,13 +22,9 @@ export default function HomePage() {
 
   useEffect(() => {
     const fetchRates = async () => {
-      try {
-        const { rates, fetched_at } = await getExchangeRates();
-        setRates(rates);
-        setFetchedAt(fetched_at);
-      } catch (e) {
-        console.error("Rates fetch failed", e);
-      }
+      const { rates, fetched_at } = await getExchangeRates();
+      setRates(rates);
+      setFetchedAt(fetched_at);
     };
 
     fetchRates();
