@@ -1,12 +1,13 @@
-import { useEffect } from "react";
+import { useEffect, lazy, Suspense } from "react";
 import Head from "next/head";
 import { getExchangeRates } from "../lib/utils";
 
 import useRatesStore from "../stores/useRatesStore";
 
-import ExchangeRatesList from "../components/ExchangeRatesList";
 import SalaryInput from "../components/SalaryInput";
 import OutputSalary from "../components/OutputSalary";
+
+const ExchangeRatesList = lazy(() => import("../components/ExchangeRatesList"));
 
 export default function Home() {
   const { setRates, setFetchedAt } = useRatesStore();
@@ -32,7 +33,9 @@ export default function Home() {
 
       <SalaryInput />
       <OutputSalary />
-      <ExchangeRatesList />
+      <Suspense fallback="Loading exchange rates...">
+        <ExchangeRatesList />
+      </Suspense>
     </div>
   );
 }

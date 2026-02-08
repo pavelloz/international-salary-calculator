@@ -1,26 +1,22 @@
+import Link from "next/link";
 import useRatesStore from "../stores/useRatesStore";
 
 const ExchangeRatesList = () => {
-  const { rates, fetchedAt } = useRatesStore();
-
-  if (!rates) {
-    return <div>Loading...</div>;
-  }
+  const { rates, fetchedAt, salary, currency } = useRatesStore();
 
   const formattedFetchedAt = new Date(fetchedAt).toLocaleTimeString();
+  const selectedRate = rates[currency];
 
   return (
-    <div>
-      <h3>Exchange rates (last updated at: {formattedFetchedAt})</h3>
-      <ul>
-        {Object.keys(rates).map((rate) => {
-          return (
-            <li key={rate}>
-              {rate.toUpperCase()}: {rates[rate]}
-            </li>
-          );
-        })}
-      </ul>
+    <div className="border-t border-gray-600">
+      <p className="pt-0 italic text-sm">
+        1 PLN = {selectedRate} {currency.toUpperCase()} (last updated at:{" "}
+        {formattedFetchedAt} from{" "}
+        <Link className="font-normal" href="https://nbp.pl/en/" target="_blank">
+          NBP API
+        </Link>
+        )
+      </p>
     </div>
   );
 };
