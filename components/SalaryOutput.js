@@ -22,7 +22,7 @@ export default () => {
   const linearTax19 = calculateLineartax19(salaries.monthly);
 
   return (
-    <>
+    <div className="border-t border-gray-500 mt-4 pt-4">
       <h3 className="w-full">Salary in PLN</h3>
 
       <table className="w-full table-auto">
@@ -59,6 +59,6 @@ export default () => {
           </tr>
         </tbody>
       </table>
-    </>
+    </div>
   );
 };
