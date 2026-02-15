@@ -1,5 +1,5 @@
-import { fetchRates } from "@/lib/fx-rates";
-import { fetchGoldPrice } from "@/lib/gold-price";
+import { fetchRates } from "@/lib/fxRates";
+import { fetchGoldPrice } from "@/lib/goldPrice";
 import HomeClient from "./home-client";
 
 export default async function HomePage() {

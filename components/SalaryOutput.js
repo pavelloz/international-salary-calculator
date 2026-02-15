@@ -1,5 +1,12 @@
 import useRatesStore from "../stores/useRatesStore";
-import { calculateSalaries, formatSalary } from "../lib/calculateSalaries";
+import {
+  calculateSalaries,
+  formatSalary,
+} from "../lib/calculateSalaries";
+import {
+  deductDaysOff,
+  convertToAllPeriods,
+} from "../lib/calculateDaysOff";
 
 import {
   calculateFlatTax12,
@@ -14,12 +21,20 @@ export default () => {
   const salary = useRatesStore((state) => state.salary);
   const currency = useRatesStore((state) => state.currency);
   const period = useRatesStore((state) => state.period);
+  const daysOff = useRatesStore((state) => state.daysOff);
 
   if (!rates) return null;
 
   const salaries = calculateSalaries(salary, period, rates[currency]);
-  const flatTax12 = calculateFlatTax12(salaries.monthly);
-  const linearTax19 = calculateLineartax19(salaries.monthly);
+
+  // Apply days off deduction to the annual salary
+  const grossReducedAnnual = deductDaysOff(salaries.yearly, daysOff);
+
+  // Convert reduced annual back to all periods
+  const reducedSalaries = convertToAllPeriods(grossReducedAnnual);
+
+  const flatTax12 = calculateFlatTax12(reducedSalaries.monthly);
+  const linearTax19 = calculateLineartax19(reducedSalaries.monthly);
 
   return (
     <div className="border-t border-gray-500 mt-4 pt-4">
@@ -38,10 +53,10 @@ export default () => {
         <tbody>
           <tr className="text-gray-600">
             <td>Gross</td>
-            <td>{formatSalary(salaries.hourly)}</td>
-            <td>{formatSalary(salaries.daily)}</td>
-            <td>{formatSalary(salaries.monthly)}</td>
-            <td>{formatSalary(salaries.yearly)}</td>
+            <td>{formatSalary(reducedSalaries.hourly)}</td>
+            <td>{formatSalary(reducedSalaries.daily)}</td>
+            <td>{formatSalary(reducedSalaries.monthly)}</td>
+            <td>{formatSalary(reducedSalaries.yearly)}</td>
           </tr>
           <tr className="border-t border-gray-400">
             <td>19% Linear tax (big ZUS)</td>

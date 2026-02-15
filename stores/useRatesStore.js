@@ -8,10 +8,12 @@ const useRatesStore = create()(
       salary: 10000,
       currency: "usd",
       period: "monthly",
+      daysOff: 0,
       setRates: (rates) => set({ rates }),
       setSalary: (salary) => set({ salary }),
       setCurrency: (currency) => set({ currency }),
       setPeriod: (period) => set({ period }),
+      setDaysOff: (daysOff) => set({ daysOff }),
     }),
     {
       name: "user-input",

@@ -1,14 +1,10 @@
 import useRatesStore from "../stores/useRatesStore";
-
-const PERIODS = ["hourly", "daily", "monthly", "yearly"];
-const CURRENCIES = ["usd", "eur", "gbp", "chf"];
-
-const CURRENCY_FLAGS = {
-  usd: "🇺🇸", // United States
-  eur: "🇪🇺", // European Union
-  gbp: "🇬🇧", // United Kingdom
-  chf: "🇨🇭", // Switzerland
-};
+import {
+  PERIODS,
+  CURRENCIES,
+  CURRENCY_FLAGS,
+  MAX_DAYS_OFF,
+} from "../lib/constants";
 
 export default () => {
   const salary = useRatesStore((state) => state.salary);
@@ -16,6 +12,8 @@ export default () => {
   const setCurrency = useRatesStore((state) => state.setCurrency);
   const period = useRatesStore((state) => state.period);
   const setPeriod = useRatesStore((state) => state.setPeriod);
+  const daysOff = useRatesStore((state) => state.daysOff);
+  const setDaysOff = useRatesStore((state) => state.setDaysOff);
 
   return (
     <div className="flex justify-between flex-wrap pb-8 gap-x-6">
@@ -60,6 +58,19 @@ export default () => {
           </option>
         ))}
       </select>
+
+      <h4 className="w-full text-gray-700 mt-4">Days off per year</h4>
+      <input
+        className="w-16"
+        id="daysOff"
+        name="daysOff"
+        value={daysOff}
+        onChange={({ target }) => {
+          const val = target.value;
+          if (val === "") return setDaysOff(0);
+          setDaysOff(parseInt(val, 10));
+        }}
+      />
     </div>
   );
 };
