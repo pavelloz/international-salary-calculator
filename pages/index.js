@@ -1,8 +1,11 @@
+"use client";
+
 import { useEffect } from "react";
+
 import dynamic from "next/dynamic";
 import Layout from "./layout";
 
-import { getExchangeRates } from "../lib/getExchangeRates";
+import { fetchRates } from "@/lib/fx-rates";
 
 import useRatesStore from "../stores/useRatesStore";
 
@@ -16,19 +19,25 @@ const ExchangeRatesList = dynamic(
   { ssr: false },
 );
 
-export default function HomePage() {
+export async function getServerSideProps() {
+  const rates = await fetchRates(); // Runs on SERVER
+
+  return {
+    props: { rates }, // Only the data is sent to client
+  };
+}
+
+export default function HomePage({ rates }) {
   const setRates = useRatesStore((state) => state.setRates);
   const setFetchedAt = useRatesStore((state) => state.setFetchedAt);
 
+  // Update Zustand store with fetched rates and timestamp
   useEffect(() => {
-    const fetchRates = async () => {
-      const { rates, fetched_at } = await getExchangeRates();
+    if (rates) {
       setRates(rates);
-      setFetchedAt(fetched_at);
-    };
-
-    fetchRates();
-  }, [setRates, setFetchedAt]);
+      setFetchedAt(new Date().toISOString());
+    }
+  }, [rates, setRates, setFetchedAt]);
 
   return (
     <>

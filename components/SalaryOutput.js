@@ -25,7 +25,7 @@ export default () => {
     <>
       <h3 className="w-full">Salary in PLN</h3>
 
-      <table class="w-full table-auto">
+      <table className="w-full table-auto">
         <thead>
           <tr className="text-left">
             <th></th>
