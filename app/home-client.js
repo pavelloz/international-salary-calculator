@@ -19,6 +19,8 @@ export default function HomePage({ rates }) {
 
   return (
     <>
+      {/* <h4>Gold price: {goldPrice}</h4> */}
+
       <SalaryInput />
       <SalaryOutput />
       <ExchangeRatesList />
