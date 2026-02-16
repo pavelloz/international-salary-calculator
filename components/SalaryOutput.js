@@ -2,11 +2,9 @@ import useRatesStore from "../stores/useRatesStore";
 import {
   calculateSalaries,
   formatSalary,
+  formatInGold,
 } from "../lib/calculateSalaries";
-import {
-  deductDaysOff,
-  convertToAllPeriods,
-} from "../lib/calculateDaysOff";
+import { deductDaysOff, convertToAllPeriods } from "../lib/calculateDaysOff";
 
 import {
   calculateFlatTax12,
@@ -22,6 +20,7 @@ export default () => {
   const currency = useRatesStore((state) => state.currency);
   const period = useRatesStore((state) => state.period);
   const daysOff = useRatesStore((state) => state.daysOff);
+  const goldPrice = useRatesStore((state) => state.goldPrice);
 
   if (!rates) return null;
 
@@ -51,26 +50,68 @@ export default () => {
           </tr>
         </thead>
         <tbody>
-          <tr className="text-gray-600">
+          <tr className="align-top text-gray-600">
             <td>Gross</td>
-            <td>{formatSalary(reducedSalaries.hourly)}</td>
-            <td>{formatSalary(reducedSalaries.daily)}</td>
-            <td>{formatSalary(reducedSalaries.monthly)}</td>
-            <td>{formatSalary(reducedSalaries.yearly)}</td>
+            <td>
+              <div>{formatSalary(reducedSalaries.hourly)}</div>
+            </td>
+            <td>
+              <div>{formatSalary(reducedSalaries.daily)}</div>
+            </td>
+            <td>
+              <div>{formatSalary(reducedSalaries.monthly)}</div>
+              <div className="text-gray-400 text-sm">
+                {formatInGold(reducedSalaries.monthly / goldPrice)} oz of gold
+              </div>
+            </td>
+            <td>
+              <div>{formatSalary(reducedSalaries.yearly)}</div>
+              <div className="text-gray-400 text-sm">
+                {formatInGold(reducedSalaries.yearly / goldPrice)} oz of gold
+              </div>
+            </td>
           </tr>
-          <tr className="border-t border-gray-400">
+          <tr className="align-top border-t border-gray-400">
             <td>19% Linear tax (big ZUS)</td>
-            <td>{formatSalary(linearTax19.hourly)}</td>
-            <td>{formatSalary(linearTax19.daily)}</td>
-            <td>{formatSalary(linearTax19.monthly)}</td>
-            <td>{formatSalary(linearTax19.yearly)}</td>
+            <td>
+              <div>{formatSalary(linearTax19.hourly)}</div>
+            </td>
+            <td>
+              <div>{formatSalary(linearTax19.daily)}</div>
+            </td>
+            <td>
+              <div>{formatSalary(linearTax19.monthly)}</div>
+              <div className="text-gray-400 text-sm">
+                {formatInGold(linearTax19.monthly / goldPrice)} oz of gold
+              </div>
+            </td>
+            <td>
+              <div>{formatSalary(linearTax19.yearly)}</div>
+              <div className="text-gray-400 text-sm">
+                {formatInGold(linearTax19.yearly / goldPrice)} oz of gold
+              </div>
+            </td>
           </tr>
-          <tr className="">
+          <tr className="align-top">
             <td>12% Flat rate tax (big ZUS)</td>
-            <td>{formatSalary(flatTax12.hourly)}</td>
-            <td>{formatSalary(flatTax12.daily)}</td>
-            <td>{formatSalary(flatTax12.monthly)}</td>
-            <td>{formatSalary(flatTax12.yearly)}</td>
+            <td>
+              <div>{formatSalary(flatTax12.hourly)}</div>
+            </td>
+            <td>
+              <div>{formatSalary(flatTax12.daily)}</div>
+            </td>
+            <td>
+              <div>{formatSalary(flatTax12.monthly)}</div>
+              <div className="text-gray-400 text-sm">
+                {formatInGold(flatTax12.monthly / goldPrice)} oz of gold
+              </div>
+            </td>
+            <td>
+              <div>{formatSalary(flatTax12.yearly)}</div>
+              <div className="text-gray-400 text-sm">
+                {formatInGold(flatTax12.yearly / goldPrice)} oz of gold
+              </div>
+            </td>
           </tr>
         </tbody>
       </table>

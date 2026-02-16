@@ -9,11 +9,13 @@ const useRatesStore = create()(
       currency: "usd",
       period: "monthly",
       daysOff: 0,
+      goldPrice: null,
       setRates: (rates) => set({ rates }),
       setSalary: (salary) => set({ salary }),
       setCurrency: (currency) => set({ currency }),
       setPeriod: (period) => set({ period }),
       setDaysOff: (daysOff) => set({ daysOff }),
+      setGoldPrice: (goldPrice) => set({ goldPrice }),
     }),
     {
       name: "user-input",
