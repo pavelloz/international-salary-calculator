@@ -1,10 +1,15 @@
 import { fetchRates } from "@/lib/fxRates";
 import { fetchGoldPrice } from "@/lib/goldPrice";
 import HomeClient from "./home-client";
+import ErrorBoundary from "../components/ErrorBoundary";
 
 export default async function HomePage() {
   const rates = await fetchRates();
   const goldPrice = await fetchGoldPrice();
 
-  return <HomeClient rates={rates} goldPrice={goldPrice} />;
+  return (
+    <ErrorBoundary>
+      <HomeClient rates={rates} goldPrice={goldPrice} />
+    </ErrorBoundary>
+  );
 }
