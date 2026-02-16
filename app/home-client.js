@@ -13,20 +13,16 @@ export default function HomePage({ rates, goldPrice }) {
   const setRates = useRatesStore((state) => state.setRates);
   const setGoldPrice = useRatesStore((state) => state.setGoldPrice);
 
-  // Update Zustand store with fetched rates
   useEffect(() => {
-    if (rates) setRates(rates);
-  }, [rates, setRates]);
+    rates && setRates(rates);
+  }, [rates]);
 
-  // Update Zustand store with fetched gold price
   useEffect(() => {
-    if (goldPrice) setGoldPrice(goldPrice);
-  }, [goldPrice, setGoldPrice]);
+    goldPrice && setGoldPrice(goldPrice);
+  }, [goldPrice]);
 
   return (
     <>
-      {/* <h4>Gold price: {goldPrice}</h4> */}
-
       <SalaryInput />
       <SalaryOutput />
       <ExchangeRatesList />
