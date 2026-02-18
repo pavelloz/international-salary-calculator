@@ -12,7 +12,7 @@ import {
 } from "../lib/calculateTaxes";
 
 export default () => {
-  // TODO: Add contract type selector
+  // TODO: Implement: Add contract type selector
   // TODO: Add est. gross, net
 
   const rates = useRatesStore((state) => state.rates);
