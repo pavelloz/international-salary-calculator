@@ -1,6 +1,6 @@
 import useRatesStore from "../stores/useRatesStore";
 
-export default () => {
+export default function ExchangeRatesList() {
   const rates = useRatesStore((state) => state.rates);
   const currency = useRatesStore((state) => state.currency);
 
@@ -13,4 +13,4 @@ export default () => {
       </p>
     </div>
   );
-};
+}

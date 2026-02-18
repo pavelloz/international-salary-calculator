@@ -1,12 +1,7 @@
 import useRatesStore from "../stores/useRatesStore";
-import {
-  PERIODS,
-  CURRENCIES,
-  CURRENCY_FLAGS,
-  MAX_DAYS_OFF,
-} from "../lib/constants";
+import { PERIODS, CURRENCIES, CURRENCY_FLAGS } from "../lib/constants";
 
-export default () => {
+export default function SalaryInput() {
   const salary = useRatesStore((state) => state.salary);
   const setSalary = useRatesStore((state) => state.setSalary);
   const setCurrency = useRatesStore((state) => state.setCurrency);
@@ -73,4 +68,4 @@ export default () => {
       />
     </div>
   );
-};
+}

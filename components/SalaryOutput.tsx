@@ -11,7 +11,7 @@ import {
   calculateLineartax19,
 } from "../lib/calculateTaxes";
 
-export default () => {
+export default function SalaryOutput() {
   // TODO: Implement: Add contract type selector
   // TODO: Add est. gross, net
 
@@ -117,4 +117,4 @@ export default () => {
       </table>
     </div>
   );
-};
+}

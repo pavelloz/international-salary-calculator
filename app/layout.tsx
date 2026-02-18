@@ -4,7 +4,11 @@ export const metadata = {
     "Calculate salaries on B2B from different currencies to PLN, with different tax regimes",
 };
 
-export default ({ children }) => {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html>
       <body className="bg-gray-100 pt-8">
@@ -18,4 +22,4 @@ export default ({ children }) => {
       </body>
     </html>
   );
-};
+}

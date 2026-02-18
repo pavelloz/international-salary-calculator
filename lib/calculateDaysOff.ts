@@ -6,11 +6,21 @@ import {
   MONTHS_PER_YEAR,
 } from "./constants";
 
-const deductDaysOff = (annualSalary, daysOff) => {
+export const deductDaysOff = (
+  annualSalary: number,
+  daysOff: number,
+): number => {
   return annualSalary * (1 - daysOff / WORKING_DAYS_PER_YEAR);
 };
 
-const convertToAllPeriods = (annualSalary) => {
+export interface PeriodValues {
+  yearly: number;
+  monthly: number;
+  daily: number;
+  hourly: number;
+}
+
+export const convertToAllPeriods = (annualSalary: number): PeriodValues => {
   return {
     yearly: Math.round(annualSalary),
     monthly: Math.round(annualSalary / MONTHS_PER_YEAR),
@@ -18,5 +28,3 @@ const convertToAllPeriods = (annualSalary) => {
     hourly: Number((annualSalary / WEEKS_PER_YEAR / HOURS_PER_WEEK).toFixed(2)),
   };
 };
-
-export { deductDaysOff, convertToAllPeriods };
