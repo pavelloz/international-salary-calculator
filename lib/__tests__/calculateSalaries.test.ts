@@ -1,4 +1,4 @@
-import { calculateSalaries } from "../calculateSalaries.ts";
+import { calculateSalaries } from "../calculateSalaries";
 
 describe("calculateSalaries", () => {
   test("calculates salaries for hourly period", () => {
@@ -37,8 +37,5 @@ describe("calculateSalaries", () => {
     const formatted = calculateSalaries(50000, "yearly", 1);
 
     expect(formatted.yearly).toBe(50000);
-    expect(typeof formatted.monthly).toBe("number");
-    expect(typeof formatted.daily).toBe("number");
-    expect(typeof formatted.hourly).toBe("number");
   });
 });

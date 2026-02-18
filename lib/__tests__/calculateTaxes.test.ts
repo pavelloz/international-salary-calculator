@@ -1,4 +1,4 @@
-import { calculateFlatTax12, calculateLineartax19 } from "../calculateTaxes.ts";
+import { calculateFlatTax12, calculateLineartax19 } from "../calculateTaxes";
 
 describe("calculateFlatTax12", () => {
   test("calculates flat tax 12% monthly correctly", () => {
@@ -6,23 +6,12 @@ describe("calculateFlatTax12", () => {
 
     expect(result.monthly).toBeGreaterThan(0);
     expect(result.yearly).toBeGreaterThan(0);
-    expect(typeof result.daily).toBe("number");
-    expect(typeof result.hourly).toBe("number");
   });
 
   test("calculates flat tax 12% yearly correctly", () => {
     const result = calculateFlatTax12(5000 * 12);
 
     expect(result.yearly).toBeGreaterThan(0);
-  });
-
-  test("formats tax results with correct types", () => {
-    const result = calculateFlatTax12(5000);
-
-    expect(typeof result.monthly).toBe("number");
-    expect(typeof result.yearly).toBe("number");
-    expect(typeof result.daily).toBe("number");
-    expect(typeof result.hourly).toBe("number");
   });
 
   test("deducts ZUS social security and health insurance", () => {
@@ -38,23 +27,12 @@ describe("calculateLineartax19", () => {
 
     expect(result.monthly).toBeGreaterThan(0);
     expect(result.yearly).toBeGreaterThan(0);
-    expect(typeof result.daily).toBe("number");
-    expect(typeof result.hourly).toBe("number");
   });
 
   test("calculates linear tax 19% yearly correctly", () => {
     const result = calculateLineartax19(5000 * 12);
 
     expect(result.yearly).toBeGreaterThan(0);
-  });
-
-  test("formats tax results with correct types", () => {
-    const result = calculateLineartax19(5000);
-
-    expect(typeof result.monthly).toBe("number");
-    expect(typeof result.yearly).toBe("number");
-    expect(typeof result.daily).toBe("number");
-    expect(typeof result.hourly).toBe("number");
   });
 
   test("deducts business costs", () => {

@@ -12,7 +12,6 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "incremental": true,
-    "allowImportingTsExtensions": true,
     "jsx": "react-jsx",
     "plugins": [
       {

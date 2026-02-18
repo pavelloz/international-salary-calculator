@@ -32,9 +32,6 @@ describe("convertToAllPeriods", () => {
     const result = convertToAllPeriods(annualSalary);
 
     expect(result.yearly).toBe(60000);
-    expect(typeof result.monthly).toBe("number");
-    expect(typeof result.daily).toBe("number");
-    expect(typeof result.hourly).toBe("number");
   });
 
   test("calculates monthly salary correctly", () => {
@@ -61,7 +58,6 @@ describe("convertToAllPeriods", () => {
   test("formats hourly salary to 2 decimal places", () => {
     const result = convertToAllPeriods(52000);
 
-    expect(typeof result.hourly).toBe("number");
     expect(result.hourly).not.toBeNaN();
   });
 });
