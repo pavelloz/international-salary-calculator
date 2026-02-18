@@ -19,8 +19,8 @@ describe("SalaryInput Component", () => {
     const salaryInput = screen.getAllByRole("textbox")[0];
     const daysOffInput = screen.getAllByRole("textbox")[1];
 
-    expect(salaryInput.value).toBe("10000");
-    expect(daysOffInput.value).toBe("0");
+    expect(salaryInput).toHaveValue("10000");
+    expect(daysOffInput).toHaveValue("0");
   });
 
   test("renders all period options", () => {
@@ -53,7 +53,7 @@ describe("SalaryInput Component", () => {
     const salaryInput = screen.getAllByRole("textbox")[0];
     fireEvent.change(salaryInput, { target: { value: "10000" } });
 
-    expect(salaryInput.value).toBe("10000");
+    expect(salaryInput).toHaveValue("10000");
   });
 
   test("updates days off value on input change", () => {
@@ -62,6 +62,6 @@ describe("SalaryInput Component", () => {
     const daysOffInput = screen.getAllByRole("textbox")[1];
     fireEvent.change(daysOffInput, { target: { value: "20" } });
 
-    expect(daysOffInput.value).toBe("20");
+    expect(daysOffInput).toHaveValue("20");
   });
 });
