@@ -2,7 +2,12 @@ const CURRENCIES = ["usd", "gbp", "eur", "chf"];
 const API_URL =
   "https://api.nbp.pl/api/exchangerates/tables/a/last/1/?format=json";
 
-export async function fetchRates() {
+interface ExchangeRate {
+  code: string;
+  mid: string;
+}
+
+export async function fetchRates(): Promise<Record<string, number>> {
   try {
     const res = await fetch(API_URL, {
       next: {
@@ -17,14 +22,17 @@ export async function fetchRates() {
 
     const [{ rates }] = await res.json(); // Destructuring assuming data[0] exists
 
-    const filteredRates = rates.reduce((acc, { code, mid }) => {
-      const lowerCode = code.toLowerCase();
-      if (CURRENCIES.includes(lowerCode)) {
-        acc[lowerCode] = parseFloat(mid.toFixed(2));
-      }
+    const filteredRates = rates.reduce(
+      (acc: Record<string, number>, { code, mid }: ExchangeRate) => {
+        const lowerCode = code.toLowerCase();
+        if (CURRENCIES.includes(lowerCode)) {
+          acc[lowerCode] = parseFloat(parseFloat(mid).toFixed(2));
+        }
 
-      return acc;
-    }, {});
+        return acc;
+      },
+      {},
+    );
 
     return filteredRates;
   } catch (error) {

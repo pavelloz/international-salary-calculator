@@ -1,5 +1,5 @@
 import useRatesStore from "../stores/useRatesStore";
-import { PERIODS, CURRENCIES, CURRENCY_FLAGS } from "../lib/constants";
+import { PERIODS, CURRENCIES, CURRENCY_FLAGS } from "../lib/constants.ts";
 
 export default function SalaryInput() {
   const salary = useRatesStore((state) => state.salary);

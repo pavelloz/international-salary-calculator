@@ -1,6 +1,6 @@
 const API_URL = "https://api.nbp.pl/api/cenyzlota/?format=json";
 
-export async function fetchGoldPrice() {
+export async function fetchGoldPrice(): Promise<number> {
   try {
     const res = await fetch(API_URL, {
       next: {
