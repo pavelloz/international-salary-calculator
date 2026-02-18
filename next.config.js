@@ -1,4 +1,4 @@
-/** @type {import('next').Nenpx xtConfig} */
+/** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
 };
