@@ -1,14 +1,14 @@
 "use client";
 
 import "../styles/globals.css";
+
 import { useEffect } from "react";
 
-import useRatesStore from "../stores/useRatesStore";
-import type { TRates, TGoldPrice } from "../stores/useRatesStore";
-
+import ExchangeRatesList from "../components/ExchangeRatesList";
 import SalaryInput from "../components/SalaryInput";
 import SalaryOutput from "../components/SalaryOutput";
-import ExchangeRatesList from "../components/ExchangeRatesList";
+import type { TGoldPrice, TRates } from "../stores/store";
+import { setGoldPrice, setRates } from "../stores/store";
 
 interface HomeClientProps {
   rates: TRates;
@@ -16,9 +16,6 @@ interface HomeClientProps {
 }
 
 export default function HomeClient({ rates, goldPrice }: HomeClientProps) {
-  const setRates = useRatesStore((state) => state.setRates);
-  const setGoldPrice = useRatesStore((state) => state.setGoldPrice);
-
   useEffect(() => {
     rates && setRates(rates);
   }, [rates]);

@@ -1,26 +1,27 @@
-import useRatesStore from "../stores/useRatesStore";
-import { PERIODS, CURRENCIES, CURRENCY_FLAGS } from "../lib/constants";
+import { useEffect, useState } from "react";
+
+import { useStore } from "@nanostores/react";
+
+import { CURRENCIES, CURRENCY_FLAGS, PERIODS } from "../lib/constants";
+import { $userInputStore, setCurrency, setDaysOff, setPeriod, setSalary } from "../stores/store";
 
 export default function SalaryInput() {
-  const salary = useRatesStore((state) => state.salary);
-  const setSalary = useRatesStore((state) => state.setSalary);
-  const setCurrency = useRatesStore((state) => state.setCurrency);
-  const period = useRatesStore((state) => state.period);
-  const setPeriod = useRatesStore((state) => state.setPeriod);
-  const daysOff = useRatesStore((state) => state.daysOff);
-  const setDaysOff = useRatesStore((state) => state.setDaysOff);
+  const { salary, currency, period, daysOff } = useStore($userInputStore);
+
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  if (!isMounted) return null;
 
   return (
     <div className="flex justify-between flex-wrap pb-8 gap-x-6">
       <h3 className="w-full text-gray-700 mt-0">Salary in foreign currency</h3>
 
-      <select
-        className="flex-1"
-        id="period"
-        onChange={({ target }) => setPeriod(target.value)}
-        value={period}
-      >
-        {PERIODS.map((p) => (
+      <select className="flex-1" id="period" onChange={({ target }) => setPeriod(target.value)} value={period}>
+        {PERIODS.map(p => (
           <option key={p} value={p}>
             {p.charAt(0).toUpperCase() + p.slice(1)}
           </option>
@@ -42,12 +43,8 @@ export default function SalaryInput() {
         }}
         pattern="\d*"
       />
-      <select
-        className="flex-0"
-        id="currency"
-        onChange={({ target }) => setCurrency(target.value)}
-      >
-        {CURRENCIES.map((c) => (
+      <select className="flex-0" id="currency" value={currency} onChange={({ target }) => setCurrency(target.value)}>
+        {CURRENCIES.map(c => (
           <option key={c} value={c}>
             {CURRENCY_FLAGS[c]} {c.toUpperCase()}
           </option>

@@ -1,10 +1,10 @@
 import {
-  HOURS_PER_WEEK,
-  WEEKS_PER_YEAR,
-  HOURS_PER_DAY,
-  MONTHS_PER_YEAR,
-  WORKING_DAYS_PER_WEEK,
   GRAMS_IN_OUNCE,
+  HOURS_PER_DAY,
+  HOURS_PER_WEEK,
+  MONTHS_PER_YEAR,
+  WEEKS_PER_YEAR,
+  WORKING_DAYS_PER_WEEK,
 } from "./constants";
 
 interface SalaryValues {
@@ -14,11 +14,7 @@ interface SalaryValues {
   hourly: number;
 }
 
-const calculateSalaries = (
-  inputSalary: number,
-  period: string,
-  rate: number,
-): SalaryValues => {
+const calculateSalaries = (inputSalary: number, period: string, rate: number): SalaryValues => {
   const salary = inputSalary * rate;
   let annual: number;
 
@@ -65,4 +61,4 @@ const formatInGold = (value: number | null): string | null => {
   return (value / GRAMS_IN_OUNCE).toFixed(2);
 };
 
-export { calculateSalaries, formatSalary, formatInGold };
+export { calculateSalaries, formatInGold, formatSalary };

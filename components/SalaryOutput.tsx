@@ -1,28 +1,26 @@
-import useRatesStore from "../stores/useRatesStore";
-import {
-  calculateSalaries,
-  formatSalary,
-  formatInGold,
-} from "../lib/calculateSalaries";
-import { deductDaysOff, convertToAllPeriods } from "../lib/calculateDaysOff";
+import { useEffect, useState } from "react";
 
-import {
-  calculateFlatTax12,
-  calculateLineartax19,
-} from "../lib/calculateTaxes";
+import { useStore } from "@nanostores/react";
+
+import { convertToAllPeriods, deductDaysOff } from "../lib/calculateDaysOff";
+import { calculateSalaries, formatInGold, formatSalary } from "../lib/calculateSalaries";
+import { calculateFlatTax12, calculateLineartax19 } from "../lib/calculateTaxes";
+import { $apiStore, $userInputStore } from "../stores/store";
 
 export default function SalaryOutput() {
+  const { salary, currency, period, daysOff } = useStore($userInputStore);
+  const { rates, goldPrice } = useStore($apiStore);
+
   // TODO: Implement: Add contract type selector
   // TODO: Add est. gross, net
 
-  const rates = useRatesStore((state) => state.rates);
-  const salary = useRatesStore((state) => state.salary);
-  const currency = useRatesStore((state) => state.currency);
-  const period = useRatesStore((state) => state.period);
-  const daysOff = useRatesStore((state) => state.daysOff);
-  const goldPrice = useRatesStore((state) => state.goldPrice);
+  const [isMounted, setIsMounted] = useState(false);
 
-  if (!rates) return null;
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  if (!isMounted) return null;
 
   const salaries = calculateSalaries(salary, period, rates[currency]);
 
@@ -66,9 +64,7 @@ export default function SalaryOutput() {
             </td>
             <td>
               <div>{formatSalary(reducedSalaries.yearly)}</div>
-              <div className="text-gray-400 text-sm">
-                {formatInGold(reducedSalaries.yearly / goldPrice)} oz of gold
-              </div>
+              <div className="text-gray-400 text-sm">{formatInGold(reducedSalaries.yearly / goldPrice)} oz of gold</div>
             </td>
           </tr>
           <tr className="align-top border-t border-gray-400">
@@ -81,15 +77,11 @@ export default function SalaryOutput() {
             </td>
             <td>
               <div>{formatSalary(linearTax19.monthly)}</div>
-              <div className="text-gray-400 text-sm">
-                {formatInGold(linearTax19.monthly / goldPrice)} oz of gold
-              </div>
+              <div className="text-gray-400 text-sm">{formatInGold(linearTax19.monthly / goldPrice)} oz of gold</div>
             </td>
             <td>
               <div>{formatSalary(linearTax19.yearly)}</div>
-              <div className="text-gray-400 text-sm">
-                {formatInGold(linearTax19.yearly / goldPrice)} oz of gold
-              </div>
+              <div className="text-gray-400 text-sm">{formatInGold(linearTax19.yearly / goldPrice)} oz of gold</div>
             </td>
           </tr>
           <tr className="align-top">
@@ -102,15 +94,11 @@ export default function SalaryOutput() {
             </td>
             <td>
               <div>{formatSalary(flatTax12.monthly)}</div>
-              <div className="text-gray-400 text-sm">
-                {formatInGold(flatTax12.monthly / goldPrice)} oz of gold
-              </div>
+              <div className="text-gray-400 text-sm">{formatInGold(flatTax12.monthly / goldPrice)} oz of gold</div>
             </td>
             <td>
               <div>{formatSalary(flatTax12.yearly)}</div>
-              <div className="text-gray-400 text-sm">
-                {formatInGold(flatTax12.yearly / goldPrice)} oz of gold
-              </div>
+              <div className="text-gray-400 text-sm">{formatInGold(flatTax12.yearly / goldPrice)} oz of gold</div>
             </td>
           </tr>
         </tbody>

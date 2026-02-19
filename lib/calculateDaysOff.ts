@@ -1,15 +1,12 @@
 import {
-  WORKING_DAYS_PER_YEAR,
-  WEEKS_PER_YEAR,
-  WORKING_DAYS_PER_WEEK,
   HOURS_PER_WEEK,
   MONTHS_PER_YEAR,
+  WEEKS_PER_YEAR,
+  WORKING_DAYS_PER_WEEK,
+  WORKING_DAYS_PER_YEAR,
 } from "./constants";
 
-export const deductDaysOff = (
-  annualSalary: number,
-  daysOff: number,
-): number => {
+export const deductDaysOff = (annualSalary: number, daysOff: number): number => {
   return annualSalary * (1 - daysOff / WORKING_DAYS_PER_YEAR);
 };
 

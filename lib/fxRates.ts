@@ -1,6 +1,5 @@
 const CURRENCIES = ["usd", "gbp", "eur", "chf"];
-const API_URL =
-  "https://api.nbp.pl/api/exchangerates/tables/a/last/1/?format=json";
+const API_URL = "https://api.nbp.pl/api/exchangerates/tables/a/last/1/?format=json";
 
 interface TSingleRateResponse {
   currency: string;
@@ -30,17 +29,14 @@ export async function fetchRates(): Promise<Record<string, number>> {
 
     const [{ rates }] = (await res.json()) as TApiResponse[]; // Destructuring assuming data[0] exists
 
-    const filteredRates = rates.reduce(
-      (acc: Record<string, number>, { code, mid }: TSingleRateResponse) => {
-        const lowerCode = code.toLowerCase();
-        if (CURRENCIES.includes(lowerCode)) {
-          acc[lowerCode] = mid;
-        }
+    const filteredRates = rates.reduce((acc: Record<string, number>, { code, mid }: TSingleRateResponse) => {
+      const lowerCode = code.toLowerCase();
+      if (CURRENCIES.includes(lowerCode)) {
+        acc[lowerCode] = mid;
+      }
 
-        return acc;
-      },
-      {},
-    );
+      return acc;
+    }, {});
 
     return filteredRates;
   } catch (error) {

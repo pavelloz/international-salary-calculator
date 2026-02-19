@@ -30,12 +30,9 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
       return (
         <div className="flex items-center justify-center min-h-screen p-4">
           <div className="max-w-md w-full bg-white rounded-lg shadow-lg p-6 text-center">
-            <h2 className="text-xl font-bold text-gray-800 mb-2">
-              Something went wrong
-            </h2>
+            <h2 className="text-xl font-bold text-gray-800 mb-2">Something went wrong</h2>
             <p className="text-gray-600 mb-4">
-              We apologize for the inconvenience. Please refresh the page to try
-              again.
+              We apologize for the inconvenience. Please refresh the page to try again.
             </p>
             <button
               onClick={() => window.location.reload()}

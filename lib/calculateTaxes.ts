@@ -1,8 +1,4 @@
-import {
-  MONTHS_PER_YEAR,
-  WORKING_DAYS_PER_MONTH,
-  HOURS_PER_DAY,
-} from "./constants";
+import { HOURS_PER_DAY, MONTHS_PER_YEAR, WORKING_DAYS_PER_MONTH } from "./constants";
 
 // Tax rates
 const FLAT_TAX_RATE = 0.12; // 12%
@@ -75,9 +71,7 @@ export interface TaxValues {
 export function calculateFlatTax12(monthlyRevenue: number): TaxValues {
   const zus = calculateZUSFlatTax12(monthlyRevenue);
   const taxBase =
-    monthlyRevenue -
-    zus.socialSecurity -
-    zus.healthInsurance * ZUS_FLAT_TAX_HEALTH_INSURANCE_DEDUCTIBLE_PERCENTAGE;
+    monthlyRevenue - zus.socialSecurity - zus.healthInsurance * ZUS_FLAT_TAX_HEALTH_INSURANCE_DEDUCTIBLE_PERCENTAGE;
   const tax = Math.round(taxBase * FLAT_TAX_RATE);
   const net = monthlyRevenue - zus.socialSecurity - zus.healthInsurance - tax;
   return {
@@ -97,7 +91,7 @@ function calculateZUSLinear19(monthlyRevenue: number): ZUSValues {
   // Health insurance - 9% of income (revenue - costs)
   const healthInsurance = Math.max(
     Math.round(income * HEALTH_INSURANCE_PERCENTAGE),
-    ZUS_LINEAR_TAX_MIN_HEALTH_INSURANCE,
+    ZUS_LINEAR_TAX_MIN_HEALTH_INSURANCE
   );
 
   return {
