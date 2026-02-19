@@ -1,0 +1,26 @@
+---
+import { ClientRouter } from "astro:transitions";
+import "../styles/globals.css";
+
+const { title = "Salary Calculator" } = Astro.props;
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>{title}</title>
+    <ClientRouter />
+  </head>
+  <body class="bg-gray-100 pt-8">
+    <main
+      class="xl:w-2/3 lg:w-9/12 w-full px-4 mx-auto prose-stone prose-xl prose-headings:text-gray-600 prose-headings:font-medium prose-hr:my-6"
+    >
+      <h2 class="text-gray-600 font-medium">Salary Calculator for 🇵🇱 folks</h2>
+
+      <main>
+        <slot />
+      </main>
+    </main>
+  </body>
+</html>
