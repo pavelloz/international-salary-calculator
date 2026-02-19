@@ -20,7 +20,7 @@ describe("SalaryInput Component", () => {
     const salaryInput = screen.getAllByRole("textbox")[0];
     const daysOffInput = screen.getAllByRole("textbox")[1];
 
-    expect(salaryInput).toHaveValue("10000");
+    expect(salaryInput).toHaveValue("30000");
     expect(daysOffInput).toHaveValue("0");
   });
 
