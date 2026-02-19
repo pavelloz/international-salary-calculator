@@ -1,5 +1,3 @@
-import { computed } from "nanostores";
-
 import { persistentMap } from "@nanostores/persistent";
 
 export type TRates = Record<string, number>;
