@@ -9,11 +9,11 @@ export const HOURS_PER_DAY = 8;
 export const HOURS_PER_WEEK = 40;
 export const WORKING_DAYS_PER_MONTH = 21;
 export const CURRENCY_CONFIG = {
+  pln: { flag: "🇵🇱", name: "PLN" },
   usd: { flag: "🇺🇸", name: "USD" },
   eur: { flag: "🇪🇺", name: "EUR" },
   gbp: { flag: "🇬🇧", name: "GBP" },
   chf: { flag: "🇨🇭", name: "CHF" },
-  pln: { flag: "🇨🇭", name: "PLN" },
 };
 export const CURRENCY_FLAGS = Object.fromEntries(Object.entries(CURRENCY_CONFIG).map(([key, val]) => [key, val.flag]));
 
