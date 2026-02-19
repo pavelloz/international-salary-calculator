@@ -2,9 +2,17 @@ const CURRENCIES = ["usd", "gbp", "eur", "chf"];
 const API_URL =
   "https://api.nbp.pl/api/exchangerates/tables/a/last/1/?format=json";
 
-interface ExchangeRate {
+interface TSingleRateResponse {
+  currency: string;
   code: string;
-  mid: string;
+  mid: number;
+}
+
+interface TApiResponse {
+  table: string;
+  no: string;
+  effectiveDate: string;
+  rates: TSingleRateResponse[];
 }
 
 export async function fetchRates(): Promise<Record<string, number>> {
@@ -20,13 +28,13 @@ export async function fetchRates(): Promise<Record<string, number>> {
       throw new Error("FX API request failed");
     }
 
-    const [{ rates }] = await res.json(); // Destructuring assuming data[0] exists
+    const [{ rates }] = (await res.json()) as TApiResponse[]; // Destructuring assuming data[0] exists
 
     const filteredRates = rates.reduce(
-      (acc: Record<string, number>, { code, mid }: ExchangeRate) => {
+      (acc: Record<string, number>, { code, mid }: TSingleRateResponse) => {
         const lowerCode = code.toLowerCase();
         if (CURRENCIES.includes(lowerCode)) {
-          acc[lowerCode] = parseFloat(parseFloat(mid).toFixed(2));
+          acc[lowerCode] = mid;
         }
 
         return acc;
