@@ -1,3 +1,5 @@
+import { computed } from "nanostores";
+
 import { persistentMap } from "@nanostores/persistent";
 
 export type TRates = Record<string, number>;
@@ -16,14 +18,11 @@ export interface IApiValue {
   goldPrice: TGoldPrice;
 }
 
-// 1. Create the persistent store
-// The second argument 'user-input' is the localStorage key.
-// The third argument handles JSON serialization automatically.
 export const $userInputStore = persistentMap<IUserInput>(
   "user-input:",
   {
-    salary: 10000,
-    currency: "usd",
+    salary: 30000,
+    currency: "pln",
     period: "monthly",
     daysOff: 0,
   },
@@ -50,5 +49,5 @@ export const $apiStore = persistentMap<IApiValue>(
   }
 );
 
-export const setRates = (rates: TRates) => $apiStore.setKey("rates", rates);
+export const setRates = (rates: TRates) => $apiStore.setKey("rates", { ...rates, pln: 1 });
 export const setGoldPrice = (price: TGoldPrice) => $apiStore.setKey("goldPrice", price);

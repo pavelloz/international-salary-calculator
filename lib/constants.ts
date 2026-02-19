@@ -13,6 +13,7 @@ export const CURRENCY_CONFIG = {
   eur: { flag: "🇪🇺", name: "EUR" },
   gbp: { flag: "🇬🇧", name: "GBP" },
   chf: { flag: "🇨🇭", name: "CHF" },
+  pln: { flag: "🇨🇭", name: "PLN" },
 };
 export const CURRENCY_FLAGS = Object.fromEntries(Object.entries(CURRENCY_CONFIG).map(([key, val]) => [key, val.flag]));
 

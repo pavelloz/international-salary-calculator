@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 
 import { useStore } from "@nanostores/react";
-
 import { convertToAllPeriods, deductDaysOff } from "../lib/calculateDaysOff";
 import { calculateSalaries, formatInGold, formatSalary } from "../lib/calculateSalaries";
 import { calculateFlatTax12, calculateLineartax19 } from "../lib/calculateTaxes";
