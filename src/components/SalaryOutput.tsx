@@ -2,7 +2,7 @@ import { useStore } from "@nanostores/react";
 import { convertToAllPeriods, deductDaysOff } from "@/lib/calculateDaysOff";
 import { calculateSalaries, formatInGold, formatSalary } from "@/lib/calculateSalaries";
 import { calculateFlatTax12, calculateLineartax19 } from "@/lib/calculateTaxes";
-import { $userInputStore, type TRates } from "@/stores/store";
+import { $userInputStore } from "@/stores/store";
 import { $ratesStore } from "@/stores/rates";
 
 export default function SalaryOutput() {

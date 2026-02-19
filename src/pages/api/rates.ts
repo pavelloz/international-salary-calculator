@@ -1,7 +1,7 @@
 import type { APIRoute } from "astro";
 
-import fetchRates from "../../lib/fxRates";
-import fetchGoldPrice from "../../lib/goldPrice";
+import fetchRates from "../../lib/api/fxRates";
+import fetchGoldPrice from "../../lib/api/goldPrice";
 
 export const GET: APIRoute = async () => {
   try {
