@@ -22,12 +22,7 @@ export async function fetchRates() {
   $ratesStore.setKey("loading", true);
 
   try {
-    const res = await fetch("/api/rates", {
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-    });
+    const res = await fetch("/api/rates.json");
     const data = await res.json();
 
     $ratesStore.set({
