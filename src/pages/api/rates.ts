@@ -11,7 +11,7 @@ export const GET: APIRoute = async () => {
     return new Response(JSON.stringify({ rates, goldPrice }), {
       status: 200,
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type": "application/json; charset=utf-8",
         "Cache-Control": "public, s-maxage=3600, max-age=3600",
       },
     });
