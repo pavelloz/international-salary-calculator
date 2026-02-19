@@ -24,6 +24,7 @@ export async function fetchRates() {
   try {
     const res = await fetch("/api/rates", {
       headers: {
+        "Content-Type": "application/json",
         Accept: "application/json",
       },
     });
