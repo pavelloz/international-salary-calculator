@@ -14,14 +14,9 @@ interface TApiResponse {
   rates: TSingleRateResponse[];
 }
 
-export async function fetchRates(): Promise<Record<string, number>> {
+export default async (): Promise<Record<string, number>> => {
   try {
-    const res = await fetch(API_URL, {
-      next: {
-        revalidate: 3600, // 1 hour
-        tags: ["fx-rates"],
-      },
-    });
+    const res = await fetch(API_URL);
 
     if (!res.ok) {
       throw new Error("FX API request failed");
@@ -41,7 +36,6 @@ export async function fetchRates(): Promise<Record<string, number>> {
     return filteredRates;
   } catch (error) {
     console.error("Error fetching FX rates:", error);
-    // Return fallback rates or throw
     throw error;
   }
-}
+};

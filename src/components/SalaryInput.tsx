@@ -1,5 +1,3 @@
-import { useEffect, useState } from "react";
-
 import { useStore } from "@nanostores/react";
 
 import { CURRENCIES, CURRENCY_FLAGS, PERIODS } from "../lib/constants";
@@ -7,14 +5,6 @@ import { $userInputStore, setCurrency, setDaysOff, setPeriod, setSalary } from "
 
 export default function SalaryInput() {
   const { salary, currency, period, daysOff } = useStore($userInputStore);
-
-  const [isMounted, setIsMounted] = useState(false);
-
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
-
-  if (!isMounted) return null;
 
   return (
     <div className="flex justify-between flex-wrap pb-8 gap-x-6">

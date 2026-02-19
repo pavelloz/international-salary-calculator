@@ -1,25 +1,16 @@
-import { useEffect, useState } from "react";
-
 import { useStore } from "@nanostores/react";
-import { convertToAllPeriods, deductDaysOff } from "../lib/calculateDaysOff";
-import { calculateSalaries, formatInGold, formatSalary } from "../lib/calculateSalaries";
-import { calculateFlatTax12, calculateLineartax19 } from "../lib/calculateTaxes";
-import { $apiStore, $userInputStore } from "../stores/store";
+import { convertToAllPeriods, deductDaysOff } from "@/lib/calculateDaysOff";
+import { calculateSalaries, formatInGold, formatSalary } from "@/lib/calculateSalaries";
+import { calculateFlatTax12, calculateLineartax19 } from "@/lib/calculateTaxes";
+import { $userInputStore, type TRates } from "@/stores/store";
+import { $ratesStore } from "@/stores/rates";
 
 export default function SalaryOutput() {
   const { salary, currency, period, daysOff } = useStore($userInputStore);
-  const { rates, goldPrice } = useStore($apiStore);
+  const { rates, goldPrice } = useStore($ratesStore);
 
   // TODO: Implement: Add contract type selector
   // TODO: Add est. gross, net
-
-  const [isMounted, setIsMounted] = useState(false);
-
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
-
-  if (!isMounted) return null;
 
   const salaries = calculateSalaries(salary, period, rates[currency]);
 

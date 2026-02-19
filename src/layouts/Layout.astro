@@ -22,5 +22,9 @@ const { title = "Salary Calculator" } = Astro.props;
         <slot />
       </main>
     </main>
+    <script>
+      import { fetchRates } from "../stores/rates";
+      fetchRates();
+    </script>
   </body>
 </html>

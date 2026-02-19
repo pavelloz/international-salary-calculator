@@ -1,20 +1,11 @@
-import { useEffect, useState } from "react";
-
 import { useStore } from "@nanostores/react";
 
-import { $apiStore, $userInputStore } from "../stores/store";
+import { $userInputStore } from "@/stores/store";
+import { $ratesStore } from "@/stores/rates";
 
 export default function ExchangeRatesList() {
-  const { rates } = useStore($apiStore);
   const { currency } = useStore($userInputStore);
-
-  const [isMounted, setIsMounted] = useState(false);
-
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
-
-  if (!isMounted) return null;
+  const { rates } = useStore($ratesStore);
 
   const selectedRate = rates[currency];
 
