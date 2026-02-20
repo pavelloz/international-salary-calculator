@@ -6,9 +6,9 @@
     "types": ["vitest/globals", "@testing-library/jest-dom"],
     "jsx": "react-jsx",
     "jsxImportSource": "react",
-    "baseUrl": ".",
+    // "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["./src/*"]
     }
   }
 }
