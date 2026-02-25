@@ -1,11 +1,11 @@
 import { Show } from "solid-js";
 import { useHydratedStore } from "../lib/useHydratedStore";
 
-import { $userInputStore } from "@/stores/userInput";
-import { $ratesStore } from "@/stores/rates";
+import { $userInputStore } from "../stores/userInput";
+import { $ratesStore } from "../stores/rates";
 
-import { defaultUserInput } from "@/stores/userInput";
-import { defaultRates } from "@/stores/rates";
+import { defaultUserInput } from "../stores/userInput";
+import { defaultRates } from "../stores/rates";
 
 export default function ExchangeRatesList() {
   const userInput = useHydratedStore($userInputStore, defaultUserInput);

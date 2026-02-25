@@ -1,10 +1,11 @@
 import { Show } from "solid-js";
 import { useHydratedStore } from "../lib/useHydratedStore";
-import { convertToAllPeriods, deductDaysOff } from "@/lib/calculateDaysOff";
-import { calculateSalaries, formatInGold, formatSalary } from "@/lib/calculateSalaries";
-import { calculateFlatTax12, calculateLineartax19 } from "@/lib/calculateTaxes";
-import { $userInputStore, defaultUserInput } from "@/stores/userInput";
-import { $ratesStore, defaultRates } from "@/stores/rates";
+import { convertToAllPeriods, deductDaysOff } from "../lib/calculateDaysOff";
+import { calculateSalaries, formatInGold, formatSalary } from "../lib/calculateSalaries";
+import { calculateFlatTax12, calculateLineartax19 } from "../lib/calculateTaxes";
+import { $userInputStore, defaultUserInput } from "../stores/userInput";
+import { $ratesStore, defaultRates } from "../stores/rates";
+import GoldDisplay from "./GoldDisplay";
 export default function SalaryOutput() {
   const userInput = useHydratedStore($userInputStore, defaultUserInput);
   const ratesStore = useHydratedStore($ratesStore, defaultRates);
@@ -49,15 +50,11 @@ export default function SalaryOutput() {
             </td>
             <td>
               <div>{formatSalary(reducedSalaries().monthly)}</div>
-              <div class="text-gray-400 text-sm">
-                {formatInGold(reducedSalaries().monthly / ratesStore().goldPrice)} oz of gold
-              </div>
+              <GoldDisplay valueInPln={reducedSalaries().monthly} />
             </td>
             <td>
               <div>{formatSalary(reducedSalaries().yearly)}</div>
-              <div class="text-gray-400 text-sm">
-                {formatInGold(reducedSalaries().yearly / ratesStore().goldPrice)} oz of gold
-              </div>
+              <GoldDisplay valueInPln={reducedSalaries().yearly} />
             </td>
           </tr>
           <Show when={userInput().daysOff > 0}>
@@ -83,15 +80,11 @@ export default function SalaryOutput() {
             </td>
             <td>
               <div>{formatSalary(linearTax19().monthly)}</div>
-              <div class="text-gray-400 text-sm">
-                {formatInGold(linearTax19().monthly / ratesStore().goldPrice)} oz of gold
-              </div>
+              <GoldDisplay valueInPln={linearTax19().monthly} />
             </td>
             <td>
               <div>{formatSalary(linearTax19().yearly)}</div>
-              <div class="text-gray-400 text-sm">
-                {formatInGold(linearTax19().yearly / ratesStore().goldPrice)} oz of gold
-              </div>
+              <GoldDisplay valueInPln={linearTax19().yearly} />
             </td>
           </tr>
           <tr class="align-top">
@@ -104,15 +97,11 @@ export default function SalaryOutput() {
             </td>
             <td>
               <div>{formatSalary(flatTax12().monthly)}</div>
-              <div class="text-gray-400 text-sm">
-                {formatInGold(flatTax12().monthly / ratesStore().goldPrice)} oz of gold
-              </div>
+              <GoldDisplay valueInPln={flatTax12().monthly} />
             </td>
             <td>
               <div>{formatSalary(flatTax12().yearly)}</div>
-              <div class="text-gray-400 text-sm">
-                {formatInGold(flatTax12().yearly / ratesStore().goldPrice)} oz of gold
-              </div>
+              <GoldDisplay valueInPln={flatTax12().yearly} />
             </td>
           </tr>
         </tbody>
