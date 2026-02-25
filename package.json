@@ -5,9 +5,7 @@
   "license": "MIT",
   "scripts": {
     "start": "astro dev",
-    "build": "astro build",
-    "preview": "astro preview",
-    "astro": "astro",
+    "build": "rm -rf dist && astro build",
     "test": "vitest run",
     "type-check": "tsc --noEmit -p ."
   },
