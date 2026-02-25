@@ -7,8 +7,10 @@ import fetchGoldPrice from "../../lib/api/goldPrice";
 
 export const GET: APIRoute = async () => {
   try {
-    const rates = await fetchRates();
-    const goldPrice = await fetchGoldPrice();
+    const [rates, goldPrice] = await Promise.all([
+      fetchRates(),
+      fetchGoldPrice()
+    ]);
 
     return new Response(JSON.stringify({ rates, goldPrice }), {
       status: 200,
