@@ -1,5 +1,7 @@
 import type { APIRoute } from "astro";
 
+export const prerender = false;
+
 import fetchRates from "../../lib/api/fxRates";
 import fetchGoldPrice from "../../lib/api/goldPrice";
 
