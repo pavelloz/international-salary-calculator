@@ -52,7 +52,7 @@ describe("SalaryInput Component", () => {
     render(() => <SalaryInput />);
 
     const salaryInput = screen.getAllByRole("textbox")[0];
-    fireEvent.change(salaryInput, { target: { value: "10000" } });
+    fireEvent.input(salaryInput, { target: { value: "10000" } });
 
     expect(salaryInput).toHaveValue("10000");
   });
@@ -61,7 +61,25 @@ describe("SalaryInput Component", () => {
     render(() => <SalaryInput />);
 
     const daysOffInput = screen.getAllByRole("textbox")[1];
-    fireEvent.change(daysOffInput, { target: { value: "20" } });
+    fireEvent.input(daysOffInput, { target: { value: "20" } });
+
+    expect(daysOffInput).toHaveValue("20");
+  });
+
+  test("strips non-numeric characters from salary input", () => {
+    render(() => <SalaryInput />);
+
+    const salaryInput = screen.getAllByRole("textbox")[0];
+    fireEvent.input(salaryInput, { target: { value: "100abc00" } });
+
+    expect(salaryInput).toHaveValue("10000");
+  });
+
+  test("strips non-numeric characters from days off input", () => {
+    render(() => <SalaryInput />);
+
+    const daysOffInput = screen.getAllByRole("textbox")[1];
+    fireEvent.input(daysOffInput, { target: { value: "20days" } });
 
     expect(daysOffInput).toHaveValue("20");
   });
