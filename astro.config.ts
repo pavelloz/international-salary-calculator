@@ -15,16 +15,11 @@ export default defineConfig({
         output: {
           entryFileNames: 'js/[name].[hash].js',
           chunkFileNames: 'js/[name].[hash].js',
-          assetFileNames: '[ext]/[name].[hash].[ext]',
+          // assetFileNames: '[ext]/[name].[hash].[ext]',
           experimentalMinChunkSize: 10000, // Merges chunks under 10kB
-          manualChunks(id) {
-            // Group solid-js, nanostores, and valibot together
+          manualChunks: function (id) {
             if (id.includes('node_modules')) {
               return 'vendor';
-            }
-
-            if (id.includes('/src/')) {
-              return 'app';
             }
           }
         }
