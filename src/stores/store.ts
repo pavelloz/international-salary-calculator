@@ -1,4 +1,5 @@
 import { persistentMap } from "@nanostores/persistent";
+import { z } from "zod";
 
 export interface IUserInput {
   salary: number;
@@ -21,7 +22,15 @@ export const $userInputStore = persistentMap<IUserInput>(
   }
 );
 
-export const setSalary = (salary: number) => $userInputStore.setKey("salary", salary);
+const numericSchema = z.preprocess((val) => {
+  if (typeof val === "string") {
+    const parsed = parseInt(val, 10);
+    return isNaN(parsed) ? 0 : parsed;
+  }
+  return val;
+}, z.number().catch(0));
+
+export const setSalary = (salary: number | string) => $userInputStore.setKey("salary", numericSchema.parse(salary));
 export const setCurrency = (currency: string) => $userInputStore.setKey("currency", currency);
 export const setPeriod = (period: string) => $userInputStore.setKey("period", period);
-export const setDaysOff = (daysOff: number) => $userInputStore.setKey("daysOff", daysOff);
+export const setDaysOff = (daysOff: number | string) => $userInputStore.setKey("daysOff", numericSchema.parse(daysOff));

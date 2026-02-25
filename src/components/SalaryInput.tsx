@@ -4,6 +4,8 @@ import { For } from "solid-js";
 import { CURRENCIES, CURRENCY_FLAGS, PERIODS } from "../lib/constants";
 import { $userInputStore, setCurrency, setDaysOff, setPeriod, setSalary } from "../stores/store";
 
+export const cleanNumericInput = (val: string) => val.replace(/\D/g, "");
+
 export default function SalaryInput() {
   const store = useStore($userInputStore);
 
@@ -26,13 +28,9 @@ export default function SalaryInput() {
         name="salary"
         value={store().salary}
         onInput={(e) => {
-          const val = e.currentTarget.value;
-          if (val === "") {
-            setSalary(0);
-          } else {
-            const parsed = parseInt(val, 10);
-            if (!isNaN(parsed)) setSalary(parsed);
-          }
+          const cleanValue = cleanNumericInput(e.currentTarget.value);
+          e.currentTarget.value = cleanValue;
+          setSalary(cleanValue);
         }}
         pattern="\d*"
       />
@@ -53,9 +51,9 @@ export default function SalaryInput() {
         name="daysOff"
         value={store().daysOff}
         onInput={(e) => {
-          const val = e.currentTarget.value;
-          if (val === "") return setDaysOff(0);
-          setDaysOff(parseInt(val, 10));
+          const cleanValue = cleanNumericInput(e.currentTarget.value);
+          e.currentTarget.value = cleanValue;
+          setDaysOff(cleanValue);
         }}
       />
     </div>
