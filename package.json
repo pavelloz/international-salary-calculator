@@ -14,7 +14,7 @@
   "dependencies": {
     "nanostores": "^1.1.0",
     "tailwindcss": "^4.2.0",
-    "zod": "^3.25.76"
+    "valibot": "^1.2.0"
   },
   "devDependencies": {
     "@astrojs/solid-js": "^4.4.0",

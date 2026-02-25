@@ -1,5 +1,5 @@
 import { persistentMap } from "@nanostores/persistent";
-import { z } from "zod";
+import * as v from "valibot";
 
 export type TRate = Record<string, number>;
 
@@ -37,10 +37,13 @@ export async function fetchRates() {
     const rawData = await res.json();
 
     // Validate the API response
-    const data = z.object({
-      rates: z.record(z.string(), z.number()),
-      goldPrice: z.number()
-    }).parse(rawData);
+    const data = v.parse(
+      v.object({
+        rates: v.record(v.string(), v.number()),
+        goldPrice: v.number(),
+      }),
+      rawData
+    );
 
     $ratesStore.set({
       rates: { ...data.rates, ...PLN },
