@@ -4,6 +4,7 @@
   "exclude": ["dist"],
   "compilerOptions": {
     "moduleResolution": "bundler",
+    "module": "preserve",
     "types": ["vitest/globals", "@testing-library/jest-dom"],
     "jsx": "preserve",
     "jsxImportSource": "solid-js",

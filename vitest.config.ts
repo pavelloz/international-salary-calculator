@@ -5,7 +5,8 @@ export default defineConfig({
   plugins: [solidPlugin()],
   test: {
     globals: true, // Allows using 'describe', 'it', 'expect' without imports
-    environment: "jsdom", // Simulates a browser for Solid components
+    // environment: "jsdom", // Simulates a browser for Solid components
+    environment: 'happy-dom', // Just change 'jsdom' to 'happy-dom'
     setupFiles: ["./vitest.setup.ts"],
     css: true, // Optional: processes CSS (helpful if you test styles)
     deps: {
