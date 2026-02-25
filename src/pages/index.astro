@@ -6,7 +6,7 @@ import SalaryOutput from "@/components/SalaryOutput";
 ---
 
 <Layout>
-  <SalaryInput client:load />
-  <SalaryOutput client:load />
-  <ExchangeRatesList client:load />
+  <SalaryInput client:only="solid" />
+  <SalaryOutput client:only="solid" />
+  <ExchangeRatesList client:only="solid" />
 </Layout>

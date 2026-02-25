@@ -1,10 +1,10 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@solidjs/testing-library";
 
 import SalaryInput from "../SalaryInput";
 
 describe("SalaryInput Component", () => {
   test("renders input fields correctly", () => {
-    render(<SalaryInput />);
+    render(() => <SalaryInput />);
 
     expect(screen.getByText(/salary in foreign currency/i)).toBeInTheDocument();
     expect(screen.getByText(/days off per year/i)).toBeInTheDocument();
@@ -15,7 +15,7 @@ describe("SalaryInput Component", () => {
   });
 
   test("has correct initial values", () => {
-    render(<SalaryInput />);
+    render(() => <SalaryInput />);
 
     const salaryInput = screen.getAllByRole("textbox")[0];
     const daysOffInput = screen.getAllByRole("textbox")[1];
@@ -25,7 +25,7 @@ describe("SalaryInput Component", () => {
   });
 
   test("renders all period options", () => {
-    render(<SalaryInput />);
+    render(() => <SalaryInput />);
 
     const periodSelect = screen.getAllByRole("combobox")[0];
     expect(periodSelect).toBeInTheDocument();
@@ -37,7 +37,7 @@ describe("SalaryInput Component", () => {
   });
 
   test("renders all currency options", () => {
-    render(<SalaryInput />);
+    render(() => <SalaryInput />);
 
     const currencySelect = screen.getAllByRole("combobox")[1];
     expect(currencySelect).toBeInTheDocument();
@@ -49,7 +49,7 @@ describe("SalaryInput Component", () => {
   });
 
   test("updates salary value on input change", () => {
-    render(<SalaryInput />);
+    render(() => <SalaryInput />);
 
     const salaryInput = screen.getAllByRole("textbox")[0];
     fireEvent.change(salaryInput, { target: { value: "10000" } });
@@ -58,7 +58,7 @@ describe("SalaryInput Component", () => {
   });
 
   test("updates days off value on input change", () => {
-    render(<SalaryInput />);
+    render(() => <SalaryInput />);
 
     const daysOffInput = screen.getAllByRole("textbox")[1];
     fireEvent.change(daysOffInput, { target: { value: "20" } });

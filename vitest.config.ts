@@ -1,17 +1,17 @@
 import { defineConfig } from "vitest/config";
-import react from "@vitejs/plugin-react";
+import solidPlugin from "vite-plugin-solid";
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [solidPlugin()],
   test: {
     globals: true, // Allows using 'describe', 'it', 'expect' without imports
-    environment: "jsdom", // Simulates a browser for React components
+    environment: "jsdom", // Simulates a browser for Solid components
     setupFiles: ["./vitest.setup.ts"],
     css: true, // Optional: processes CSS (helpful if you test styles)
     deps: {
       optimizer: {
         web: {
-          include: ["nanostores", "@nanostores/react", "@nanostores/persistent"],
+          include: ["nanostores", "@nanostores/solid", "@nanostores/persistent"],
         },
       },
     },

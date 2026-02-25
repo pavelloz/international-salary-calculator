@@ -1,23 +1,24 @@
-import { useStore } from "@nanostores/react";
+import { useStore } from "@nanostores/solid";
+import { Show } from "solid-js";
 
 import { $userInputStore } from "@/stores/store";
 import { $ratesStore } from "@/stores/rates";
 
 export default function ExchangeRatesList() {
-  const { currency } = useStore($userInputStore);
-  const { rates } = useStore($ratesStore);
+  const userInput = useStore($userInputStore);
+  const ratesStore = useStore($ratesStore);
 
-  const selectedRate = rates && currency ? rates[currency] : null;
-
-  if (!selectedRate) return null;
+  const selectedRate = () => ratesStore().rates && userInput().currency ? ratesStore().rates[userInput().currency] : null;
 
   return (
-    <div className="border-t border-gray-500 mt-4 pt-4">
-      {currency !== "pln" && (
-        <p className="pt-0 italic text-sm">
-          1 PLN = {selectedRate} {currency.toUpperCase()}
-        </p>
-      )}
-    </div>
+    <Show when={selectedRate()}>
+      <div class="border-t border-gray-500 mt-4 pt-4">
+        <Show when={userInput().currency !== "pln"}>
+          <p class="pt-0 italic text-sm">
+            1 PLN = {selectedRate()} {userInput().currency.toUpperCase()}
+          </p>
+        </Show>
+      </div>
+    </Show>
   );
 }

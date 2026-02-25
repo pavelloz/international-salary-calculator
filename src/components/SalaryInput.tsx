@@ -1,29 +1,32 @@
-import { useStore } from "@nanostores/react";
+import { useStore } from "@nanostores/solid";
+import { For } from "solid-js";
 
 import { CURRENCIES, CURRENCY_FLAGS, PERIODS } from "../lib/constants";
 import { $userInputStore, setCurrency, setDaysOff, setPeriod, setSalary } from "../stores/store";
 
 export default function SalaryInput() {
-  const { salary, currency, period, daysOff } = useStore($userInputStore);
+  const store = useStore($userInputStore);
 
   return (
-    <div className="flex justify-between flex-wrap pb-8 gap-x-6">
-      <h3 className="w-full text-gray-700 mt-0">Salary in foreign currency</h3>
+    <div class="flex justify-between flex-wrap pb-8 gap-x-6">
+      <h3 class="w-full text-gray-700 mt-0">Salary in foreign currency</h3>
 
-      <select className="flex-1" id="period" onChange={({ target }) => setPeriod(target.value)} value={period}>
-        {PERIODS.map(p => (
-          <option key={p} value={p}>
-            {p.charAt(0).toUpperCase() + p.slice(1)}
-          </option>
-        ))}
+      <select class="flex-1" id="period" onChange={(e) => setPeriod(e.currentTarget.value)} value={store().period}>
+        <For each={PERIODS}>
+          {(p: string) => (
+            <option value={p}>
+              {p.charAt(0).toUpperCase() + p.slice(1)}
+            </option>
+          )}
+        </For>
       </select>
       <input
-        className="flex-1"
+        class="flex-1"
         id="salary"
         name="salary"
-        value={salary}
-        onChange={({ target }) => {
-          const val = target.value;
+        value={store().salary}
+        onInput={(e) => {
+          const val = e.currentTarget.value;
           if (val === "") {
             setSalary(0);
           } else {
@@ -33,22 +36,24 @@ export default function SalaryInput() {
         }}
         pattern="\d*"
       />
-      <select className="flex-0" id="currency" value={currency} onChange={({ target }) => setCurrency(target.value)}>
-        {CURRENCIES.map(c => (
-          <option key={c} value={c}>
-            {CURRENCY_FLAGS[c]} {c.toUpperCase()}
-          </option>
-        ))}
+      <select class="flex-0" id="currency" value={store().currency} onChange={(e) => setCurrency(e.currentTarget.value)}>
+        <For each={CURRENCIES}>
+          {(c: string) => (
+            <option value={c}>
+              {CURRENCY_FLAGS[c as keyof typeof CURRENCY_FLAGS]} {c.toUpperCase()}
+            </option>
+          )}
+        </For>
       </select>
 
-      <h4 className="w-full text-gray-700 mt-4">Days off per year</h4>
+      <h4 class="w-full text-gray-700 mt-4">Days off per year</h4>
       <input
-        className="w-16"
+        class="w-16"
         id="daysOff"
         name="daysOff"
-        value={daysOff}
-        onChange={({ target }) => {
-          const val = target.value;
+        value={store().daysOff}
+        onInput={(e) => {
+          const val = e.currentTarget.value;
           if (val === "") return setDaysOff(0);
           setDaysOff(parseInt(val, 10));
         }}

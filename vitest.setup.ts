@@ -1,5 +1,5 @@
 import "@testing-library/jest-dom/vitest";
-import { cleanup } from "@testing-library/react";
+import { cleanup } from "@solidjs/testing-library";
 import { afterEach, vi } from "vitest";
 
 // Mock localStorage so Nano Stores doesn't crash in the test environment
