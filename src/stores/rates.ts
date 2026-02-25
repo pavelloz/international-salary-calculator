@@ -1,5 +1,6 @@
 import { persistentMap } from "@nanostores/persistent";
 import * as v from "valibot";
+import { PLN } from "../lib/constants";
 
 export const rateSchema = v.record(v.string(), v.number());
 export type TRate = v.InferOutput<typeof rateSchema>;
@@ -11,20 +12,27 @@ export const ratesStoreSchema = v.object({
 });
 export type IRatesStore = v.InferOutput<typeof ratesStoreSchema>;
 
+export const defaultRates: IRatesStore = {
+  rates: {
+    ...PLN,
+    usd: 3.5,
+    eur: 4.2,
+    chf: 4.1,
+    gbp: 4.5
+  },
+  goldPrice: 1, // Fallback non-zero to avoid division by zero errors during SSR
+  loading: false,
+};
+
 export const $ratesStore = persistentMap<IRatesStore>(
   "rates-cache:",
-  {
-    rates: {},
-    goldPrice: 0,
-    loading: false,
-  },
+  defaultRates,
   {
     encode: JSON.stringify,
     decode: JSON.parse,
   }
 );
 
-const PLN = { pln: 1 };
 
 export async function fetchRates() {
   if ($ratesStore.get().loading) return;

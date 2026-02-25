@@ -1,14 +1,13 @@
-import { useStore } from "@nanostores/solid";
 import { Show } from "solid-js";
+import { useHydratedStore } from "../lib/useHydratedStore";
 import { convertToAllPeriods, deductDaysOff } from "@/lib/calculateDaysOff";
 import { calculateSalaries, formatInGold, formatSalary } from "@/lib/calculateSalaries";
 import { calculateFlatTax12, calculateLineartax19 } from "@/lib/calculateTaxes";
-import { $userInputStore } from "@/stores/userInput";
-import { $ratesStore } from "@/stores/rates";
-
+import { $userInputStore, defaultUserInput } from "@/stores/userInput";
+import { $ratesStore, defaultRates } from "@/stores/rates";
 export default function SalaryOutput() {
-  const userInput = useStore($userInputStore);
-  const ratesStore = useStore($ratesStore);
+  const userInput = useHydratedStore($userInputStore, defaultUserInput);
+  const ratesStore = useHydratedStore($ratesStore, defaultRates);
 
   // TODO: Implement: Add contract type selector
   // TODO: Add est. gross, net

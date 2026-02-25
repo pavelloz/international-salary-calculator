@@ -9,14 +9,16 @@ export const userInputSchema = v.object({
 });
 export type IUserInput = v.InferOutput<typeof userInputSchema>;
 
+export const defaultUserInput: IUserInput = {
+  salary: 30000,
+  currency: "pln",
+  period: "monthly",
+  daysOff: 0,
+};
+
 export const $userInputStore = persistentMap<IUserInput>(
   "user-input:",
-  {
-    salary: 30000,
-    currency: "pln",
-    period: "monthly",
-    daysOff: 0,
-  },
+  defaultUserInput,
   {
     encode: JSON.stringify,
     decode: JSON.parse,

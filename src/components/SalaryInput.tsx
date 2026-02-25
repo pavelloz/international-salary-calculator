@@ -1,13 +1,13 @@
-import { useStore } from "@nanostores/solid";
 import { For } from "solid-js";
+import { useHydratedStore } from "../lib/useHydratedStore";
 
 import { CURRENCIES, CURRENCY_FLAGS, PERIODS } from "../lib/constants";
-import { $userInputStore, setCurrency, setDaysOff, setPeriod, setSalary } from "../stores/userInput";
+import { $userInputStore, defaultUserInput, setCurrency, setDaysOff, setPeriod, setSalary } from "../stores/userInput";
 
 export const cleanNumericInput = (val: string) => val.replace(/\D/g, "");
 
 export default function SalaryInput() {
-  const store = useStore($userInputStore);
+  const store = useHydratedStore($userInputStore, defaultUserInput);
 
   return (
     <div class="flex justify-between flex-wrap pb-8 gap-x-6">

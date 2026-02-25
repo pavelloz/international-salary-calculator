@@ -19,6 +19,8 @@ export const CURRENCY_FLAGS = Object.fromEntries(Object.entries(CURRENCY_CONFIG)
 
 export const CURRENCIES = Object.keys(CURRENCY_CONFIG);
 
+export const PLN = { pln: 1 };
+
 export const PERIOD_CONFIG = {
   hourly: "Hourly",
   daily: "Daily",
