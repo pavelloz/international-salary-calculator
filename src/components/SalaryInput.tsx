@@ -2,7 +2,7 @@ import { useStore } from "@nanostores/solid";
 import { For } from "solid-js";
 
 import { CURRENCIES, CURRENCY_FLAGS, PERIODS } from "../lib/constants";
-import { $userInputStore, setCurrency, setDaysOff, setPeriod, setSalary } from "../stores/store";
+import { $userInputStore, setCurrency, setDaysOff, setPeriod, setSalary } from "../stores/userInput";
 
 export const cleanNumericInput = (val: string) => val.replace(/\D/g, "");
 

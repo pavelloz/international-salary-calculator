@@ -1,13 +1,15 @@
 import { persistentMap } from "@nanostores/persistent";
 import * as v from "valibot";
 
-export type TRate = Record<string, number>;
+export const rateSchema = v.record(v.string(), v.number());
+export type TRate = v.InferOutput<typeof rateSchema>;
 
-interface IRatesStore {
-  rates: TRate;
-  goldPrice: number;
-  loading: boolean;
-}
+export const ratesStoreSchema = v.object({
+  rates: rateSchema,
+  goldPrice: v.number(),
+  loading: v.boolean(),
+});
+export type IRatesStore = v.InferOutput<typeof ratesStoreSchema>;
 
 export const $ratesStore = persistentMap<IRatesStore>(
   "rates-cache:",
@@ -39,7 +41,7 @@ export async function fetchRates() {
     // Validate the API response
     const data = v.parse(
       v.object({
-        rates: v.record(v.string(), v.number()),
+        rates: rateSchema,
         goldPrice: v.number(),
       }),
       rawData

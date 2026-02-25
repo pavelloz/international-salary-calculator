@@ -1,5 +1,5 @@
 import { describe, expect, test, beforeEach } from "vitest";
-import { $userInputStore, setDaysOff, setSalary } from "../store";
+import { $userInputStore, setDaysOff, setSalary } from "../userInput";
 
 describe("UserInput Store Zod Validation", () => {
     // Reset the store to default values before each test

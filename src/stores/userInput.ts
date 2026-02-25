@@ -1,12 +1,13 @@
 import { persistentMap } from "@nanostores/persistent";
 import * as v from "valibot";
 
-export interface IUserInput {
-  salary: number;
-  currency: string;
-  period: string;
-  daysOff: number;
-}
+export const userInputSchema = v.object({
+  salary: v.number(),
+  currency: v.string(),
+  period: v.string(),
+  daysOff: v.number(),
+});
+export type IUserInput = v.InferOutput<typeof userInputSchema>;
 
 export const $userInputStore = persistentMap<IUserInput>(
   "user-input:",

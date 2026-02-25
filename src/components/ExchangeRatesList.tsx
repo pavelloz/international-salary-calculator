@@ -1,14 +1,15 @@
 import { useStore } from "@nanostores/solid";
 import { Show } from "solid-js";
 
-import { $userInputStore } from "@/stores/store";
+import { $userInputStore } from "@/stores/userInput";
 import { $ratesStore } from "@/stores/rates";
 
 export default function ExchangeRatesList() {
   const userInput = useStore($userInputStore);
   const ratesStore = useStore($ratesStore);
 
-  const selectedRate = () => ratesStore().rates && userInput().currency ? ratesStore().rates[userInput().currency] : null;
+  const selectedRate = () =>
+    ratesStore().rates && userInput().currency ? ratesStore().rates[userInput().currency] : null;
 
   return (
     <Show when={selectedRate()}>
