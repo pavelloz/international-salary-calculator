@@ -17,7 +17,7 @@ export default defineConfig({
           chunkFileNames: 'js/[name].[hash].js',
           // assetFileNames: '[ext]/[name].[hash].[ext]',
           experimentalMinChunkSize: 10000, // Merges chunks under 10kB
-          manualChunks: function (id) {
+          manualChunks: (id) => {
             if (id.includes('node_modules')) {
               return 'vendor';
             }
