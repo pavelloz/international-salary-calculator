@@ -20,7 +20,7 @@ export const defaultRates: IRatesStore = {
     chf: 4.1,
     gbp: 4.5
   },
-  goldPrice: 1, // Fallback non-zero to avoid division by zero errors during SSR
+  goldPrice: 590, // reasonable default to avoid layout shifts
   loading: false,
 };
 
