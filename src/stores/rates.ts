@@ -1,4 +1,4 @@
-import { map } from "nanostores";
+import { persistentMap } from "@nanostores/persistent";
 import { z } from "zod";
 
 export type TRate = Record<string, number>;
@@ -9,11 +9,18 @@ interface IRatesStore {
   loading: boolean;
 }
 
-export const $ratesStore = map<IRatesStore>({
-  rates: {},
-  goldPrice: 0,
-  loading: false,
-});
+export const $ratesStore = persistentMap<IRatesStore>(
+  "rates-cache:",
+  {
+    rates: {},
+    goldPrice: 0,
+    loading: false,
+  },
+  {
+    encode: JSON.stringify,
+    decode: JSON.parse,
+  }
+);
 
 const PLN = { pln: 1 };
 
@@ -24,8 +31,11 @@ export async function fetchRates() {
 
   try {
     const res = await fetch("/api/rates.json");
+    if (!res.ok) {
+      throw new Error(`API returned status ${res.status}`);
+    }
     const rawData = await res.json();
-    
+
     // Validate the API response
     const data = z.object({
       rates: z.record(z.string(), z.number()),
@@ -39,6 +49,6 @@ export async function fetchRates() {
     });
   } catch (e) {
     $ratesStore.setKey("loading", false);
-    console.error("Rates fetch failed", e);
+    console.warn("Rates fetch or validation failed, using cached fallback data if available.", e);
   }
 }
