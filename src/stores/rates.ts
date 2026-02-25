@@ -1,4 +1,5 @@
 import { map } from "nanostores";
+import { z } from "zod";
 
 export type TRate = Record<string, number>;
 
@@ -23,7 +24,13 @@ export async function fetchRates() {
 
   try {
     const res = await fetch("/api/rates.json");
-    const data = await res.json();
+    const rawData = await res.json();
+    
+    // Validate the API response
+    const data = z.object({
+      rates: z.record(z.string(), z.number()),
+      goldPrice: z.number()
+    }).parse(rawData);
 
     $ratesStore.set({
       rates: { ...data.rates, ...PLN },
