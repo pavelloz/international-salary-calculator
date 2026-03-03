@@ -10,8 +10,8 @@ export default function SalaryInput() {
   const store = useHydratedStore($userInputStore, defaultUserInput);
 
   return (
-    <div class="flex justify-between flex-wrap pb-8 gap-x-6">
-      <h3 class="w-full text-gray-700 mt-0">Salary in foreign currency</h3>
+    <div class="flex justify-between flex-wrap p-10 gap-x-6 rounded-lg bg-white">
+      <h3 class="w-full text-gray-700 mt-0">Salary in {store().currency.toUpperCase()}</h3>
 
       <select class="flex-1" id="period" onChange={e => setPeriod(e.currentTarget.value)} value={store().period}>
         <For each={PERIODS}>{(p: string) => <option value={p}>{p.charAt(0).toUpperCase() + p.slice(1)}</option>}</For>
@@ -38,7 +38,7 @@ export default function SalaryInput() {
         </For>
       </select>
 
-      <h4 class="w-full text-gray-700 mt-4">Days off per year</h4>
+      <h4 class="w-full text-gray-700 mt-4">Unpaid days off per year</h4>
       <input
         class="w-16"
         id="daysOff"

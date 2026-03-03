@@ -16,13 +16,11 @@ export default function ExchangeRatesList() {
 
   return (
     <Show when={selectedRate()}>
-      <div class="border-t border-gray-500 mt-4 pt-4">
-        <Show when={userInput().currency !== "pln"}>
-          <p class="pt-0 italic text-sm">
-            1 PLN = {selectedRate()} {userInput().currency.toUpperCase()}
-          </p>
-        </Show>
-      </div>
+      <Show when={userInput().currency !== "pln"}>
+        <p class="pt-0 italic text-sm text-right">
+          1 PLN = {selectedRate()} {userInput().currency.toUpperCase()}
+        </p>
+      </Show>
     </Show>
   );
 }

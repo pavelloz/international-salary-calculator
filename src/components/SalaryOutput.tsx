@@ -26,8 +26,8 @@ export default function SalaryOutput() {
   const linearTax19 = () => calculateLineartax19(reducedSalaries().monthly);
 
   return (
-    <div class="border-t border-gray-500 mt-4 pt-4">
-      <h3 class="w-full">Salary in PLN</h3>
+    <div class="p-10 rounded-lg bg-white mt-8">
+      <h3 class="w-full mt-0">Salary in PLN</h3>
 
       <table class="w-full table-auto">
         <thead>
