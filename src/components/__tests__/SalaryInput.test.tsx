@@ -6,7 +6,7 @@ describe("SalaryInput Component", () => {
   test("renders input fields correctly", () => {
     render(() => <SalaryInput />);
 
-    expect(screen.getByText(/salary in foreign currency/i)).toBeInTheDocument();
+    expect(screen.getByText(/salary in pln/i)).toBeInTheDocument();
     expect(screen.getByText(/days off per year/i)).toBeInTheDocument();
     expect(screen.getAllByRole("combobox")[0]).toBeInTheDocument();
     expect(screen.getAllByRole("combobox")[1]).toBeInTheDocument();
