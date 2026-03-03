@@ -7,9 +7,12 @@
     "start": "astro dev",
     "build": "rm -rf dist && astro build",
     "test": "vitest run",
-    "check": "bunx astro check"
+    "check": "bunx astro check",
+    "build:node": "bunx astro build ./ --node",
+    "preview": "bun run build:node && bunx astro preview --node"
   },
   "dependencies": {
+    "@astrojs/node": "^9.5.4",
     "nanostores": "^1.1.0",
     "tailwindcss": "^4.2.1",
     "valibot": "^1.2.0"
