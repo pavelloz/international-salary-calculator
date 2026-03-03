@@ -30,8 +30,6 @@ describe("ExchangeRatesList Component", () => {
 
   test("does not render component when currency is PLN", () => {
     $userInputStore.setKey("currency", "pln");
-    const { container } = render(() => <ExchangeRatesList />);
-
     // The `<Show when={userInput().currency !== "pln"}>` should evaluate to false
     // ensuring the container only holds the wrapping div but nothing inside.
     expect(screen.queryByText(/1 PLN/i)).not.toBeInTheDocument();

@@ -14,3 +14,4 @@ All commands are run from the root of the project, from a terminal:
 | `bun start`     | Starts local dev server at `localhost:4321` |
 | `bun run build` | Build your production site to `./dist/`     |
 | `bun run test`  | Run tests                                   |
+| `bun run check` | Type check the project                      |

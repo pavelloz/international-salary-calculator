@@ -1,7 +1,7 @@
 import { Show } from "solid-js";
 import { useHydratedStore } from "../lib/useHydratedStore";
 import { convertToAllPeriods, deductDaysOff } from "../lib/calculateDaysOff";
-import { calculateSalaries, formatInGold, formatSalary } from "../lib/calculateSalaries";
+import { calculateSalaries, formatSalary } from "../lib/calculateSalaries";
 import { calculateFlatTax12, calculateLineartax19 } from "../lib/calculateTaxes";
 import { $userInputStore, defaultUserInput } from "../stores/userInput";
 import { $ratesStore, defaultRates } from "../stores/rates";
