@@ -5,6 +5,8 @@ import solidJs from '@astrojs/solid-js';
 
 import vercel from '@astrojs/vercel';
 
+import tailwindcss from '@tailwindcss/vite';
+
 // https://astro.build/config
 export default defineConfig({
   integrations: [solidJs()],
@@ -24,7 +26,9 @@ export default defineConfig({
           }
         }
       }
-    }
+    },
+
+    plugins: [tailwindcss()]
   },
   security: {
     checkOrigin: false
