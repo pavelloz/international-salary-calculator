@@ -10,6 +10,12 @@ const localStorageMock = {
 };
 Object.defineProperty(window, "localStorage", { value: localStorageMock });
 
+vi.mock("astro:actions", () => ({
+  actions: {
+    getRates: vi.fn(),
+  },
+}));
+
 // Cleanup DOM after each test
 afterEach(() => {
   cleanup();

@@ -1,8 +1,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { $ratesStore, fetchRates } from '../rates';
 import { cleanStores } from 'nanostores';
-
-const globalFetch = globalThis.fetch;
+import { actions } from 'astro:actions';
 
 describe('ratesStore', () => {
     beforeEach(() => {
@@ -13,10 +12,10 @@ describe('ratesStore', () => {
             goldPrice: 0,
             loading: false,
         });
+        vi.clearAllMocks();
     });
 
     afterEach(() => {
-        globalThis.fetch = globalFetch;
         vi.restoreAllMocks();
     });
 
@@ -34,14 +33,14 @@ describe('ratesStore', () => {
             goldPrice: 300,
         };
 
-        globalThis.fetch = vi.fn().mockResolvedValue({
-            ok: true,
-            json: () => Promise.resolve(mockData)
+        vi.mocked(actions.getRates).mockResolvedValue({
+            data: mockData,
+            error: undefined
         });
 
         await fetchRates();
 
-        expect(globalThis.fetch).toHaveBeenCalledWith('/api/rates.json');
+        expect(actions.getRates).toHaveBeenCalled();
         expect($ratesStore.get()).toEqual({
             rates: { eur: 4.5, usd: 4.0, pln: 1 },
             goldPrice: 300,
@@ -50,9 +49,9 @@ describe('ratesStore', () => {
     });
 
     it('should handle fetch failure gracefully', async () => {
-        globalThis.fetch = vi.fn().mockResolvedValue({
-            ok: false,
-            status: 500
+        vi.mocked(actions.getRates).mockResolvedValue({
+            data: undefined,
+            error: new Error('Action failed') as any
         });
 
         const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => { });
@@ -65,18 +64,17 @@ describe('ratesStore', () => {
 
     it('should not fetch if already loading', async () => {
         $ratesStore.setKey('loading', true);
-        globalThis.fetch = vi.fn();
 
         await fetchRates();
 
-        expect(globalThis.fetch).not.toHaveBeenCalled();
+        expect(actions.getRates).not.toHaveBeenCalled();
     });
 
     it('should handle validation failure', async () => {
         // Return invalid data (missing required fields)
-        globalThis.fetch = vi.fn().mockResolvedValue({
-            ok: true,
-            json: () => Promise.resolve({ invalidData: 'test' })
+        vi.mocked(actions.getRates).mockResolvedValue({
+            data: { invalidData: 'test' } as any,
+            error: undefined
         });
 
         const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => { });

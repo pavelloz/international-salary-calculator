@@ -1,5 +1,6 @@
 import { persistentMap } from "@nanostores/persistent";
 import * as v from "valibot";
+import { actions } from "astro:actions";
 import { PLN } from "../lib/constants";
 
 export const rateSchema = v.record(v.string(), v.number());
@@ -40,11 +41,10 @@ export async function fetchRates() {
   $ratesStore.setKey("loading", true);
 
   try {
-    const res = await fetch("/api/rates.json");
-    if (!res.ok) {
-      throw new Error(`API returned status ${res.status}`);
+    const { data: actionData, error } = await actions.getRates();
+    if (error) {
+      throw new Error(`Action returned error: ${error.message}`);
     }
-    const rawData = await res.json();
 
     // Validate the API response
     const data = v.parse(
@@ -52,7 +52,7 @@ export async function fetchRates() {
         rates: rateSchema,
         goldPrice: v.number(),
       }),
-      rawData
+      actionData
     );
 
     $ratesStore.set({
