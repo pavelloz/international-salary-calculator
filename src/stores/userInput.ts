@@ -1,12 +1,9 @@
 import { persistentMap } from "@nanostores/persistent";
 import * as v from "valibot";
 
-export const userInputSchema = v.object({
-  salary: v.number(),
-  currency: v.string(),
-  period: v.string(),
-  daysOff: v.number(),
-});
+import numeric from "./validations/numeric";
+import userInputSchema from "./schemas/userInput";
+
 export type IUserInput = v.InferOutput<typeof userInputSchema>;
 
 export const defaultUserInput: IUserInput = {
@@ -25,22 +22,7 @@ export const $userInputStore = persistentMap<IUserInput>(
   }
 );
 
-const numericSchema = v.fallback(
-  v.pipe(
-    v.union([v.string(), v.number()]),
-    v.transform((val) => {
-      if (typeof val === "string") {
-        const parsed = parseInt(val, 10);
-        return isNaN(parsed) ? 0 : parsed;
-      }
-      return val;
-    }),
-    v.number()
-  ),
-  0
-);
-
-export const setSalary = (salary: number | string) => $userInputStore.setKey("salary", v.parse(numericSchema, salary));
+export const setSalary = (salary: number | string) => $userInputStore.setKey("salary", v.parse(numeric, salary));
 export const setCurrency = (currency: string) => $userInputStore.setKey("currency", currency);
 export const setPeriod = (period: string) => $userInputStore.setKey("period", period);
-export const setDaysOff = (daysOff: number | string) => $userInputStore.setKey("daysOff", v.parse(numericSchema, daysOff));
+export const setDaysOff = (daysOff: number | string) => $userInputStore.setKey("daysOff", v.parse(numeric, daysOff));
