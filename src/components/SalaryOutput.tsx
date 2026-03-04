@@ -122,7 +122,7 @@ export default function SalaryOutput() {
             <td>
               Linear 19%
               <br />
-              (big ZUS)
+              <span class="text-sm text-gray-400">(big ZUS)</span>
             </td>
             <td>{renderValue(linearTax19().hourly, linearTax19Max()?.hourly)}</td>
             <td>{renderValue(linearTax19().daily, linearTax19Max()?.daily)}</td>
@@ -139,7 +139,7 @@ export default function SalaryOutput() {
             <td>
               Flat 12%
               <br />
-              (big ZUS)
+              <span class="text-sm text-gray-400">(big ZUS)</span>
             </td>
             <td>{renderValue(flatTax12().hourly, flatTax12Max()?.hourly)}</td>
             <td>{renderValue(flatTax12().daily, flatTax12Max()?.daily)}</td>

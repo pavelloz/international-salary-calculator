@@ -131,4 +131,51 @@ describe("SalaryInput Component", () => {
     // It should snap back to 10000 (the min salary)
     expect(maxSalaryInput).toHaveValue("10000");
   });
+
+  test("scales base and max proportionally when period changes", () => {
+    $userInputStore.set({
+      ...defaultUserInput,
+      salary: 10000,
+      salaryMax: 12000,
+      currency: "pln",
+      period: "monthly",
+    });
+
+    render(() => <SalaryInput />);
+
+    const periodSelect = screen.getAllByRole("combobox")[0];
+
+    // Switch from monthly to yearly
+    fireEvent.change(periodSelect, { target: { value: "yearly" } });
+
+    const inputs = screen.getAllByRole("textbox");
+    // 10000 * 12 = 120000
+    // 12000 * 12 = 144000
+    expect(inputs[0]).toHaveValue("120000");
+    expect(inputs[1]).toHaveValue("144000");
+  });
+
+  test("clamps max to min if scaling down loses precision heavily", () => {
+    $userInputStore.set({
+      ...defaultUserInput,
+      salary: 10000,
+      salaryMax: 10000, // exact same
+      currency: "pln",
+      period: "yearly",
+    });
+
+    render(() => <SalaryInput />);
+
+    const periodSelect = screen.getAllByRole("combobox")[0];
+
+    // Switch from yearly to monthly
+    // 10000 / 12 = 833.33... -> 833
+    fireEvent.change(periodSelect, { target: { value: "monthly" } });
+
+    const inputs = screen.getAllByRole("textbox");
+
+    // Both should be 833, max shouldn't somehow drop below 833 because of rounding logic
+    expect(inputs[0]).toHaveValue("833");
+    expect(inputs[1]).toHaveValue("833");
+  });
 });

@@ -14,27 +14,41 @@ interface SalaryValues {
   hourly: number;
 }
 
-const calculateSalaries = (inputSalary: number, period: string, rate: number): SalaryValues => {
-  const salary = inputSalary * rate;
-  let annual: number;
-
-  // 1. Convert any input to a standard Annual Salary first
+const convertToAnnual = (salary: number, period: string): number => {
   switch (period) {
     case "hourly":
-      annual = salary * HOURS_PER_WEEK * WEEKS_PER_YEAR;
-      break;
+      return salary * HOURS_PER_WEEK * WEEKS_PER_YEAR;
     case "daily":
-      annual = (salary / HOURS_PER_DAY) * HOURS_PER_WEEK * WEEKS_PER_YEAR;
-      break;
+      return (salary / HOURS_PER_DAY) * HOURS_PER_WEEK * WEEKS_PER_YEAR;
     case "monthly":
-      annual = salary * MONTHS_PER_YEAR;
-      break;
+      return salary * MONTHS_PER_YEAR;
     case "yearly":
-      annual = salary;
-      break;
+      return salary;
     default:
-      annual = salary;
+      return salary;
   }
+};
+
+const convertSalaryPeriod = (salary: number, fromPeriod: string, toPeriod: string): number => {
+  const annual = convertToAnnual(salary, fromPeriod);
+
+  switch (toPeriod) {
+    case "hourly":
+      return Number((annual / WEEKS_PER_YEAR / HOURS_PER_WEEK).toFixed(2));
+    case "daily":
+      return Math.round(annual / WEEKS_PER_YEAR / WORKING_DAYS_PER_WEEK);
+    case "monthly":
+      return Math.round(annual / MONTHS_PER_YEAR);
+    case "yearly":
+      return Math.round(annual);
+    default:
+      return Math.round(annual);
+  }
+};
+
+const calculateSalaries = (inputSalary: number, period: string, rate: number): SalaryValues => {
+  const salary = inputSalary * rate;
+  const annual = convertToAnnual(salary, period);
 
   // 2. Derive other values from the Annual baseline
   const yearly = Math.round(annual);
@@ -49,8 +63,8 @@ const formatSalary = (value: number | null): string | null => {
   if (value === null || isNaN(value)) return null;
 
   return Math.round(value).toLocaleString("pl-PL", {
-    style: "currency",
-    currency: "PLN",
+    // style: "currency",
+    // currency: "PLN",
     maximumSignificantDigits: 7,
   });
 };
@@ -69,7 +83,7 @@ const formatCompactSalary = (value: number | null): string | null => {
     maximumFractionDigits: 1,
   });
 
-  return `${formatted} zł`;
+  return formatted
 };
 
-export { calculateSalaries, formatInGold, formatSalary, formatCompactSalary };
+export { calculateSalaries, formatInGold, formatSalary, formatCompactSalary, convertToAnnual, convertSalaryPeriod };

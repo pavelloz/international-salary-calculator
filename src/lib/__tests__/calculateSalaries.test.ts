@@ -1,4 +1,4 @@
-import { calculateSalaries } from "../calculateSalaries";
+import { calculateSalaries, convertSalaryPeriod, convertToAnnual } from "../calculateSalaries";
 
 describe("calculateSalaries", () => {
   test("calculates salaries for hourly period", () => {
@@ -37,5 +37,34 @@ describe("calculateSalaries", () => {
     const formatted = calculateSalaries(50000, "yearly", 1);
 
     expect(formatted.yearly).toBe(50000);
+  });
+});
+
+describe("convertSalaryPeriod", () => {
+  test("converts from monthly to yearly correctly", () => {
+    const result = convertSalaryPeriod(10000, "monthly", "yearly");
+    expect(result).toBe(120000);
+  });
+
+  test("converts from yearly to monthly correctly", () => {
+    const result = convertSalaryPeriod(120000, "yearly", "monthly");
+    expect(result).toBe(10000);
+  });
+
+  test("converts from hourly to daily correctly", () => {
+    const result = convertSalaryPeriod(100, "hourly", "daily");
+    // 100 * 8 = 800
+    expect(result).toBe(800);
+  });
+
+  test("converts from simple amounts back to themselves", () => {
+    expect(convertSalaryPeriod(5000, "monthly", "monthly")).toBe(5000);
+    expect(convertSalaryPeriod(150000, "yearly", "yearly")).toBe(150000);
+  });
+
+  test("rounds gracefully", () => {
+    // 10000 yearly -> monthly = 10000 / 12 = 833.333... -> 833
+    const result = convertSalaryPeriod(10000, "yearly", "monthly");
+    expect(result).toBe(833);
   });
 });

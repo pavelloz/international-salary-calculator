@@ -1,5 +1,6 @@
 import { For, Show, createEffect, on } from "solid-js";
 import { useHydratedStore } from "../lib/useHydratedStore";
+import { convertSalaryPeriod } from "../lib/calculateSalaries";
 
 import { CURRENCIES, CURRENCY_FLAGS, PERIODS } from "../lib/constants";
 import {
@@ -56,7 +57,33 @@ export default function SalaryInput() {
         <label class="text-xs text-gray-500 mb-1" for="period">
           Period
         </label>
-        <select id="period" onChange={e => setPeriod(e.currentTarget.value)} value={store().period}>
+        <select
+          id="period"
+          onChange={e => {
+            const newPeriod = e.currentTarget.value;
+            const oldPeriod = store().period;
+
+            if (oldPeriod !== newPeriod) {
+              const newSalary = convertSalaryPeriod(store().salary, oldPeriod, newPeriod);
+              setSalary(newSalary);
+
+              if (store().salaryMax !== undefined) {
+                if (newPeriod === "monthly" || newPeriod === "yearly") {
+                  let newMax = convertSalaryPeriod(store().salaryMax!, oldPeriod, newPeriod);
+                  if (newMax < newSalary) {
+                    newMax = newSalary;
+                  }
+                  setSalaryMax(newMax);
+                } else {
+                  setSalaryMax(undefined);
+                }
+              }
+
+              setPeriod(newPeriod);
+            }
+          }}
+          value={store().period}
+        >
           <For each={PERIODS}>{(p: string) => <option value={p}>{p.charAt(0).toUpperCase() + p.slice(1)}</option>}</For>
         </select>
       </div>
