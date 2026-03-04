@@ -6,6 +6,7 @@ const userInputSchema = v.object({
     currency: v.string(),
     period: v.string(),
     daysOff: v.number(),
+    paidDaysOff: v.optional(v.number()),
 });
 
 export default userInputSchema; 

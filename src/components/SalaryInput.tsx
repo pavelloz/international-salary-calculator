@@ -11,6 +11,7 @@ import {
   setPeriod,
   setSalary,
   setSalaryMax,
+  setPaidDaysOff,
 } from "../stores/userInput";
 
 export const cleanNumericInput = (val: string) => val.replace(/\D/g, "");
@@ -153,18 +154,41 @@ export default function SalaryInput() {
         </select>
       </div>
 
-      <h4 class="w-full text-gray-700 mt-4">Unpaid days off per year</h4>
-      <input
-        class="w-16"
-        id="daysOff"
-        name="daysOff"
-        value={store().daysOff}
-        onInput={e => {
-          const cleanValue = cleanNumericInput(e.currentTarget.value);
-          e.currentTarget.value = cleanValue;
-          setDaysOff(cleanValue);
-        }}
-      />
+      <div class="w-full flex gap-x-12 mt-4">
+        <div class="flex flex-col">
+          <label class="text-xs text-gray-500 mb-1" for="daysOff">
+            Unpaid days off per year
+          </label>
+          <input
+            class="w-24"
+            id="daysOff"
+            name="daysOff"
+            value={store().daysOff}
+            onInput={e => {
+              const cleanValue = cleanNumericInput(e.currentTarget.value);
+              e.currentTarget.value = cleanValue;
+              setDaysOff(cleanValue);
+            }}
+          />
+        </div>
+
+        <div class="flex flex-col">
+          <label class="text-xs text-gray-500 mb-1" for="paidDaysOff">
+            Paid days off per year
+          </label>
+          <input
+            class="w-24"
+            id="paidDaysOff"
+            name="paidDaysOff"
+            value={store().paidDaysOff ?? 0}
+            onInput={e => {
+              const cleanValue = cleanNumericInput(e.currentTarget.value);
+              e.currentTarget.value = cleanValue;
+              setPaidDaysOff(cleanValue);
+            }}
+          />
+        </div>
+      </div>
     </div>
   );
 }

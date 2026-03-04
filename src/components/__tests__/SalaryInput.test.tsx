@@ -12,27 +12,28 @@ describe("SalaryInput Component", () => {
     render(() => <SalaryInput />);
 
     expect(screen.getByText(/salary in pln/i)).toBeInTheDocument();
-    expect(screen.getByText(/days off per year/i)).toBeInTheDocument();
+    expect(screen.getByText("Unpaid days off per year")).toBeInTheDocument();
+    expect(screen.getByText("Paid days off per year")).toBeInTheDocument();
     expect(screen.getAllByRole("combobox")[0]).toBeInTheDocument(); // Period
     expect(screen.getAllByRole("combobox")[1]).toBeInTheDocument(); // Currency
 
-    // Period is "monthly" by default so we should have 3 text inputs:
-    // min salary, max salary, daysOff
-    expect(screen.getAllByRole("textbox")).toHaveLength(3);
+    expect(screen.getAllByRole("textbox")).toHaveLength(4); // salary, salaryMax, daysOff, paidDaysOff
   });
 
   test("has correct initial values", () => {
     render(() => <SalaryInput />);
 
-    // Since it's monthly, we get min salary, max salary (auto-computed), daysOff
+    // Since it's monthly, we get min salary, max salary (auto-computed), daysOff, paidDaysOff
     const salaryInput = screen.getAllByRole("textbox")[0];
     const maxSalaryInput = screen.getAllByRole("textbox")[1];
-    const daysOffInput = screen.getAllByRole("textbox")[2];
+    const daysOffInput = screen.getByLabelText("Unpaid days off per year");
+    const paidDaysOffInput = screen.getByLabelText("Paid days off per year");
 
     expect(salaryInput).toHaveValue("30000");
     // store max starts undefined, but effect computes 1.2 * 30000 = 36000
     expect(maxSalaryInput).toHaveValue("36000");
     expect(daysOffInput).toHaveValue("0");
+    expect(paidDaysOffInput).toHaveValue("0");
   });
 
   test("renders all period options", () => {
@@ -70,7 +71,7 @@ describe("SalaryInput Component", () => {
   test("updates days off value on input change", () => {
     render(() => <SalaryInput />);
 
-    const daysOffInput = screen.getAllByRole("textbox")[2];
+    const daysOffInput = screen.getByLabelText("Unpaid days off per year");
     fireEvent.input(daysOffInput, { target: { value: "20" } });
 
     expect(daysOffInput).toHaveValue("20");
@@ -88,7 +89,7 @@ describe("SalaryInput Component", () => {
   test("strips non-numeric characters from days off input", () => {
     render(() => <SalaryInput />);
 
-    const daysOffInput = screen.getAllByRole("textbox")[2];
+    const daysOffInput = screen.getByLabelText("Unpaid days off per year");
     fireEvent.input(daysOffInput, { target: { value: "20days" } });
 
     expect(daysOffInput).toHaveValue("20");
@@ -104,8 +105,7 @@ describe("SalaryInput Component", () => {
     });
     render(() => <SalaryInput />);
     // hourly => no max salary
-    const inputs = screen.getAllByRole("textbox");
-    expect(inputs).toHaveLength(2); // salary, daysoff
+    expect(screen.getAllByRole("textbox")).toHaveLength(3); // salary, daysOff, paidDaysOff
   });
 
   test("max amount resets to min amount if user inputs a smaller number and blurs", () => {

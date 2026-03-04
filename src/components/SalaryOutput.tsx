@@ -2,6 +2,7 @@ import { Show } from "solid-js";
 import { useHydratedStore } from "../lib/useHydratedStore";
 import { convertToAllPeriods, deductDaysOff } from "../lib/calculateDaysOff";
 import { calculateSalaries, formatSalary, formatCompactSalary } from "../lib/calculateSalaries";
+import { MONTHS_PER_YEAR, WORKING_DAYS_PER_YEAR } from "../lib/constants";
 import { calculateFlatTax12, calculateLineartax19 } from "../lib/calculateTaxes";
 import { $userInputStore, defaultUserInput } from "../stores/userInput";
 import { $ratesStore, defaultRates } from "../stores/rates";
@@ -42,6 +43,10 @@ export default function SalaryOutput() {
 
   const flatTax12Max = () => (reducedSalariesMax() ? calculateFlatTax12(reducedSalariesMax()!.monthly) : null);
   const linearTax19Max = () => (reducedSalariesMax() ? calculateLineartax19(reducedSalariesMax()!.monthly) : null);
+
+  const paidDaysOffValueAnnual = () => (salaries().yearly / WORKING_DAYS_PER_YEAR) * (userInput().paidDaysOff || 0);
+  const paidDaysOffValueAnnualMax = () =>
+    hasMax() ? (salariesMax()!.yearly / WORKING_DAYS_PER_YEAR) * (userInput().paidDaysOff || 0) : null;
 
   const renderValue = (minVal: number, maxVal: number | undefined | null, compact?: boolean) => {
     const formatter = compact ? formatCompactSalary : formatSalary;
@@ -110,6 +115,31 @@ export default function SalaryOutput() {
                   <div>
                     -{formatCompactSalary(salaries().yearly - reducedSalaries().yearly)} -
                     {formatCompactSalary(salariesMax()!.yearly - reducedSalariesMax()!.yearly)}
+                  </div>
+                </Show>
+              </td>
+            </tr>
+          </Show>
+          <Show when={(userInput().paidDaysOff || 0) > 0}>
+            <tr class="align-top text-gray-500">
+              <td>Paid days off value</td>
+              <td></td>
+              <td>
+                <Show
+                  when={hasMax()}
+                  fallback={<div>+{formatCompactSalary(paidDaysOffValueAnnual() / MONTHS_PER_YEAR)}</div>}
+                >
+                  <div>
+                    +{formatCompactSalary(paidDaysOffValueAnnual() / MONTHS_PER_YEAR)} -
+                    {formatCompactSalary(paidDaysOffValueAnnualMax()! / MONTHS_PER_YEAR)}
+                  </div>
+                </Show>
+              </td>
+              <td>
+                <Show when={hasMax()} fallback={<div>+{formatCompactSalary(paidDaysOffValueAnnual())}</div>}>
+                  <div>
+                    +{formatCompactSalary(paidDaysOffValueAnnual())} -
+                    {formatCompactSalary(paidDaysOffValueAnnualMax()!)}
                   </div>
                 </Show>
               </td>
