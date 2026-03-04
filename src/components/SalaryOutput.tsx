@@ -117,22 +117,6 @@ export default function SalaryOutput() {
           </Show>
           <tr class="align-top border-t border-gray-400">
             <td>
-              Linear 19%
-              <br />
-              <span class="text-sm text-gray-400">(big ZUS)</span>
-            </td>
-            <td>{renderValue(linearTax19().hourly, linearTax19Max()?.hourly)}</td>
-            <td>
-              {renderValue(linearTax19().monthly, linearTax19Max()?.monthly, true)}
-              {renderGold(linearTax19().monthly, linearTax19Max()?.monthly)}
-            </td>
-            <td>
-              {renderValue(linearTax19().yearly, linearTax19Max()?.yearly, true)}
-              {renderGold(linearTax19().yearly, linearTax19Max()?.yearly)}
-            </td>
-          </tr>
-          <tr class="align-top">
-            <td>
               Flat 12%
               <br />
               <span class="text-sm text-gray-400">(big ZUS)</span>
@@ -145,6 +129,22 @@ export default function SalaryOutput() {
             <td>
               {renderValue(flatTax12().yearly, flatTax12Max()?.yearly, true)}
               {renderGold(flatTax12().yearly, flatTax12Max()?.yearly)}
+            </td>
+          </tr>
+          <tr class="align-top">
+            <td>
+              Linear 19%
+              <br />
+              <span class="text-sm text-gray-400">(big ZUS)</span>
+            </td>
+            <td>{renderValue(linearTax19().hourly, linearTax19Max()?.hourly)}</td>
+            <td>
+              {renderValue(linearTax19().monthly, linearTax19Max()?.monthly, true)}
+              {renderGold(linearTax19().monthly, linearTax19Max()?.monthly)}
+            </td>
+            <td>
+              {renderValue(linearTax19().yearly, linearTax19Max()?.yearly, true)}
+              {renderGold(linearTax19().yearly, linearTax19Max()?.yearly)}
             </td>
           </tr>
         </tbody>
