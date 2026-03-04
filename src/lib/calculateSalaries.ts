@@ -61,4 +61,15 @@ const formatInGold = (value: number | null): string | null => {
   return (value / GRAMS_IN_OUNCE).toFixed(2);
 };
 
-export { calculateSalaries, formatInGold, formatSalary };
+const formatCompactSalary = (value: number | null): string | null => {
+  if (value === null || isNaN(value)) return null;
+
+  const formatted = Math.round(value).toLocaleString("en-US", {
+    notation: "compact",
+    maximumFractionDigits: 1,
+  });
+
+  return `${formatted} zł`;
+};
+
+export { calculateSalaries, formatInGold, formatSalary, formatCompactSalary };

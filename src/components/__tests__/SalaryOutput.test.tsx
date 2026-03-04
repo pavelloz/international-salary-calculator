@@ -7,6 +7,7 @@ describe("SalaryOutput Component", () => {
   beforeEach(() => {
     $userInputStore.set({
       salary: 10000,
+      salaryMax: undefined,
       currency: "pln",
       period: "monthly",
       daysOff: 0,
@@ -32,11 +33,25 @@ describe("SalaryOutput Component", () => {
     render(() => <SalaryOutput />);
     expect(screen.getByText("Gross")).toBeInTheDocument();
     // 10000 PLN monthly = 120000 yearly
-    // Value will be formatted as 120 000 PLN (roughly, depending on locale)
+    // Value will be formatted as 120K PLN (roughly, depending on locale)
     // Testing the UI directly via string parsing logic can be fragile across locales,
     // so we just verify the basic categories exist and it rendered without crashing
-    expect(screen.getByText("19% Linear tax (big ZUS)")).toBeInTheDocument();
-    expect(screen.getByText("12% Flat rate tax (big ZUS)")).toBeInTheDocument();
+    expect(screen.getByText(/Linear 19%/i)).toBeInTheDocument();
+    expect(screen.getByText(/Flat 12%/i)).toBeInTheDocument();
+  });
+
+  test("renders range salaries correctly", () => {
+    $userInputStore.set({
+      salary: 10000,
+      salaryMax: 15000,
+      currency: "pln",
+      period: "monthly",
+      daysOff: 0,
+    });
+    render(() => <SalaryOutput />);
+    // Testing the range rendered strings loosely due to pl-PL unicode non-breaking space issues
+    const grossCell = screen.getAllByText(/Gross/i)[0].parentElement!;
+    expect(grossCell.textContent).toMatch(/10K.*15K/);
   });
 
   test("shows days off cost only when daysOff > 0", () => {
@@ -48,6 +63,7 @@ describe("SalaryOutput Component", () => {
     // Set daysOff to 10
     $userInputStore.set({
       salary: 10000,
+      salaryMax: undefined,
       currency: "pln",
       period: "monthly",
       daysOff: 10,

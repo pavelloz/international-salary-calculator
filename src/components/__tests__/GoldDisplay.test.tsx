@@ -27,4 +27,13 @@ describe("GoldDisplay Component", () => {
     render(() => <GoldDisplay valueInPln={-5000} />);
     expect(screen.queryByText(/oz of gold/i)).not.toBeInTheDocument();
   });
+
+  test("renders range correctly when valueInPlnMax is provided", () => {
+    // 10000 PLN / 10000 = 1 oz
+    // 20000 PLN / 10000 = 2 oz
+    render(() => <GoldDisplay valueInPln={10000} valueInPlnMax={20000} />);
+    const minText = formatInGold(1);
+    const maxText = formatInGold(2);
+    expect(screen.getByText(new RegExp(`${minText} - ${maxText} oz of gold`, "i"))).toBeInTheDocument();
+  });
 });
