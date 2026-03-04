@@ -67,8 +67,8 @@ export default function SalaryOutput() {
   };
 
   return (
-    <div class="p-10 rounded-lg bg-white mt-8">
-      <h3 class="w-full mt-0">Salary in PLN</h3>
+    <div class="mt-8 p-4 md:p-10 rounded-lg bg-white">
+      <h3 class="w-full mt-0 text-xl md:text-2xl">Salary in PLN</h3>
 
       <table class="w-full table-auto">
         <thead>
@@ -85,11 +85,13 @@ export default function SalaryOutput() {
             <td>{renderValue(reducedSalaries().hourly, reducedSalariesMax()?.hourly)}</td>
             <td>
               {renderValue(reducedSalaries().monthly, reducedSalariesMax()?.monthly, true)}
-              {renderGold(reducedSalaries().monthly, reducedSalariesMax()?.monthly)}
+              <span class="hidden md:inline">
+                {renderGold(reducedSalaries().monthly, reducedSalariesMax()?.monthly)}
+              </span>
             </td>
             <td>
               {renderValue(reducedSalaries().yearly, reducedSalariesMax()?.yearly, true)}
-              {renderGold(reducedSalaries().yearly, reducedSalariesMax()?.yearly)}
+              <span class="hidden md:inline">{renderGold(reducedSalaries().yearly, reducedSalariesMax()?.yearly)}</span>
             </td>
           </tr>
           <Show when={userInput().daysOff > 0}>
@@ -154,11 +156,11 @@ export default function SalaryOutput() {
             <td>{renderValue(flatTax12().hourly, flatTax12Max()?.hourly)}</td>
             <td>
               {renderValue(flatTax12().monthly, flatTax12Max()?.monthly, true)}
-              {renderGold(flatTax12().monthly, flatTax12Max()?.monthly)}
+              <span class="hidden md:inline">{renderGold(flatTax12().monthly, flatTax12Max()?.monthly)}</span>
             </td>
             <td>
               {renderValue(flatTax12().yearly, flatTax12Max()?.yearly, true)}
-              {renderGold(flatTax12().yearly, flatTax12Max()?.yearly)}
+              <span class="hidden md:inline">{renderGold(flatTax12().yearly, flatTax12Max()?.yearly)}</span>
             </td>
           </tr>
           <tr class="align-top">
@@ -170,11 +172,11 @@ export default function SalaryOutput() {
             <td>{renderValue(linearTax19().hourly, linearTax19Max()?.hourly)}</td>
             <td>
               {renderValue(linearTax19().monthly, linearTax19Max()?.monthly, true)}
-              {renderGold(linearTax19().monthly, linearTax19Max()?.monthly)}
+              <span class="hidden md:inline">{renderGold(linearTax19().monthly, linearTax19Max()?.monthly)}</span>
             </td>
             <td>
               {renderValue(linearTax19().yearly, linearTax19Max()?.yearly, true)}
-              {renderGold(linearTax19().yearly, linearTax19Max()?.yearly)}
+              <span class="hidden md:inline">{renderGold(linearTax19().yearly, linearTax19Max()?.yearly)}</span>
             </td>
           </tr>
         </tbody>
