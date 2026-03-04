@@ -42,7 +42,6 @@ describe("SalaryInput Component", () => {
     expect(periodSelect).toBeInTheDocument();
 
     expect(screen.getByText(/hourly/i)).toBeInTheDocument();
-    expect(screen.getByText(/daily/i)).toBeInTheDocument();
     expect(screen.getByText(/monthly/i)).toBeInTheDocument();
     expect(screen.getByText(/yearly/i)).toBeInTheDocument();
   });

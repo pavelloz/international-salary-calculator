@@ -64,7 +64,6 @@ function calculateZUSFlatTax12(monthlyRevenue: number): ZUSValues {
 export interface TaxValues {
   monthly: number;
   yearly: number;
-  daily: number;
   hourly: number;
 }
 
@@ -77,7 +76,6 @@ export function calculateFlatTax12(monthlyRevenue: number): TaxValues {
   return {
     monthly: net,
     yearly: net * MONTHS_PER_YEAR,
-    daily: net / WORKING_DAYS_PER_MONTH,
     hourly: net / (WORKING_DAYS_PER_MONTH * HOURS_PER_DAY),
   };
 }
@@ -108,7 +106,6 @@ export function calculateLineartax19(monthlyRevenue: number): TaxValues {
   return {
     monthly: net,
     yearly: net * MONTHS_PER_YEAR,
-    daily: net / WORKING_DAYS_PER_MONTH,
     hourly: net / (WORKING_DAYS_PER_MONTH * HOURS_PER_DAY),
   };
 }

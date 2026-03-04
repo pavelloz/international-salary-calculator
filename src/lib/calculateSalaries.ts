@@ -10,7 +10,6 @@ import {
 interface SalaryValues {
   yearly: number;
   monthly: number;
-  daily: number;
   hourly: number;
 }
 
@@ -18,8 +17,6 @@ const convertToAnnual = (salary: number, period: string): number => {
   switch (period) {
     case "hourly":
       return salary * HOURS_PER_WEEK * WEEKS_PER_YEAR;
-    case "daily":
-      return (salary / HOURS_PER_DAY) * HOURS_PER_WEEK * WEEKS_PER_YEAR;
     case "monthly":
       return salary * MONTHS_PER_YEAR;
     case "yearly":
@@ -35,8 +32,6 @@ const convertSalaryPeriod = (salary: number, fromPeriod: string, toPeriod: strin
   switch (toPeriod) {
     case "hourly":
       return Number((annual / WEEKS_PER_YEAR / HOURS_PER_WEEK).toFixed(2));
-    case "daily":
-      return Math.round(annual / WEEKS_PER_YEAR / WORKING_DAYS_PER_WEEK);
     case "monthly":
       return Math.round(annual / MONTHS_PER_YEAR);
     case "yearly":
@@ -53,10 +48,9 @@ const calculateSalaries = (inputSalary: number, period: string, rate: number): S
   // 2. Derive other values from the Annual baseline
   const yearly = Math.round(annual);
   const monthly = Math.round(annual / MONTHS_PER_YEAR);
-  const daily = Math.round(annual / WEEKS_PER_YEAR / WORKING_DAYS_PER_WEEK);
   const hourly = Number((annual / WEEKS_PER_YEAR / HOURS_PER_WEEK).toFixed(2));
 
-  return { yearly, monthly, daily, hourly };
+  return { yearly, monthly, hourly };
 };
 
 const formatSalary = (value: number | null): string | null => {

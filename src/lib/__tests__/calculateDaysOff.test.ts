@@ -41,13 +41,6 @@ describe("convertToAllPeriods", () => {
     expect(result.monthly).toBe(5000);
   });
 
-  test("calculates daily salary correctly", () => {
-    const dailySalary = 200;
-    const result = convertToAllPeriods(dailySalary * 5 * 52);
-
-    expect(result.daily).toBe(200);
-  });
-
   test("calculates hourly salary correctly", () => {
     const hourlySalary = 50;
     const result = convertToAllPeriods(hourlySalary * 8 * 5 * 52);

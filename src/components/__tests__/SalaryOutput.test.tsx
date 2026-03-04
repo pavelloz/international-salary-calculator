@@ -24,7 +24,6 @@ describe("SalaryOutput Component", () => {
     render(() => <SalaryOutput />);
     expect(screen.getByText("Salary in PLN")).toBeInTheDocument();
     expect(screen.getByText("Hourly")).toBeInTheDocument();
-    expect(screen.getByText("Daily")).toBeInTheDocument();
     expect(screen.getByText("Monthly")).toBeInTheDocument();
     expect(screen.getByText("Yearly")).toBeInTheDocument();
   });

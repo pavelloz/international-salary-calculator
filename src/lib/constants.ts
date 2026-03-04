@@ -23,7 +23,6 @@ export const PLN = { pln: 1 };
 
 export const PERIOD_CONFIG = {
   hourly: "Hourly",
-  daily: "Daily",
   monthly: "Monthly",
   yearly: "Yearly",
 };
