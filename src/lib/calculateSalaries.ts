@@ -41,6 +41,13 @@ const convertSalaryPeriod = (salary: number, fromPeriod: string, toPeriod: strin
   }
 };
 
+const convertSalaryCurrency = (salary: number, oldRate: number, newRate: number): number => {
+  if (oldRate === 0 || newRate === 0) return salary;
+  // salary * oldRate = value in PLN
+  // value in PLN / newRate = salary in new currency
+  return Math.round((salary * oldRate) / newRate);
+};
+
 const calculateSalaries = (inputSalary: number, period: string, rate: number): SalaryValues => {
   const salary = inputSalary * rate;
   const annual = convertToAnnual(salary, period);
@@ -80,4 +87,4 @@ const formatCompactSalary = (value: number | null): string | null => {
   return formatted
 };
 
-export { calculateSalaries, formatInGold, formatSalary, formatCompactSalary, convertToAnnual, convertSalaryPeriod };
+export { calculateSalaries, formatInGold, formatSalary, formatCompactSalary, convertToAnnual, convertSalaryPeriod, convertSalaryCurrency };

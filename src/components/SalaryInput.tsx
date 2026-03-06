@@ -1,6 +1,7 @@
 import { For, Show, createEffect, on } from "solid-js";
 import { useHydratedStore } from "../lib/useHydratedStore";
-import { convertSalaryPeriod } from "../lib/calculateSalaries";
+import { convertSalaryPeriod, convertSalaryCurrency } from "../lib/calculateSalaries";
+import { $ratesStore, defaultRates } from "../stores/rates";
 
 import { CURRENCIES, CURRENCY_FLAGS, PERIODS } from "../lib/constants";
 import {
@@ -18,6 +19,7 @@ export const cleanNumericInput = (val: string) => val.replace(/\D/g, "");
 
 export default function SalaryInput() {
   const store = useHydratedStore($userInputStore, defaultUserInput);
+  const ratesStore = useHydratedStore($ratesStore, defaultRates);
 
   // Set default max salary when period changes to monthly/yearly and max is not set.
   createEffect(
@@ -143,7 +145,34 @@ export default function SalaryInput() {
         <label class="text-xs text-gray-500 mb-1" for="currency">
           Currency
         </label>
-        <select id="currency" value={store().currency} onChange={e => setCurrency(e.currentTarget.value)}>
+        <select
+          id="currency"
+          value={store().currency}
+          onChange={e => {
+            const newCurrency = e.currentTarget.value;
+            const oldCurrency = store().currency;
+
+            if (oldCurrency !== newCurrency) {
+              const rates = ratesStore().rates;
+              const oldRate = rates[oldCurrency] || 1;
+              const newRate = rates[newCurrency] || 1;
+
+              const newSalary = convertSalaryCurrency(store().salary, oldRate, newRate);
+              setSalary(newSalary);
+
+              if (store().salaryMax !== undefined) {
+                // we know store().salaryMax is not undefined here
+                let newMax = convertSalaryCurrency(store().salaryMax as number, oldRate, newRate);
+                if (newMax < newSalary) {
+                  newMax = newSalary;
+                }
+                setSalaryMax(newMax);
+              }
+
+              setCurrency(newCurrency);
+            }
+          }}
+        >
           <For each={CURRENCIES}>
             {(c: string) => (
               <option value={c}>
