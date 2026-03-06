@@ -3,7 +3,11 @@ import { HOURS_PER_DAY, MONTHS_PER_YEAR, WORKING_DAYS_PER_MONTH } from "./consta
 // Tax rates
 const FLAT_TAX_RATE = 0.12; // 12%
 const LINEAR_TAX_RATE = 0.19; // 19%
-const BUSINESS_COST_PERCENTAGE = 0.5; // 50% of revenue
+
+// Default B2B Costs (Koszty uzyskania przychodu).
+// In IT, B2B programmers usually have low costs (e.g. accounting ~250 PLN/mo), but for simplicity in a calculator prioritizing Revenue -> Net, we assume 0 default unless specified.
+// 50% is for Creative Works (autorskie koszty), not standard B2B.
+const BUSINESS_COST_PERCENTAGE = 0;
 const HEALTH_INSURANCE_PERCENTAGE = 0.09; // 9% of income
 
 // ZUS (Social Security) amounts - monthly
@@ -12,6 +16,7 @@ const ZUS_LINEAR_TAX_SOCIAL_SECURITY = 1788.29;
 const ZUS_LINEAR_TAX_MIN_HEALTH_INSURANCE = 432.54;
 
 // Health insurance rates for flat tax - monthly (based on yearly revenue)
+// Note: Linear tax health insurance is 4.9% of income. Flat tax uses fixed amounts.
 interface HealthInsuranceRate {
   maxYearlyRevenue?: number;
   monthlyRate: number;
@@ -98,15 +103,56 @@ function calculateZUSLinear19(monthlyRevenue: number): ZUSValues {
   };
 }
 
+// Linear Tax allows deducting Health Insurance from the tax base up to a yearly limit.
+// For 2026, the limit is 14,100 PLN.
+const LINEAR_TAX_HEALTH_DEDUCTION_LIMIT = 14100;
+
 export function calculateLineartax19(monthlyRevenue: number): TaxValues {
-  const zus = calculateZUSLinear19(monthlyRevenue);
-  const taxBase = monthlyRevenue - zus.socialSecurity - zus.healthInsurance;
-  const tax = Math.round(taxBase * LINEAR_TAX_RATE);
-  const net = monthlyRevenue - zus.socialSecurity - zus.healthInsurance - tax;
+  let yearlyNet = 0;
+  let cumulativeHealthDeduction = 0;
+
+  for (let month = 1; month <= 12; month++) {
+    const zus = calculateZUSLinear19(monthlyRevenue);
+
+    // In actual Polish law, ZUS social security and FP are deducted from Income.
+    // Income = Revenue - Costs
+    const costs = Math.round(monthlyRevenue * BUSINESS_COST_PERCENTAGE);
+    const income = monthlyRevenue - costs;
+
+    // Linear tax health insurance is 4.9% of (Income - ZUS Social).
+    // The previous implementation used 9% (HEALTH_INSURANCE_PERCENTAGE) which is only for Flat Tax / UOP.
+    const healthInsuranceBase = income - zus.socialSecurity;
+    const healthInsurance = Math.max(
+      Math.round(healthInsuranceBase * 0.049), // 4.9% for Linear
+      ZUS_LINEAR_TAX_MIN_HEALTH_INSURANCE
+    );
+
+    // Limit Health Insurance deduction from tax base
+    const maxDeductible = LINEAR_TAX_HEALTH_DEDUCTION_LIMIT - cumulativeHealthDeduction;
+    const deductibleHealth = Math.min(healthInsurance, Math.max(0, maxDeductible));
+    cumulativeHealthDeduction += deductibleHealth;
+
+    // Tax base is Income - ZUS Social - Deductible Health
+    let taxBase = income - zus.socialSecurity - deductibleHealth;
+    if (taxBase < 0) taxBase = 0;
+    taxBase = Math.round(taxBase);
+
+    const tax = Math.round(taxBase * LINEAR_TAX_RATE);
+    const netMonth = monthlyRevenue - costs - zus.socialSecurity - healthInsurance - tax;
+
+    // Wait, the costs are not actually deducted from the "na reke" (net in pocket), they are just business expenses.
+    // In standard Polish calculators, "Net in pocket" for B2B = Revenue - ZUS - Health - Tax.
+    // The previous code did: monthlyRevenue - zus.socialSecurity - zus.healthInsurance - tax.
+    const net = monthlyRevenue - zus.socialSecurity - healthInsurance - tax;
+    yearlyNet += net;
+  }
+
+  const avgMonthlyNet = yearlyNet / MONTHS_PER_YEAR;
+
   return {
-    monthly: net,
-    yearly: net * MONTHS_PER_YEAR,
-    hourly: net / (WORKING_DAYS_PER_MONTH * HOURS_PER_DAY),
+    monthly: avgMonthlyNet,
+    yearly: yearlyNet,
+    hourly: avgMonthlyNet / (WORKING_DAYS_PER_MONTH * HOURS_PER_DAY),
   };
 }
 
