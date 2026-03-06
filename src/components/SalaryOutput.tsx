@@ -110,7 +110,7 @@ export default function SalaryOutput() {
                   fallback={<div>-{formatCompactSalary(salaries().monthly - reducedSalaries().monthly)}</div>}
                 >
                   <div>
-                    -{formatCompactSalary(salaries().monthly - reducedSalaries().monthly)} -
+                    -{formatCompactSalary(salaries().monthly - reducedSalaries().monthly)} -{" "}
                     {formatCompactSalary(salariesMax()!.monthly - reducedSalariesMax()!.monthly)}
                   </div>
                 </Show>
@@ -121,7 +121,7 @@ export default function SalaryOutput() {
                   fallback={<div>-{formatCompactSalary(salaries().yearly - reducedSalaries().yearly)}</div>}
                 >
                   <div>
-                    -{formatCompactSalary(salaries().yearly - reducedSalaries().yearly)} -
+                    -{formatCompactSalary(salaries().yearly - reducedSalaries().yearly)} -{" "}
                     {formatCompactSalary(salariesMax()!.yearly - reducedSalariesMax()!.yearly)}
                   </div>
                 </Show>
@@ -138,7 +138,7 @@ export default function SalaryOutput() {
                   fallback={<div>+{formatCompactSalary(paidDaysOffValueAnnual() / MONTHS_PER_YEAR)}</div>}
                 >
                   <div>
-                    +{formatCompactSalary(paidDaysOffValueAnnual() / MONTHS_PER_YEAR)} -
+                    {formatCompactSalary(paidDaysOffValueAnnual() / MONTHS_PER_YEAR)} -{" "}
                     {formatCompactSalary(paidDaysOffValueAnnualMax()! / MONTHS_PER_YEAR)}
                   </div>
                 </Show>
@@ -146,7 +146,7 @@ export default function SalaryOutput() {
               <td>
                 <Show when={hasMax()} fallback={<div>+{formatCompactSalary(paidDaysOffValueAnnual())}</div>}>
                   <div>
-                    +{formatCompactSalary(paidDaysOffValueAnnual())} -
+                    {formatCompactSalary(paidDaysOffValueAnnual())} -{" "}
                     {formatCompactSalary(paidDaysOffValueAnnualMax()!)}
                   </div>
                 </Show>
