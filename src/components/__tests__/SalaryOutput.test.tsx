@@ -53,6 +53,30 @@ describe("SalaryOutput Component", () => {
     expect(grossCell.textContent).toMatch(/10K.*15K/);
   });
 
+  test("does not render gold equivalent if showGold is false", () => {
+    $userInputStore.set({
+      ...$userInputStore.get(),
+      showGold: false,
+    });
+    const { unmount } = render(() => <SalaryOutput />);
+    // There shouldn't be any "oz" string visible inside the Gross row since gold is off
+    const grossCell = screen.getAllByText(/Gross/i)[0].parentElement!;
+    expect(grossCell.textContent).not.toMatch(/oz/);
+    unmount();
+  });
+
+  test("renders gold equivalent if showGold is true", () => {
+    $userInputStore.set({
+      ...$userInputStore.get(),
+      showGold: true,
+    });
+    const { unmount } = render(() => <SalaryOutput />);
+    // "oz" should now be present in the output
+    const grossCell = screen.getAllByText(/Gross/i)[0].parentElement!;
+    expect(grossCell.textContent).toMatch(/oz/);
+    unmount();
+  });
+
   test("shows days off cost only when daysOff > 0", () => {
     // Should not exist initially (daysOff = 0)
     const { unmount } = render(() => <SalaryOutput />);
@@ -70,5 +94,20 @@ describe("SalaryOutput Component", () => {
 
     render(() => <SalaryOutput />);
     expect(screen.getByText("Days off cost")).toBeInTheDocument();
+  });
+
+  test("renders max fallback values when salaryMax is set (e.g. days off cost)", () => {
+    $userInputStore.set({
+      ...$userInputStore.get(),
+      salary: 10000,
+      salaryMax: 15000,
+      daysOff: 5,
+    });
+
+    render(() => <SalaryOutput />);
+    const row = screen.getByText("Days off cost").parentElement!;
+
+    // the row should contain a minus sign and a dash for the range e.g. -2K - -3K
+    expect(row.textContent).toMatch(/-/);
   });
 });

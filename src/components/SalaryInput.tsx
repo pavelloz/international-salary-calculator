@@ -1,4 +1,4 @@
-import { For, Show, createEffect, on } from "solid-js";
+import { For, Show, createEffect, on, createMemo, untrack } from "solid-js";
 import { useHydratedStore } from "../lib/useHydratedStore";
 import { convertSalaryPeriod, convertSalaryCurrency } from "../lib/calculateSalaries";
 import { $ratesStore, defaultRates } from "../stores/rates";
@@ -21,35 +21,35 @@ export default function SalaryInput() {
   const store = useHydratedStore($userInputStore, defaultUserInput);
   const ratesStore = useHydratedStore($ratesStore, defaultRates);
 
+  // Use memos to isolate property changes.
+  // This prevents setting salaryMax from re-triggering effects that watch the whole store object.
+  const salary = createMemo<number>(() => store().salary);
+  const period = createMemo<string>(() => store().period);
+  const salaryMax = createMemo<number | undefined>(() => store().salaryMax);
+
   // Set default max salary when period changes to monthly/yearly and max is not set.
   createEffect(
-    on(
-      () => store().period,
-      period => {
-        if (period === "monthly" || period === "yearly") {
-          if (!store().salaryMax && store().salary > 0) {
-            setSalaryMax(Math.round(store().salary * 1.2));
-          }
-        } else {
-          if (store().salaryMax !== undefined) {
-            setSalaryMax(undefined);
-          }
+    on(period, p => {
+      if (p === "monthly" || p === "yearly") {
+        if (!untrack(salaryMax) && untrack(salary) > 0) {
+          setSalaryMax(Math.round(untrack(salary) * 1.2));
+        }
+      } else {
+        if (untrack(salaryMax) !== undefined) {
+          setSalaryMax(undefined);
         }
       }
-    )
+    })
   );
 
   // Also default max when base salary changes, if applicable and max not set.
   createEffect(
-    on(
-      () => store().salary,
-      salary => {
-        const period = store().period;
-        if ((period === "monthly" || period === "yearly") && !store().salaryMax && salary > 0) {
-          setSalaryMax(Math.round(salary * 1.2));
-        }
+    on(salary, s => {
+      const p = untrack(period);
+      if ((p === "monthly" || p === "yearly") && !untrack(salaryMax) && s > 0) {
+        setSalaryMax(Math.round(s * 1.2));
       }
-    )
+    })
   );
 
   return (
@@ -72,13 +72,18 @@ export default function SalaryInput() {
 
               if (store().salaryMax !== undefined) {
                 if (newPeriod === "monthly" || newPeriod === "yearly") {
-                  let newMax = convertSalaryPeriod(store().salaryMax!, oldPeriod, newPeriod);
+                  let newMax = convertSalaryPeriod(store().salaryMax as number, oldPeriod, newPeriod);
                   if (newMax < newSalary) {
                     newMax = newSalary;
                   }
                   setSalaryMax(newMax);
                 } else {
                   setSalaryMax(undefined);
+                }
+              } else if (newPeriod === "monthly" || newPeriod === "yearly") {
+                // Auto-guess if it was undefined but we are entering a range-enabled period
+                if (newSalary > 0) {
+                  setSalaryMax(Math.round(newSalary * 1.2));
                 }
               }
 
@@ -132,6 +137,7 @@ export default function SalaryInput() {
             }}
             onBlur={() => {
               const currentMax = store().salaryMax;
+              // Only snap back to min salary if max is explicitly defined and less than min salary
               if (currentMax !== undefined && currentMax < store().salary) {
                 setSalaryMax(store().salary);
               }

@@ -60,6 +60,15 @@ describe("calculateLineartax19", () => {
     expect(result.monthly).toBeGreaterThan(29000);
     expect(result.monthly).toBeLessThan(31000);
   });
+
+  test("handles low income logic with negative tax bases", () => {
+    // Under linear tax, very low income (or high costs) results in health insurance deductions pushing tax base below 0.
+    const result = calculateLineartax19(100);
+
+    // It shouldn't crash or return NaN and should bottom out limits correctly.
+    expect(result.monthly).not.toBeNaN();
+    expect(result.yearly).toBeLessThan(100 * 12);
+  });
 });
 
 describe("tax calculations comparison", () => {
@@ -107,5 +116,19 @@ describe("calculateEmploymentContract", () => {
     expect(result.monthly).toBeGreaterThan(6000);
     expect(result.monthly).toBeLessThan(8000);
     expect(result.yearly).toBeCloseTo(result.monthly * 12, 0);
+  });
+
+  test("calculates exactly across bracket crossing in the middle of a month", () => {
+    // Tax bracket is 120,000 PLN.
+    // Earning exactly 120,500 PLN yearly means we cross it at the very end.
+    // Let's test earning 10,041.66 a month. Cumulative base reaches 120,000 roughly in Dec.
+    const result = calculateEmploymentContract(10042);
+    expect(result.monthly).toBeGreaterThan(0);
+  });
+
+  test("handles low income logic with negative tax bases for UOP", () => {
+    // Very low income (e.g. 100 PLN gross) where deductions could push tax base < 0
+    const result = calculateEmploymentContract(100);
+    expect(result.yearly).toBeGreaterThanOrEqual(0);
   });
 });

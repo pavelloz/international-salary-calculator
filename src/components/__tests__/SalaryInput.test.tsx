@@ -2,12 +2,17 @@ import { fireEvent, render, screen } from "@solidjs/testing-library";
 
 import SalaryInput from "../SalaryInput";
 import { $userInputStore, defaultUserInput } from "../../stores/userInput";
+import { $ratesStore, defaultRates } from "../../stores/rates";
 
 describe("SalaryInput Component", () => {
   beforeEach(() => {
     $userInputStore.set(defaultUserInput);
+    $ratesStore.set({
+      rates: { pln: 1, usd: 4, eur: 4.3, gbp: 5, chf: 4.5 },
+      goldPrice: 10000,
+      loading: false,
+    });
   });
-
   test("renders input fields correctly", () => {
     render(() => <SalaryInput />);
 
@@ -176,5 +181,68 @@ describe("SalaryInput Component", () => {
     // Both should be 833, max shouldn't somehow drop below 833 because of rounding logic
     expect(inputs[0]).toHaveValue("833");
     expect(inputs[1]).toHaveValue("833");
+  });
+
+  test("scales base and max proportionally when currency changes", () => {
+    $userInputStore.set({
+      ...defaultUserInput,
+      salary: 10000, // USD
+      salaryMax: 12000, // USD
+      currency: "usd",
+      period: "monthly",
+    });
+
+    render(() => <SalaryInput />);
+
+    const currencySelect = screen.getAllByRole("combobox")[1]; // Currency is 2nd select
+
+    // Switch from USD (rate 4) to PLN (rate 1)
+    // 10000 USD is 40000 PLN
+    fireEvent.change(currencySelect, { target: { value: "pln" } });
+
+    const inputs = screen.getAllByRole("textbox");
+    expect(inputs[0]).toHaveValue("40000");
+    expect(inputs[1]).toHaveValue("48000");
+  });
+
+  test("clamps max to min if finding currency rate loses precision heavily", () => {
+    $userInputStore.set({
+      ...defaultUserInput,
+      salary: 10000, // USD
+      salaryMax: 10000, // USD
+      currency: "usd",
+      period: "monthly",
+    });
+
+    render(() => <SalaryInput />);
+
+    const currencySelect = screen.getAllByRole("combobox")[1];
+
+    // Switch from USD (rate 4) to GBP (rate 5)
+    // 10000 * 4 = 40000 PLN -> / 5 = 8000 GBP
+    fireEvent.change(currencySelect, { target: { value: "gbp" } });
+
+    const inputs = screen.getAllByRole("textbox");
+
+    // Both should be 8000
+    expect(inputs[0]).toHaveValue("8000");
+    expect(inputs[1]).toHaveValue("8000");
+  });
+
+  test("clears max amount when input is emptied", () => {
+    $userInputStore.set({
+      ...defaultUserInput,
+      salary: 10000,
+      salaryMax: 12000,
+      currency: "pln",
+      period: "monthly",
+    });
+
+    render(() => <SalaryInput />);
+
+    const maxSalaryInput = screen.getAllByRole("textbox")[1];
+    fireEvent.input(maxSalaryInput, { target: { value: "" } });
+
+    expect($userInputStore.get().salaryMax).toBeUndefined();
   });
 });
