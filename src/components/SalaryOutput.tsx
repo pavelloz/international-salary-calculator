@@ -4,7 +4,7 @@ import { convertToAllPeriods, deductDaysOff } from "../lib/calculateDaysOff";
 import { calculateSalaries, formatSalary, formatCompactSalary } from "../lib/calculateSalaries";
 import { MONTHS_PER_YEAR, WORKING_DAYS_PER_YEAR } from "../lib/constants";
 import { calculateFlatTax12, calculateLineartax19, calculateEmploymentContract } from "../lib/calculateTaxes";
-import { $userInputStore, defaultUserInput } from "../stores/userInput";
+import { $userInputStore, defaultUserInput, setShowGold } from "../stores/userInput";
 import { $ratesStore, defaultRates } from "../stores/rates";
 import GoldDisplay from "./GoldDisplay";
 
@@ -65,7 +65,11 @@ export default function SalaryOutput() {
 
   const renderGold = (minVal: number, maxVal: number | undefined | null) => {
     if (minVal === undefined) return null;
-    return <GoldDisplay valueInPln={minVal} valueInPlnMax={maxVal} />;
+    return (
+      <Show when={userInput().showGold}>
+        <GoldDisplay valueInPln={minVal} valueInPlnMax={maxVal} />
+      </Show>
+    );
   };
 
   return (
@@ -150,11 +154,7 @@ export default function SalaryOutput() {
             </tr>
           </Show>
           <tr class="align-top border-t border-gray-400">
-            <td>
-              Flat 12%
-              <br />
-              <span class="text-sm text-gray-400">(big ZUS)</span>
-            </td>
+            <td>Flat 12%</td>
             <td>{renderValue(flatTax12().hourly, flatTax12Max()?.hourly)}</td>
             <td>
               {renderValue(flatTax12().monthly, flatTax12Max()?.monthly, true)}
@@ -166,11 +166,7 @@ export default function SalaryOutput() {
             </td>
           </tr>
           <tr class="align-top">
-            <td>
-              Linear 19%
-              <br />
-              <span class="text-sm text-gray-400">(big ZUS)</span>
-            </td>
+            <td>Linear 19%</td>
             <td>{renderValue(linearTax19().hourly, linearTax19Max()?.hourly)}</td>
             <td>
               {renderValue(linearTax19().monthly, linearTax19Max()?.monthly, true)}
@@ -202,6 +198,19 @@ export default function SalaryOutput() {
           </tr>
         </tbody>
       </table>
+
+      <div class="mt-8 hidden md:flex items-center justify-end gap-2">
+        <input
+          type="checkbox"
+          id="showGoldCheckbox"
+          checked={userInput().showGold || false}
+          onChange={e => setShowGold(e.currentTarget.checked)}
+          class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
+        />
+        <label for="showGoldCheckbox" class="text-sm font-medium text-gray-700">
+          Show gold equivalent
+        </label>
+      </div>
     </div>
   );
 }

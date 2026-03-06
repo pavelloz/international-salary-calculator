@@ -13,6 +13,7 @@ export const defaultUserInput: IUserInput = {
   period: "monthly",
   daysOff: 0,
   paidDaysOff: 0,
+  showGold: false,
 };
 
 export const $userInputStore = persistentMap<IUserInput>(
@@ -31,3 +32,4 @@ export const setCurrency = (currency: string) => $userInputStore.setKey("currenc
 export const setPeriod = (period: string) => $userInputStore.setKey("period", period);
 export const setDaysOff = (daysOff: number | string) => $userInputStore.setKey("daysOff", v.parse(numeric, daysOff));
 export const setPaidDaysOff = (paidDaysOff: number | string) => $userInputStore.setKey("paidDaysOff", v.parse(numeric, paidDaysOff));
+export const setShowGold = (showGold: boolean) => $userInputStore.setKey("showGold", showGold);
