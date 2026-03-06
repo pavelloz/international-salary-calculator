@@ -177,7 +177,7 @@ export default function SalaryOutput() {
               <span class="hidden md:inline">{renderGold(linearTax19().yearly, linearTax19Max()?.yearly)}</span>
             </td>
           </tr>
-          <tr class="align-top border-t border-gray-400">
+          <tr class="align-top">
             <td>
               Employment (UoP)
               <br />
@@ -199,18 +199,16 @@ export default function SalaryOutput() {
         </tbody>
       </table>
 
-      <div class="mt-8 hidden md:flex items-center justify-end gap-2">
+      <label for="showGoldCheckbox" class="mt-8 hidden md:flex items-center  gap-2 cursor-pointer">
         <input
           type="checkbox"
           id="showGoldCheckbox"
           checked={userInput().showGold || false}
           onChange={e => setShowGold(e.currentTarget.checked)}
-          class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
+          class="rounded cursor-pointer"
         />
-        <label for="showGoldCheckbox" class="text-sm font-medium text-gray-700">
-          Show gold equivalent
-        </label>
-      </div>
+        <span class="text-sm text-gray-600">Show gold equivalent</span>
+      </label>
     </div>
   );
 }
