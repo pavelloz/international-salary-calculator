@@ -3,7 +3,7 @@ import { useHydratedStore } from "../lib/useHydratedStore";
 import { convertToAllPeriods, deductDaysOff } from "../lib/calculateDaysOff";
 import { calculateSalaries, formatSalary, formatCompactSalary } from "../lib/calculateSalaries";
 import { MONTHS_PER_YEAR, WORKING_DAYS_PER_YEAR } from "../lib/constants";
-import { calculateFlatTax12, calculateLineartax19 } from "../lib/calculateTaxes";
+import { calculateFlatTax12, calculateLineartax19, calculateEmploymentContract } from "../lib/calculateTaxes";
 import { $userInputStore, defaultUserInput } from "../stores/userInput";
 import { $ratesStore, defaultRates } from "../stores/rates";
 import GoldDisplay from "./GoldDisplay";
@@ -43,6 +43,8 @@ export default function SalaryOutput() {
 
   const flatTax12Max = () => (reducedSalariesMax() ? calculateFlatTax12(reducedSalariesMax()!.monthly) : null);
   const linearTax19Max = () => (reducedSalariesMax() ? calculateLineartax19(reducedSalariesMax()!.monthly) : null);
+  const employmentContract = () => calculateEmploymentContract(salaries().monthly);
+  const employmentContractMax = () => (salariesMax() ? calculateEmploymentContract(salariesMax()!.monthly) : null);
 
   const paidDaysOffValueAnnual = () => (salaries().yearly / WORKING_DAYS_PER_YEAR) * (userInput().paidDaysOff || 0);
   const paidDaysOffValueAnnualMax = () =>
@@ -177,6 +179,25 @@ export default function SalaryOutput() {
             <td>
               {renderValue(linearTax19().yearly, linearTax19Max()?.yearly, true)}
               <span class="hidden md:inline">{renderGold(linearTax19().yearly, linearTax19Max()?.yearly)}</span>
+            </td>
+          </tr>
+          <tr class="align-top border-t border-gray-400">
+            <td>
+              Employment (UoP)
+              <br />
+            </td>
+            <td>{renderValue(employmentContract().hourly, employmentContractMax()?.hourly)}</td>
+            <td>
+              {renderValue(employmentContract().monthly, employmentContractMax()?.monthly, true)}
+              <span class="hidden md:inline">
+                {renderGold(employmentContract().monthly, employmentContractMax()?.monthly)}
+              </span>
+            </td>
+            <td>
+              {renderValue(employmentContract().yearly, employmentContractMax()?.yearly, true)}
+              <span class="hidden md:inline">
+                {renderGold(employmentContract().yearly, employmentContractMax()?.yearly)}
+              </span>
             </td>
           </tr>
         </tbody>
