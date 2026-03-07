@@ -138,11 +138,7 @@ export function calculateLineartax19(monthlyRevenue: number): TaxValues {
     taxBase = Math.round(taxBase);
 
     const tax = Math.round(taxBase * LINEAR_TAX_RATE);
-    const netMonth = monthlyRevenue - costs - zus.socialSecurity - healthInsurance - tax;
-
-    // Wait, the costs are not actually deducted from the "na reke" (net in pocket), they are just business expenses.
     // In standard Polish calculators, "Net in pocket" for B2B = Revenue - ZUS - Health - Tax.
-    // The previous code did: monthlyRevenue - zus.socialSecurity - zus.healthInsurance - tax.
     const net = monthlyRevenue - zus.socialSecurity - healthInsurance - tax;
     yearlyNet += net;
   }
@@ -169,7 +165,6 @@ export function calculateLineartax19(monthlyRevenue: number): TaxValues {
 // - Tax-free advance amount (Tax Reducing Amount): 300 PLN monthly
 // - Progressive Tax Brackets: 12% up to 120,000 PLN, 32% above 120,000 PLN.
 
-const EMPLOYMENT_TAX_FREE_ALLOWANCE = 30000;
 const EMPLOYMENT_TAX_BRACKET_1_LIMIT = 120000;
 const EMPLOYMENT_TAX_RATE_1 = 0.12;
 const EMPLOYMENT_TAX_RATE_2 = 0.32;

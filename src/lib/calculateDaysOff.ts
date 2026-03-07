@@ -2,7 +2,6 @@ import {
   HOURS_PER_WEEK,
   MONTHS_PER_YEAR,
   WEEKS_PER_YEAR,
-  WORKING_DAYS_PER_WEEK,
   WORKING_DAYS_PER_YEAR,
 } from "./constants";
 

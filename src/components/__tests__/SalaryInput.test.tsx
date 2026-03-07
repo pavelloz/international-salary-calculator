@@ -2,7 +2,7 @@ import { fireEvent, render, screen } from "@solidjs/testing-library";
 
 import SalaryInput from "../SalaryInput";
 import { $userInputStore, defaultUserInput } from "../../stores/userInput";
-import { $ratesStore, defaultRates } from "../../stores/rates";
+import { $ratesStore } from "../../stores/rates";
 
 describe("SalaryInput Component", () => {
   beforeEach(() => {
