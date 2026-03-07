@@ -15,7 +15,7 @@ export default defineConfig({
   integrations: [solidJs()],
   adapter,
   vite: {
-    // @ts-expect-error - Tailwind v4 plugin has type mismatch with Astro's bundled Vite
+    // @ts-expect-error
     plugins: [tailwindcss()]
   },
   security: {
