@@ -107,7 +107,6 @@ export default function SalaryOutput() {
         <thead>
           <tr class="text-left">
             <th></th>
-            <th>Hourly</th>
             <th>Monthly</th>
             <th>Yearly</th>
           </tr>
@@ -115,14 +114,12 @@ export default function SalaryOutput() {
         <tbody>
           <tr class="align-top text-gray-600">
             <td>Gross</td>
-            <td>{renderValue(salaries().hourly, salariesMax()?.hourly)}</td>
             <td>{renderValue(salaries().monthly, salariesMax()?.monthly, true)}</td>
             <td>{renderValue(salaries().yearly, salariesMax()?.yearly, true)}</td>
           </tr>
           <Show when={userInput().daysOff > 0}>
             <tr class="align-top text-sm text-gray-500 [&>td]:pb-0 [&>td]:pt-1">
               <td>Days off cost</td>
-              <td></td>
               <td class="text-red-700">
                 <Show
                   when={hasMax()}
@@ -146,7 +143,6 @@ export default function SalaryOutput() {
           <Show when={(userInput().paidDaysOff || 0) > 0}>
             <tr class="align-top text-sm text-gray-500 [&>td]:pb-0 [&>td]:pt-1">
               <td>Paid days off value</td>
-              <td></td>
               <td class="text-green-700">
                 <Show
                   when={hasMax()}
@@ -171,7 +167,6 @@ export default function SalaryOutput() {
           <Show when={(userInput().yearlyBonus || 0) > 0}>
             <tr class="align-top text-sm text-gray-500 [&>td]:pb-1 [&>td]:pt-1">
               <td>Yearly bonus</td>
-              <td></td>
               <td class="text-green-700">
                 <Show when={hasMax()} fallback={<div>+{formatCompactSalary(yearlyBonusPLN() / MONTHS_PER_YEAR)}</div>}>
                   <div>
@@ -192,7 +187,6 @@ export default function SalaryOutput() {
           <Show when={(userInput().benefits || 0) > 0}>
             <tr class="align-top text-sm text-gray-500 [&>td]:pb-1 [&>td]:pt-1">
               <td>Benefits</td>
-              <td></td>
               <td class="text-green-700">
                 <Show
                   when={hasMax()}
@@ -221,7 +215,6 @@ export default function SalaryOutput() {
           >
             <tr class="align-top">
               <td>Flat 12%</td>
-              <td>{renderValue(flatTax12().hourly, flatTax12Max()?.hourly)}</td>
               <td>
                 {renderValue(flatTax12().monthly, flatTax12Max()?.monthly, true)}
                 {renderTotalGrey(totalFlat12().monthly, totalFlat12Max()?.monthly)}
@@ -239,7 +232,6 @@ export default function SalaryOutput() {
           >
             <tr class="align-top">
               <td>Linear 19%</td>
-              <td>{renderValue(linearTax19().hourly, linearTax19Max()?.hourly)}</td>
               <td>
                 {renderValue(linearTax19().monthly, linearTax19Max()?.monthly, true)}
                 {renderTotalGrey(totalLinear19().monthly, totalLinear19Max()?.monthly)}
@@ -258,7 +250,6 @@ export default function SalaryOutput() {
                 Employment (UoP)
                 <br />
               </td>
-              <td>{renderValue(employmentContract().hourly, employmentContractMax()?.hourly)}</td>
               <td>
                 {renderValue(employmentContract().monthly, employmentContractMax()?.monthly, true)}
                 {renderTotalGrey(totalUop().monthly, totalUopMax()?.monthly)}
