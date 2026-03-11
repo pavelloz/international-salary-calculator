@@ -22,7 +22,6 @@ describe("SalaryOutput Component", () => {
   test("renders table headers correctly", () => {
     render(() => <SalaryOutput />);
     expect(screen.getByText("Salary in PLN")).toBeInTheDocument();
-    expect(screen.getByText("Hourly")).toBeInTheDocument();
     expect(screen.getByText("Monthly")).toBeInTheDocument();
     expect(screen.getByText("Yearly")).toBeInTheDocument();
   });

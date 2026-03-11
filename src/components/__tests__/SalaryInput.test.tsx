@@ -16,13 +16,13 @@ describe("SalaryInput Component", () => {
     render(() => <SalaryInput />);
 
     expect(screen.getByText(/salary in pln/i)).toBeInTheDocument();
-    expect(screen.getByText("Unpaid days off per year")).toBeInTheDocument();
-    expect(screen.getByText("Paid days off per year")).toBeInTheDocument();
+    expect(screen.getByText("Unpaid days off / year")).toBeInTheDocument();
+    expect(screen.getByText("Paid days off / year")).toBeInTheDocument();
     expect(screen.getAllByRole("combobox")[0]).toBeInTheDocument(); // Period
     expect(screen.getAllByRole("combobox")[1]).toBeInTheDocument(); // Currency
 
-    expect(screen.getAllByRole("textbox")).toHaveLength(5); // salary, salaryMax, daysOff, paidDaysOff, yearlyBonus
-    expect(screen.getByRole("checkbox")).toBeInTheDocument(); // isCreative KUP
+    expect(screen.getAllByRole("textbox")).toHaveLength(6); // salary, salaryMax, daysOff, paidDaysOff, yearlyBonus, benefits
+    expect(screen.getAllByRole("checkbox")).toHaveLength(3); // isCreative (KUP), 2x Only UoP
   });
 
   test("has correct initial values", () => {
@@ -31,8 +31,8 @@ describe("SalaryInput Component", () => {
     // Since it's monthly, we get min salary, max salary (auto-computed), daysOff, paidDaysOff
     const salaryInput = screen.getAllByRole("textbox")[0];
     const maxSalaryInput = screen.getAllByRole("textbox")[1];
-    const daysOffInput = screen.getByLabelText("Unpaid days off per year");
-    const paidDaysOffInput = screen.getByLabelText("Paid days off per year");
+    const daysOffInput = screen.getByLabelText("Unpaid days off / year");
+    const paidDaysOffInput = screen.getByLabelText("Paid days off / year");
     const yearlyBonusInput = screen.getByLabelText("Yearly bonus (%)");
 
     expect(salaryInput).toHaveValue("30000");
@@ -78,7 +78,7 @@ describe("SalaryInput Component", () => {
   test("updates days off value on input change", () => {
     render(() => <SalaryInput />);
 
-    const daysOffInput = screen.getByLabelText("Unpaid days off per year");
+    const daysOffInput = screen.getByLabelText("Unpaid days off / year");
     fireEvent.input(daysOffInput, { target: { value: "20" } });
 
     expect(daysOffInput).toHaveValue("20");
@@ -96,7 +96,7 @@ describe("SalaryInput Component", () => {
   test("strips non-numeric characters from days off input", () => {
     render(() => <SalaryInput />);
 
-    const daysOffInput = screen.getByLabelText("Unpaid days off per year");
+    const daysOffInput = screen.getByLabelText("Unpaid days off / year");
     fireEvent.input(daysOffInput, { target: { value: "20days" } });
 
     expect(daysOffInput).toHaveValue("20");
@@ -112,8 +112,8 @@ describe("SalaryInput Component", () => {
     });
     render(() => <SalaryInput />);
     // hourly => no max salary
-    expect(screen.getAllByRole("textbox")).toHaveLength(4); // salary, daysOff, paidDaysOff, yearlyBonus
-    expect(screen.getByRole("checkbox")).toBeInTheDocument(); // isCreative KUP
+    expect(screen.getAllByRole("textbox")).toHaveLength(5); // salary, daysOff, paidDaysOff, yearlyBonus, benefits
+    expect(screen.getAllByRole("checkbox")).toHaveLength(3); // isCreative KUP, 2x Only UoP
   });
 
   test("max amount resets to min amount if user inputs a smaller number and blurs", () => {
