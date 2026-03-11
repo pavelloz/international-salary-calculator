@@ -176,11 +176,13 @@ const ZUS_HEALTH_INSURANCE_RATE = 0.09;
 const ZUS_ANNUAL_LIMIT = 282600;
 const INCOME_DEDUCTIBLE_EXPENSES = 250;
 const TAX_REDUCING_AMOUNT = 300;
+const KUP_LIMIT = 120890;
 
-export function calculateEmploymentContract(monthlyGross: number): TaxValues {
+export function calculateEmploymentContract(monthlyGross: number, isCreative: boolean = false): TaxValues {
   let yearlyNet = 0;
   let cumulativeGrossForZus = 0;
   let cumulativeTaxBase = 0;
+  let cumulativeKup = 0;
 
   for (let month = 1; month <= 12; month++) {
     // 1. ZUS (Social Security) limits
@@ -207,7 +209,23 @@ export function calculateEmploymentContract(monthlyGross: number): TaxValues {
     const healthInsurance = healthBase * ZUS_HEALTH_INSURANCE_RATE;
 
     // 3. Tax Base
-    let taxBaseMonth = Math.round(monthlyGross - totalZus - INCOME_DEDUCTIBLE_EXPENSES);
+    const basisForKup = monthlyGross - totalZus;
+    let appliedKup = INCOME_DEDUCTIBLE_EXPENSES;
+
+    if (isCreative) {
+      let creativeKup = basisForKup * 0.5;
+      
+      if (cumulativeKup + creativeKup > KUP_LIMIT) {
+        creativeKup = Math.max(0, KUP_LIMIT - cumulativeKup);
+      }
+      cumulativeKup += creativeKup;
+      
+      if (creativeKup > 0) {
+        appliedKup = creativeKup;
+      }
+    }
+
+    let taxBaseMonth = Math.round(basisForKup - appliedKup);
     if (taxBaseMonth < 0) taxBaseMonth = 0;
 
     let tax = 0;

@@ -15,6 +15,7 @@ import {
   setPaidDaysOff,
   setYearlyBonus,
   setContractType,
+  setIsCreative,
 } from "../stores/userInput";
 
 export const cleanNumericInput = (val: string) => val.replace(/\D/g, "");
@@ -194,7 +195,7 @@ export default function SalaryInput() {
       <div class="w-full flex gap-x-12 mt-4">
         <div class="flex flex-col">
           <label class="text-xs text-gray-500 mb-1" for="daysOff">
-            Unpaid days off per year
+            Unpaid days off / year
           </label>
           <input
             class="w-24"
@@ -211,7 +212,7 @@ export default function SalaryInput() {
 
         <div class="flex flex-col">
           <label class="text-xs text-gray-500 mb-1" for="paidDaysOff">
-            Paid days off per year
+            Paid days off / year
           </label>
           <input
             class="w-24"
@@ -230,38 +231,58 @@ export default function SalaryInput() {
           <label class="text-xs text-gray-500 mb-1" for="yearlyBonus">
             Yearly bonus (%)
           </label>
-          <div class="flex items-center">
-            <input
-              class="w-24"
-              id="yearlyBonus"
-              name="yearlyBonus"
-              value={store().yearlyBonus ?? 0}
-              onInput={e => {
-                const cleanValue = cleanNumericInput(e.currentTarget.value);
-                e.currentTarget.value = cleanValue;
-                setYearlyBonus(cleanValue);
-              }}
-            />
-            <span class="text-gray-500">&nbsp;%</span>
-          </div>
+          <input
+            class="w-24"
+            id="yearlyBonus"
+            name="yearlyBonus"
+            value={store().yearlyBonus ?? 0}
+            onInput={e => {
+              const cleanValue = cleanNumericInput(e.currentTarget.value);
+              e.currentTarget.value = cleanValue;
+              setYearlyBonus(cleanValue);
+            }}
+          />
         </div>
 
-        <div class="flex flex-col">
-          <label class="text-xs text-gray-500 mb-1" for="contractType">
-            Contract Type
-          </label>
-          <select
-            id="contractType"
-            value={store().contractType || "all"}
-            onChange={e => {
-              setContractType(e.currentTarget.value);
-            }}
-          >
-            <option value="all">All</option>
-            <option value="uop">Employment (UoP)</option>
-            <option value="linear">Linear 19%</option>
-            <option value="flat">Flat 12%</option>
-          </select>
+        <div class="flex ml-auto gap-4">
+          <Show when={!store().contractType || store().contractType === "all" || store().contractType === "uop"}>
+            <div class="flex flex-col">
+              <label class="text-xs mb-1 opacity-0 pointer-events-none" aria-hidden="true">
+                &nbsp;
+              </label>
+              <div class="flex flex-1 items-center pb-1">
+                <input
+                  type="checkbox"
+                  class="w-4 h-4 rounded cursor-pointer"
+                  id="isCreative"
+                  name="isCreative"
+                  checked={store().isCreative ?? false}
+                  onChange={e => setIsCreative(e.currentTarget.checked)}
+                />
+                <label class="ml-2 text-xs text-gray-500 cursor-pointer" for="isCreative">
+                  50% KUP
+                </label>
+              </div>
+            </div>
+          </Show>
+
+          <div class="flex flex-col">
+            <label class="text-xs text-gray-500 mb-1" for="contractType">
+              Contract Type
+            </label>
+            <select
+              id="contractType"
+              value={store().contractType || "all"}
+              onChange={e => {
+                setContractType(e.currentTarget.value);
+              }}
+            >
+              <option value="all">All</option>
+              <option value="uop">Employment (UoP)</option>
+              <option value="linear">Linear 19%</option>
+              <option value="flat">Flat 12%</option>
+            </select>
+          </div>
         </div>
       </div>
     </div>

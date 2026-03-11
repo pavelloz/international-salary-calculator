@@ -38,8 +38,8 @@ export default function SalaryOutput() {
 
   const flatTax12Max = () => (salariesMax() ? calculateFlatTax12(salariesMax()!.monthly) : null);
   const linearTax19Max = () => (salariesMax() ? calculateLineartax19(salariesMax()!.monthly) : null);
-  const employmentContract = () => calculateEmploymentContract(salaries().monthly);
-  const employmentContractMax = () => (salariesMax() ? calculateEmploymentContract(salariesMax()!.monthly) : null);
+  const employmentContract = () => calculateEmploymentContract(salaries().monthly, userInput().isCreative || false);
+  const employmentContractMax = () => (salariesMax() ? calculateEmploymentContract(salariesMax()!.monthly, userInput().isCreative || false) : null);
 
   const paidDaysOffValueAnnual = () => (salaries().yearly / WORKING_DAYS_PER_YEAR) * (userInput().paidDaysOff || 0);
   const paidDaysOffValueAnnualMax = () =>

@@ -9,6 +9,7 @@ const userInputSchema = v.object({
     paidDaysOff: v.optional(v.number()),
     yearlyBonus: v.optional(v.number()),
     contractType: v.optional(v.string()),
+    isCreative: v.optional(v.boolean()),
 });
 
 export default userInputSchema;

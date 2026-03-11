@@ -22,6 +22,7 @@ describe("SalaryInput Component", () => {
     expect(screen.getAllByRole("combobox")[1]).toBeInTheDocument(); // Currency
 
     expect(screen.getAllByRole("textbox")).toHaveLength(5); // salary, salaryMax, daysOff, paidDaysOff, yearlyBonus
+    expect(screen.getByRole("checkbox")).toBeInTheDocument(); // isCreative KUP
   });
 
   test("has correct initial values", () => {
@@ -112,6 +113,7 @@ describe("SalaryInput Component", () => {
     render(() => <SalaryInput />);
     // hourly => no max salary
     expect(screen.getAllByRole("textbox")).toHaveLength(4); // salary, daysOff, paidDaysOff, yearlyBonus
+    expect(screen.getByRole("checkbox")).toBeInTheDocument(); // isCreative KUP
   });
 
   test("max amount resets to min amount if user inputs a smaller number and blurs", () => {
