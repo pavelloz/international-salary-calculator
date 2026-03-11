@@ -8,8 +8,7 @@ const userInputSchema = v.object({
     daysOff: v.number(),
     paidDaysOff: v.optional(v.number()),
     yearlyBonus: v.optional(v.number()),
-    showGold: v.optional(v.boolean()),
     contractType: v.optional(v.string()),
 });
 
-export default userInputSchema; 
+export default userInputSchema;

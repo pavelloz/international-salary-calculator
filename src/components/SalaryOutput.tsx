@@ -4,9 +4,8 @@ import { deductDaysOff } from "../lib/calculateDaysOff";
 import { calculateSalaries, formatSalary, formatCompactSalary } from "../lib/calculateSalaries";
 import { MONTHS_PER_YEAR, WORKING_DAYS_PER_YEAR } from "../lib/constants";
 import { calculateFlatTax12, calculateLineartax19, calculateEmploymentContract } from "../lib/calculateTaxes";
-import { $userInputStore, defaultUserInput, setShowGold } from "../stores/userInput";
+import { $userInputStore, defaultUserInput } from "../stores/userInput";
 import { $ratesStore, defaultRates } from "../stores/rates";
-import GoldDisplay from "./GoldDisplay";
 
 export default function SalaryOutput() {
   const userInput = useHydratedStore($userInputStore, defaultUserInput);
@@ -93,14 +92,7 @@ export default function SalaryOutput() {
     return <div>{formatter(minVal)}</div>;
   };
 
-  const renderGold = (minVal: number, maxVal: number | undefined | null) => {
-    if (minVal === undefined) return null;
-    return (
-      <Show when={userInput().showGold}>
-        <GoldDisplay valueInPln={minVal} valueInPlnMax={maxVal} />
-      </Show>
-    );
-  };
+
 
   return (
     <div class="mt-8 p-4 md:p-10 rounded-lg bg-white">
@@ -121,13 +113,9 @@ export default function SalaryOutput() {
             <td>{renderValue(salaries().hourly, salariesMax()?.hourly)}</td>
             <td>
               {renderValue(salaries().monthly, salariesMax()?.monthly, true)}
-              <span class="hidden md:inline">
-                {renderGold(salaries().monthly, salariesMax()?.monthly)}
-              </span>
             </td>
             <td>
               {renderValue(salaries().yearly, salariesMax()?.yearly, true)}
-              <span class="hidden md:inline">{renderGold(salaries().yearly, salariesMax()?.yearly)}</span>
             </td>
           </tr>
           <Show when={userInput().daysOff > 0}>
@@ -200,68 +188,54 @@ export default function SalaryOutput() {
               </td>
             </tr>
           </Show>
-          <tr class="align-top border-t border-gray-400">
-            <td>Flat 12%</td>
-            <td>{renderValue(flatTax12().hourly, flatTax12Max()?.hourly)}</td>
-            <td>
-              {renderValue(flatTax12().monthly, flatTax12Max()?.monthly, true)}
-              {renderTotalGrey(totalFlat12().monthly, totalFlat12Max()?.monthly)}
-              <span class="hidden md:inline">{renderGold(totalFlat12().monthly, totalFlat12Max()?.monthly)}</span>
-            </td>
-            <td>
-              {renderValue(flatTax12().yearly, flatTax12Max()?.yearly, true)}
-              {renderTotalGrey(totalFlat12().yearly, totalFlat12Max()?.yearly)}
-              <span class="hidden md:inline">{renderGold(totalFlat12().yearly, totalFlat12Max()?.yearly)}</span>
-            </td>
-          </tr>
-          <tr class="align-top">
-            <td>Linear 19%</td>
-            <td>{renderValue(linearTax19().hourly, linearTax19Max()?.hourly)}</td>
-            <td>
-              {renderValue(linearTax19().monthly, linearTax19Max()?.monthly, true)}
-              {renderTotalGrey(totalLinear19().monthly, totalLinear19Max()?.monthly)}
-              <span class="hidden md:inline">{renderGold(totalLinear19().monthly, totalLinear19Max()?.monthly)}</span>
-            </td>
-            <td>
-              {renderValue(linearTax19().yearly, linearTax19Max()?.yearly, true)}
-              {renderTotalGrey(totalLinear19().yearly, totalLinear19Max()?.yearly)}
-              <span class="hidden md:inline">{renderGold(totalLinear19().yearly, totalLinear19Max()?.yearly)}</span>
-            </td>
-          </tr>
-          <tr class="align-top">
-            <td>
-              Employment (UoP)
-              <br />
-            </td>
-            <td>{renderValue(employmentContract().hourly, employmentContractMax()?.hourly)}</td>
-            <td>
-              {renderValue(employmentContract().monthly, employmentContractMax()?.monthly, true)}
-              {renderTotalGrey(totalUop().monthly, totalUopMax()?.monthly)}
-              <span class="hidden md:inline">
-                {renderGold(totalUop().monthly, totalUopMax()?.monthly)}
-              </span>
-            </td>
-            <td>
-              {renderValue(employmentContract().yearly, employmentContractMax()?.yearly, true)}
-              {renderTotalGrey(totalUop().yearly, totalUopMax()?.yearly)}
-              <span class="hidden md:inline">
-                {renderGold(totalUop().yearly, totalUopMax()?.yearly)}
-              </span>
-            </td>
-          </tr>
+          <Show when={!userInput().contractType || userInput().contractType === "all" || userInput().contractType === "flat"}>
+            <tr class="align-top border-t border-gray-400">
+              <td>Flat 12%</td>
+              <td>{renderValue(flatTax12().hourly, flatTax12Max()?.hourly)}</td>
+              <td>
+                {renderValue(flatTax12().monthly, flatTax12Max()?.monthly, true)}
+                {renderTotalGrey(totalFlat12().monthly, totalFlat12Max()?.monthly)}
+              </td>
+              <td>
+                {renderValue(flatTax12().yearly, flatTax12Max()?.yearly, true)}
+                {renderTotalGrey(totalFlat12().yearly, totalFlat12Max()?.yearly)}
+              </td>
+            </tr>
+          </Show>
+          <Show when={!userInput().contractType || userInput().contractType === "all" || userInput().contractType === "linear"}>
+            <tr class="align-top">
+              <td>Linear 19%</td>
+              <td>{renderValue(linearTax19().hourly, linearTax19Max()?.hourly)}</td>
+              <td>
+                {renderValue(linearTax19().monthly, linearTax19Max()?.monthly, true)}
+                {renderTotalGrey(totalLinear19().monthly, totalLinear19Max()?.monthly)}
+              </td>
+              <td>
+                {renderValue(linearTax19().yearly, linearTax19Max()?.yearly, true)}
+                {renderTotalGrey(totalLinear19().yearly, totalLinear19Max()?.yearly)}
+              </td>
+            </tr>
+          </Show>
+          <Show when={!userInput().contractType || userInput().contractType === "all" || userInput().contractType === "uop"}>
+            <tr class="align-top">
+              <td>
+                Employment (UoP)
+                <br />
+              </td>
+              <td>{renderValue(employmentContract().hourly, employmentContractMax()?.hourly)}</td>
+              <td>
+                {renderValue(employmentContract().monthly, employmentContractMax()?.monthly, true)}
+                {renderTotalGrey(totalUop().monthly, totalUopMax()?.monthly)}
+              </td>
+              <td>
+                {renderValue(employmentContract().yearly, employmentContractMax()?.yearly, true)}
+                {renderTotalGrey(totalUop().yearly, totalUopMax()?.yearly)}
+              </td>
+            </tr>
+          </Show>
         </tbody>
       </table>
 
-      <label for="showGoldCheckbox" class="mt-8 hidden md:flex items-center  gap-2 cursor-pointer">
-        <input
-          type="checkbox"
-          id="showGoldCheckbox"
-          checked={userInput().showGold || false}
-          onChange={e => setShowGold(e.currentTarget.checked)}
-          class="rounded cursor-pointer"
-        />
-        <span class="text-sm text-gray-600">Show gold equivalent</span>
-      </label>
     </div>
   );
 }

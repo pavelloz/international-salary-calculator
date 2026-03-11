@@ -9,7 +9,6 @@ describe("SalaryInput Component", () => {
     $userInputStore.set(defaultUserInput);
     $ratesStore.set({
       rates: { pln: 1, usd: 4, eur: 4.3, gbp: 5, chf: 4.5 },
-      goldPrice: 10000,
       loading: false,
     });
   });

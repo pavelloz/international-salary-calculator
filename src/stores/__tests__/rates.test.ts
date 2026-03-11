@@ -9,7 +9,6 @@ describe('ratesStore', () => {
         // Reset to initial state for each test
         $ratesStore.set({
             rates: {},
-            goldPrice: 0,
             loading: false,
         });
         vi.clearAllMocks();
@@ -22,7 +21,6 @@ describe('ratesStore', () => {
     it('should have correct initial state', () => {
         expect($ratesStore.get()).toEqual({
             rates: {},
-            goldPrice: 0,
             loading: false,
         });
     });
@@ -30,7 +28,6 @@ describe('ratesStore', () => {
     it('should fetch rates and update store on success', async () => {
         const mockData = {
             rates: { eur: 4.5, usd: 4.0 },
-            goldPrice: 300,
         };
 
         vi.mocked(actions.getRates).mockResolvedValue({
@@ -43,7 +40,6 @@ describe('ratesStore', () => {
         expect(actions.getRates).toHaveBeenCalled();
         expect($ratesStore.get()).toEqual({
             rates: { eur: 4.5, usd: 4.0, pln: 1 },
-            goldPrice: 300,
             loading: false,
         });
     });

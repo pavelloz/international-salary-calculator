@@ -12,9 +12,7 @@ export const defaultUserInput: IUserInput = {
   currency: "pln",
   period: "monthly",
   daysOff: 0,
-  paidDaysOff: 0,
   yearlyBonus: 0,
-  showGold: false,
   contractType: "all",
 };
 
@@ -35,5 +33,4 @@ export const setPeriod = (period: string) => $userInputStore.setKey("period", pe
 export const setDaysOff = (daysOff: number | string) => $userInputStore.setKey("daysOff", v.parse(numeric, daysOff));
 export const setPaidDaysOff = (paidDaysOff: number | string) => $userInputStore.setKey("paidDaysOff", v.parse(numeric, paidDaysOff));
 export const setYearlyBonus = (yearlyBonus: number | string) => $userInputStore.setKey("yearlyBonus", v.parse(numeric, yearlyBonus));
-export const setShowGold = (showGold: boolean) => $userInputStore.setKey("showGold", showGold);
 export const setContractType = (contractType: string) => $userInputStore.setKey("contractType", contractType);

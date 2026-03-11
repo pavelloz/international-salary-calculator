@@ -15,7 +15,6 @@ describe("ExchangeRatesList Component", () => {
 
     $ratesStore.set({
       rates: { pln: 1, usd: 4.0 }, // 1 USD = 4 PLN mock
-      goldPrice: 10000,
       loading: false,
     });
   });
@@ -38,7 +37,6 @@ describe("ExchangeRatesList Component", () => {
   test("does not render if rates are undefined or loading", () => {
     $ratesStore.set({
       rates: {},
-      goldPrice: 10000,
       loading: true,
     });
 

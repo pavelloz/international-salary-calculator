@@ -14,6 +14,7 @@ import {
   setSalaryMax,
   setPaidDaysOff,
   setYearlyBonus,
+  setContractType,
 } from "../stores/userInput";
 
 export const cleanNumericInput = (val: string) => val.replace(/\D/g, "");
@@ -243,6 +244,24 @@ export default function SalaryInput() {
             />
             <span class="text-gray-500">&nbsp;%</span>
           </div>
+        </div>
+
+        <div class="flex flex-col">
+          <label class="text-xs text-gray-500 mb-1" for="contractType">
+            Contract Type
+          </label>
+          <select
+            id="contractType"
+            value={store().contractType || "all"}
+            onChange={e => {
+              setContractType(e.currentTarget.value);
+            }}
+          >
+            <option value="all">All</option>
+            <option value="uop">Employment (UoP)</option>
+            <option value="linear">Linear 19%</option>
+            <option value="flat">Flat 12%</option>
+          </select>
         </div>
       </div>
     </div>

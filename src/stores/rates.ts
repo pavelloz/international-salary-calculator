@@ -8,7 +8,6 @@ export type TRate = v.InferOutput<typeof rateSchema>;
 
 export const ratesStoreSchema = v.object({
   rates: rateSchema,
-  goldPrice: v.number(),
   loading: v.boolean(),
 });
 export type IRatesStore = v.InferOutput<typeof ratesStoreSchema>;
@@ -21,7 +20,6 @@ export const defaultRates: IRatesStore = {
     chf: 4.1,
     gbp: 4.5
   },
-  goldPrice: 590, // reasonable default to avoid layout shifts
   loading: false,
 };
 
@@ -50,14 +48,12 @@ export async function fetchRates() {
     const data = v.parse(
       v.object({
         rates: rateSchema,
-        goldPrice: v.number(),
       }),
       actionData
     );
 
     $ratesStore.set({
       rates: { ...data.rates, ...PLN },
-      goldPrice: data.goldPrice,
       loading: false,
     });
   } catch (e) {

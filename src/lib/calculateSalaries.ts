@@ -1,5 +1,4 @@
 import {
-  GRAMS_IN_OUNCE,
   HOURS_PER_WEEK,
   MONTHS_PER_YEAR,
   WEEKS_PER_YEAR,
@@ -68,12 +67,6 @@ const formatSalary = (value: number | null): string | null => {
   });
 };
 
-const formatInGold = (value: number | null): string | null => {
-  if (value === null || isNaN(value)) return null;
-
-  return (value / GRAMS_IN_OUNCE).toFixed(2);
-};
-
 const formatCompactSalary = (value: number | null): string | null => {
   if (value === null || isNaN(value)) return null;
 
@@ -85,4 +78,4 @@ const formatCompactSalary = (value: number | null): string | null => {
   return formatted
 };
 
-export { calculateSalaries, formatInGold, formatSalary, formatCompactSalary, convertToAnnual, convertSalaryPeriod, convertSalaryCurrency };
+export { calculateSalaries, formatSalary, formatCompactSalary, convertToAnnual, convertSalaryPeriod, convertSalaryCurrency };
