@@ -11,6 +11,8 @@ const userInputSchema = v.object({
     benefits: v.optional(v.number()),
     contractType: v.optional(v.string()),
     isCreative: v.optional(v.boolean()),
+    onlyUopForPaidDaysOff: v.optional(v.boolean()),
+    onlyUopForYearlyBonus: v.optional(v.boolean()),
 });
 
 export default userInputSchema;

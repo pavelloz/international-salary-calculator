@@ -17,6 +17,8 @@ import {
   setBenefits,
   setContractType,
   setIsCreative,
+  setOnlyUopForPaidDaysOff,
+  setOnlyUopForYearlyBonus,
 } from "../stores/userInput";
 
 export const cleanNumericInput = (val: string) => val.replace(/\D/g, "");
@@ -226,6 +228,18 @@ export default function SalaryInput() {
               setPaidDaysOff(cleanValue);
             }}
           />
+          <div class="flex flex-1 items-center pb-1 mt-2">
+            <input
+              type="checkbox"
+              id="onlyUopForPaidDaysOff"
+              class="w-4 h-4 rounded cursor-pointer"
+              checked={store().onlyUopForPaidDaysOff ?? false}
+              onChange={e => setOnlyUopForPaidDaysOff(e.currentTarget.checked)}
+            />
+            <label for="onlyUopForPaidDaysOff" class="ml-2 text-xs text-gray-500 cursor-pointer">
+              Only UoP
+            </label>
+          </div>
         </div>
 
         <div class="flex flex-col">
@@ -243,6 +257,18 @@ export default function SalaryInput() {
               setYearlyBonus(cleanValue);
             }}
           />
+          <div class="flex flex-1 items-center pb-1 mt-2">
+            <input
+              type="checkbox"
+              id="onlyUopForYearlyBonus"
+              class="w-4 h-4 rounded cursor-pointer"
+              checked={store().onlyUopForYearlyBonus ?? false}
+              onChange={e => setOnlyUopForYearlyBonus(e.currentTarget.checked)}
+            />
+            <label for="onlyUopForYearlyBonus" class="ml-2 text-xs text-gray-500 cursor-pointer">
+              Only UoP
+            </label>
+          </div>
         </div>
 
         <div class="flex flex-col">
@@ -262,44 +288,42 @@ export default function SalaryInput() {
           />
         </div>
 
-        <div class="flex ml-auto gap-4">
-          <Show when={!store().contractType || store().contractType === "all" || store().contractType === "uop"}>
-            <div class="flex flex-col">
-              <label class="text-xs mb-1 opacity-0 pointer-events-none" aria-hidden="true">
-                &nbsp;
-              </label>
-              <div class="flex flex-1 items-center pb-1">
-                <input
-                  type="checkbox"
-                  class="w-4 h-4 rounded cursor-pointer"
-                  id="isCreative"
-                  name="isCreative"
-                  checked={store().isCreative ?? false}
-                  onChange={e => setIsCreative(e.currentTarget.checked)}
-                />
-                <label class="ml-2 text-xs text-gray-500 cursor-pointer" for="isCreative">
-                  50% KUP
-                </label>
-              </div>
-            </div>
-          </Show>
-
+        <div class="flex ml-auto">
           <div class="flex flex-col">
-            <label class="text-xs text-gray-500 mb-1" for="contractType">
+            <label class="text-xs text-gray-500 mb-1 text-right" for="contractType">
               Contract Type
             </label>
-            <select
-              id="contractType"
-              value={store().contractType || "all"}
-              onChange={e => {
-                setContractType(e.currentTarget.value);
-              }}
-            >
-              <option value="all">All</option>
-              <option value="uop">Employment (UoP)</option>
-              <option value="linear">Linear 19%</option>
-              <option value="flat">Flat 12%</option>
-            </select>
+            <div class="flex items-center gap-4">
+              <Show when={!store().contractType || store().contractType === "all" || store().contractType === "uop"}>
+                <div class="flex items-center">
+                  <input
+                    type="checkbox"
+                    class="w-4 h-4 rounded cursor-pointer"
+                    id="isCreative"
+                    name="isCreative"
+                    checked={store().isCreative ?? false}
+                    onChange={e => setIsCreative(e.currentTarget.checked)}
+                  />
+                  <label class="ml-2 text-xs text-gray-500 cursor-pointer whitespace-nowrap" for="isCreative">
+                    50% KUP
+                  </label>
+                </div>
+              </Show>
+
+              <select
+                id="contractType"
+                class="min-w-[150px]"
+                value={store().contractType || "all"}
+                onChange={e => {
+                  setContractType(e.currentTarget.value);
+                }}
+              >
+                <option value="all">All</option>
+                <option value="uop">Employment (UoP)</option>
+                <option value="linear">Linear 19%</option>
+                <option value="flat">Flat 12%</option>
+              </select>
+            </div>
           </div>
         </div>
       </div>

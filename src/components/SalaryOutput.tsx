@@ -51,30 +51,33 @@ export default function SalaryOutput() {
     yearly: number;
   }
 
-  const calculateTotal = (net: PeriodValues, isMax: boolean) => {
+  const calculateTotal = (net: PeriodValues, isMax: boolean, isUop: boolean) => {
     const dCost = isMax ? daysOffCostAnnualMax()! : daysOffCostAnnual();
     const pdVal = isMax ? paidDaysOffValueAnnualMax()! : paidDaysOffValueAnnual();
     const bVal = isMax ? yearlyBonusPLNMax()! : yearlyBonusPLN();
     const benVal = userInput().benefits || 0;
 
+    const appliedPaidDaysOff = isUop || !userInput().onlyUopForPaidDaysOff ? pdVal : 0;
+    const appliedBonus = isUop || !userInput().onlyUopForYearlyBonus ? bVal : 0;
+
     return {
       monthly:
         net.monthly -
         dCost / MONTHS_PER_YEAR +
-        pdVal / MONTHS_PER_YEAR +
-        bVal / MONTHS_PER_YEAR +
+        appliedPaidDaysOff / MONTHS_PER_YEAR +
+        appliedBonus / MONTHS_PER_YEAR +
         benVal / MONTHS_PER_YEAR,
-      yearly: net.yearly - dCost + pdVal + bVal + benVal,
+      yearly: net.yearly - dCost + appliedPaidDaysOff + appliedBonus + benVal,
     };
   };
 
-  const totalFlat12 = () => calculateTotal(flatTax12(), false);
-  const totalLinear19 = () => calculateTotal(linearTax19(), false);
-  const totalUop = () => calculateTotal(employmentContract(), false);
+  const totalFlat12 = () => calculateTotal(flatTax12(), false, false);
+  const totalLinear19 = () => calculateTotal(linearTax19(), false, false);
+  const totalUop = () => calculateTotal(employmentContract(), false, true);
 
-  const totalFlat12Max = () => (hasMax() ? calculateTotal(flatTax12Max()!, true) : null);
-  const totalLinear19Max = () => (hasMax() ? calculateTotal(linearTax19Max()!, true) : null);
-  const totalUopMax = () => (hasMax() ? calculateTotal(employmentContractMax()!, true) : null);
+  const totalFlat12Max = () => (hasMax() ? calculateTotal(flatTax12Max()!, true, false) : null);
+  const totalLinear19Max = () => (hasMax() ? calculateTotal(linearTax19Max()!, true, false) : null);
+  const totalUopMax = () => (hasMax() ? calculateTotal(employmentContractMax()!, true, true) : null);
 
   const renderTotalGrey = (minVal: number, maxVal: number | undefined | null) => {
     if (minVal === undefined) return null;
