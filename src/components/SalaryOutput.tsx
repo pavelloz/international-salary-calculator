@@ -1,6 +1,6 @@
 import { Show } from "solid-js";
 import { useHydratedStore } from "../lib/useHydratedStore";
-import { convertToAllPeriods, deductDaysOff } from "../lib/calculateDaysOff";
+import { deductDaysOff } from "../lib/calculateDaysOff";
 import { calculateSalaries, formatSalary, formatCompactSalary } from "../lib/calculateSalaries";
 import { MONTHS_PER_YEAR, WORKING_DAYS_PER_YEAR } from "../lib/constants";
 import { calculateFlatTax12, calculateLineartax19, calculateEmploymentContract } from "../lib/calculateTaxes";
@@ -21,14 +21,8 @@ export default function SalaryOutput() {
   const yearlyBonusPLN = () => (salaries().yearly * (userInput().yearlyBonus || 0)) / 100;
   const yearlyBonusPLNMax = () => (hasMax() ? (salariesMax()!.yearly * (userInput().yearlyBonus || 0)) / 100 : null);
 
-  // Apply days off deduction to the annual salary
-  const grossReducedAnnual = () => deductDaysOff(salaries().yearly, userInput().daysOff) + yearlyBonusPLN();
-
-  // Convert reduced annual back to all periods
-  const reducedSalaries = () => convertToAllPeriods(grossReducedAnnual());
-
-  const flatTax12 = () => calculateFlatTax12(reducedSalaries().monthly);
-  const linearTax19 = () => calculateLineartax19(reducedSalaries().monthly);
+  const flatTax12 = () => calculateFlatTax12(salaries().monthly);
+  const linearTax19 = () => calculateLineartax19(salaries().monthly);
 
   // Max calculations
   const hasMax = () =>
@@ -39,23 +33,52 @@ export default function SalaryOutput() {
       ? calculateSalaries(userInput().salaryMax!, userInput().period, ratesStore().rates[userInput().currency])
       : null;
 
-  const grossReducedAnnualMax = () =>
-    salariesMax() ? deductDaysOff(salariesMax()!.yearly, userInput().daysOff) + yearlyBonusPLNMax()! : null;
-  const reducedSalariesMax = () =>
-    grossReducedAnnualMax() !== null ? convertToAllPeriods(grossReducedAnnualMax()!) : null;
-
   const daysOffCostAnnual = () => salaries().yearly - deductDaysOff(salaries().yearly, userInput().daysOff);
   const daysOffCostAnnualMax = () =>
     hasMax() ? salariesMax()!.yearly - deductDaysOff(salariesMax()!.yearly, userInput().daysOff) : null;
 
-  const flatTax12Max = () => (reducedSalariesMax() ? calculateFlatTax12(reducedSalariesMax()!.monthly) : null);
-  const linearTax19Max = () => (reducedSalariesMax() ? calculateLineartax19(reducedSalariesMax()!.monthly) : null);
+  const flatTax12Max = () => (salariesMax() ? calculateFlatTax12(salariesMax()!.monthly) : null);
+  const linearTax19Max = () => (salariesMax() ? calculateLineartax19(salariesMax()!.monthly) : null);
   const employmentContract = () => calculateEmploymentContract(salaries().monthly);
   const employmentContractMax = () => (salariesMax() ? calculateEmploymentContract(salariesMax()!.monthly) : null);
 
   const paidDaysOffValueAnnual = () => (salaries().yearly / WORKING_DAYS_PER_YEAR) * (userInput().paidDaysOff || 0);
   const paidDaysOffValueAnnualMax = () =>
     hasMax() ? (salariesMax()!.yearly / WORKING_DAYS_PER_YEAR) * (userInput().paidDaysOff || 0) : null;
+
+  interface PeriodValues {
+    monthly: number;
+    yearly: number;
+  }
+
+  const calculateTotal = (net: PeriodValues, isMax: boolean) => {
+    const dCost = isMax ? daysOffCostAnnualMax()! : daysOffCostAnnual();
+    const pdVal = isMax ? paidDaysOffValueAnnualMax()! : paidDaysOffValueAnnual();
+    const bVal = isMax ? yearlyBonusPLNMax()! : yearlyBonusPLN();
+
+    return {
+      monthly: net.monthly - (dCost / MONTHS_PER_YEAR) + (pdVal / MONTHS_PER_YEAR) + (bVal / MONTHS_PER_YEAR),
+      yearly: net.yearly - dCost + pdVal + bVal,
+    };
+  };
+
+  const totalFlat12 = () => calculateTotal(flatTax12(), false);
+  const totalLinear19 = () => calculateTotal(linearTax19(), false);
+  const totalUop = () => calculateTotal(employmentContract(), false);
+
+  const totalFlat12Max = () => (hasMax() ? calculateTotal(flatTax12Max()!, true) : null);
+  const totalLinear19Max = () => (hasMax() ? calculateTotal(linearTax19Max()!, true) : null);
+  const totalUopMax = () => (hasMax() ? calculateTotal(employmentContractMax()!, true) : null);
+
+  const renderTotalGrey = (minVal: number, maxVal: number | undefined | null) => {
+    if (minVal === undefined) return null;
+    return (
+      <div class="text-xs text-gray-500 mt-1">
+        Total: {formatCompactSalary(minVal)}
+        {maxVal !== null && maxVal !== undefined ? ` - ${formatCompactSalary(maxVal)}` : ""}
+      </div>
+    );
+  };
 
   const renderValue = (minVal: number, maxVal: number | undefined | null, compact?: boolean) => {
     const formatter = compact ? formatCompactSalary : formatSalary;
@@ -95,20 +118,20 @@ export default function SalaryOutput() {
         <tbody>
           <tr class="align-top text-gray-600">
             <td>Gross</td>
-            <td>{renderValue(reducedSalaries().hourly, reducedSalariesMax()?.hourly)}</td>
+            <td>{renderValue(salaries().hourly, salariesMax()?.hourly)}</td>
             <td>
-              {renderValue(reducedSalaries().monthly, reducedSalariesMax()?.monthly, true)}
+              {renderValue(salaries().monthly, salariesMax()?.monthly, true)}
               <span class="hidden md:inline">
-                {renderGold(reducedSalaries().monthly, reducedSalariesMax()?.monthly)}
+                {renderGold(salaries().monthly, salariesMax()?.monthly)}
               </span>
             </td>
             <td>
-              {renderValue(reducedSalaries().yearly, reducedSalariesMax()?.yearly, true)}
-              <span class="hidden md:inline">{renderGold(reducedSalaries().yearly, reducedSalariesMax()?.yearly)}</span>
+              {renderValue(salaries().yearly, salariesMax()?.yearly, true)}
+              <span class="hidden md:inline">{renderGold(salaries().yearly, salariesMax()?.yearly)}</span>
             </td>
           </tr>
           <Show when={userInput().daysOff > 0}>
-            <tr class="align-top text-gray-500">
+            <tr class="align-top text-sm text-gray-500 [&>td]:pb-0 [&>td]:pt-1">
               <td>Days off cost</td>
               <td></td>
               <td>
@@ -132,7 +155,7 @@ export default function SalaryOutput() {
             </tr>
           </Show>
           <Show when={(userInput().paidDaysOff || 0) > 0}>
-            <tr class="align-top text-gray-500">
+            <tr class="align-top text-sm text-gray-500 [&>td]:pb-0 [&>td]:pt-1">
               <td>Paid days off value</td>
               <td></td>
               <td>
@@ -157,7 +180,7 @@ export default function SalaryOutput() {
             </tr>
           </Show>
           <Show when={(userInput().yearlyBonus || 0) > 0}>
-            <tr class="align-top text-gray-500">
+            <tr class="align-top text-sm text-gray-500 [&>td]:pb-1 [&>td]:pt-1">
               <td>Yearly bonus</td>
               <td></td>
               <td>
@@ -182,11 +205,13 @@ export default function SalaryOutput() {
             <td>{renderValue(flatTax12().hourly, flatTax12Max()?.hourly)}</td>
             <td>
               {renderValue(flatTax12().monthly, flatTax12Max()?.monthly, true)}
-              <span class="hidden md:inline">{renderGold(flatTax12().monthly, flatTax12Max()?.monthly)}</span>
+              {renderTotalGrey(totalFlat12().monthly, totalFlat12Max()?.monthly)}
+              <span class="hidden md:inline">{renderGold(totalFlat12().monthly, totalFlat12Max()?.monthly)}</span>
             </td>
             <td>
               {renderValue(flatTax12().yearly, flatTax12Max()?.yearly, true)}
-              <span class="hidden md:inline">{renderGold(flatTax12().yearly, flatTax12Max()?.yearly)}</span>
+              {renderTotalGrey(totalFlat12().yearly, totalFlat12Max()?.yearly)}
+              <span class="hidden md:inline">{renderGold(totalFlat12().yearly, totalFlat12Max()?.yearly)}</span>
             </td>
           </tr>
           <tr class="align-top">
@@ -194,11 +219,13 @@ export default function SalaryOutput() {
             <td>{renderValue(linearTax19().hourly, linearTax19Max()?.hourly)}</td>
             <td>
               {renderValue(linearTax19().monthly, linearTax19Max()?.monthly, true)}
-              <span class="hidden md:inline">{renderGold(linearTax19().monthly, linearTax19Max()?.monthly)}</span>
+              {renderTotalGrey(totalLinear19().monthly, totalLinear19Max()?.monthly)}
+              <span class="hidden md:inline">{renderGold(totalLinear19().monthly, totalLinear19Max()?.monthly)}</span>
             </td>
             <td>
               {renderValue(linearTax19().yearly, linearTax19Max()?.yearly, true)}
-              <span class="hidden md:inline">{renderGold(linearTax19().yearly, linearTax19Max()?.yearly)}</span>
+              {renderTotalGrey(totalLinear19().yearly, totalLinear19Max()?.yearly)}
+              <span class="hidden md:inline">{renderGold(totalLinear19().yearly, totalLinear19Max()?.yearly)}</span>
             </td>
           </tr>
           <tr class="align-top">
@@ -209,14 +236,16 @@ export default function SalaryOutput() {
             <td>{renderValue(employmentContract().hourly, employmentContractMax()?.hourly)}</td>
             <td>
               {renderValue(employmentContract().monthly, employmentContractMax()?.monthly, true)}
+              {renderTotalGrey(totalUop().monthly, totalUopMax()?.monthly)}
               <span class="hidden md:inline">
-                {renderGold(employmentContract().monthly, employmentContractMax()?.monthly)}
+                {renderGold(totalUop().monthly, totalUopMax()?.monthly)}
               </span>
             </td>
             <td>
               {renderValue(employmentContract().yearly, employmentContractMax()?.yearly, true)}
+              {renderTotalGrey(totalUop().yearly, totalUopMax()?.yearly)}
               <span class="hidden md:inline">
-                {renderGold(employmentContract().yearly, employmentContractMax()?.yearly)}
+                {renderGold(totalUop().yearly, totalUopMax()?.yearly)}
               </span>
             </td>
           </tr>

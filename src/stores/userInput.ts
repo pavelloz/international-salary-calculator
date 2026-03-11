@@ -15,6 +15,7 @@ export const defaultUserInput: IUserInput = {
   paidDaysOff: 0,
   yearlyBonus: 0,
   showGold: false,
+  contractType: "all",
 };
 
 export const $userInputStore = persistentMap<IUserInput>(
@@ -35,3 +36,4 @@ export const setDaysOff = (daysOff: number | string) => $userInputStore.setKey("
 export const setPaidDaysOff = (paidDaysOff: number | string) => $userInputStore.setKey("paidDaysOff", v.parse(numeric, paidDaysOff));
 export const setYearlyBonus = (yearlyBonus: number | string) => $userInputStore.setKey("yearlyBonus", v.parse(numeric, yearlyBonus));
 export const setShowGold = (showGold: boolean) => $userInputStore.setKey("showGold", showGold);
+export const setContractType = (contractType: string) => $userInputStore.setKey("contractType", contractType);
