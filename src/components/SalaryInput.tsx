@@ -14,6 +14,7 @@ import {
   setSalaryMax,
   setPaidDaysOff,
   setYearlyBonus,
+  setBenefits,
   setContractType,
   setIsCreative,
 } from "../stores/userInput";
@@ -240,6 +241,23 @@ export default function SalaryInput() {
               const cleanValue = cleanNumericInput(e.currentTarget.value);
               e.currentTarget.value = cleanValue;
               setYearlyBonus(cleanValue);
+            }}
+          />
+        </div>
+
+        <div class="flex flex-col">
+          <label class="text-xs text-gray-500 mb-1" for="benefits">
+            Benefits / year (PLN)
+          </label>
+          <input
+            class="w-32"
+            id="benefits"
+            name="benefits"
+            value={store().benefits ?? 0}
+            onInput={e => {
+              const cleanValue = cleanNumericInput(e.currentTarget.value);
+              e.currentTarget.value = cleanValue;
+              setBenefits(cleanValue);
             }}
           />
         </div>

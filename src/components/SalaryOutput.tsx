@@ -39,7 +39,8 @@ export default function SalaryOutput() {
   const flatTax12Max = () => (salariesMax() ? calculateFlatTax12(salariesMax()!.monthly) : null);
   const linearTax19Max = () => (salariesMax() ? calculateLineartax19(salariesMax()!.monthly) : null);
   const employmentContract = () => calculateEmploymentContract(salaries().monthly, userInput().isCreative || false);
-  const employmentContractMax = () => (salariesMax() ? calculateEmploymentContract(salariesMax()!.monthly, userInput().isCreative || false) : null);
+  const employmentContractMax = () =>
+    salariesMax() ? calculateEmploymentContract(salariesMax()!.monthly, userInput().isCreative || false) : null;
 
   const paidDaysOffValueAnnual = () => (salaries().yearly / WORKING_DAYS_PER_YEAR) * (userInput().paidDaysOff || 0);
   const paidDaysOffValueAnnualMax = () =>
@@ -54,10 +55,16 @@ export default function SalaryOutput() {
     const dCost = isMax ? daysOffCostAnnualMax()! : daysOffCostAnnual();
     const pdVal = isMax ? paidDaysOffValueAnnualMax()! : paidDaysOffValueAnnual();
     const bVal = isMax ? yearlyBonusPLNMax()! : yearlyBonusPLN();
+    const benVal = userInput().benefits || 0;
 
     return {
-      monthly: net.monthly - (dCost / MONTHS_PER_YEAR) + (pdVal / MONTHS_PER_YEAR) + (bVal / MONTHS_PER_YEAR),
-      yearly: net.yearly - dCost + pdVal + bVal,
+      monthly:
+        net.monthly -
+        dCost / MONTHS_PER_YEAR +
+        pdVal / MONTHS_PER_YEAR +
+        bVal / MONTHS_PER_YEAR +
+        benVal / MONTHS_PER_YEAR,
+      yearly: net.yearly - dCost + pdVal + bVal + benVal,
     };
   };
 
@@ -92,8 +99,6 @@ export default function SalaryOutput() {
     return <div>{formatter(minVal)}</div>;
   };
 
-
-
   return (
     <div class="mt-8 p-4 md:p-10 rounded-lg bg-white">
       <h3 class="w-full mt-0 text-xl md:text-2xl">Salary in PLN</h3>
@@ -111,32 +116,28 @@ export default function SalaryOutput() {
           <tr class="align-top text-gray-600">
             <td>Gross</td>
             <td>{renderValue(salaries().hourly, salariesMax()?.hourly)}</td>
-            <td>
-              {renderValue(salaries().monthly, salariesMax()?.monthly, true)}
-            </td>
-            <td>
-              {renderValue(salaries().yearly, salariesMax()?.yearly, true)}
-            </td>
+            <td>{renderValue(salaries().monthly, salariesMax()?.monthly, true)}</td>
+            <td>{renderValue(salaries().yearly, salariesMax()?.yearly, true)}</td>
           </tr>
           <Show when={userInput().daysOff > 0}>
             <tr class="align-top text-sm text-gray-500 [&>td]:pb-0 [&>td]:pt-1">
               <td>Days off cost</td>
               <td></td>
-              <td>
+              <td class="text-red-700">
                 <Show
                   when={hasMax()}
                   fallback={<div>-{formatCompactSalary(daysOffCostAnnual() / MONTHS_PER_YEAR)}</div>}
                 >
                   <div>
-                    -{formatCompactSalary(daysOffCostAnnual() / MONTHS_PER_YEAR)} -{" "}
+                    -{formatCompactSalary(daysOffCostAnnual() / MONTHS_PER_YEAR)} - -
                     {formatCompactSalary(daysOffCostAnnualMax()! / MONTHS_PER_YEAR)}
                   </div>
                 </Show>
               </td>
-              <td>
+              <td class="text-red-700">
                 <Show when={hasMax()} fallback={<div>-{formatCompactSalary(daysOffCostAnnual())}</div>}>
                   <div>
-                    -{formatCompactSalary(daysOffCostAnnual())} - {formatCompactSalary(daysOffCostAnnualMax()!)}
+                    -{formatCompactSalary(daysOffCostAnnual())} - -{formatCompactSalary(daysOffCostAnnualMax()!)}
                   </div>
                 </Show>
               </td>
@@ -146,21 +147,21 @@ export default function SalaryOutput() {
             <tr class="align-top text-sm text-gray-500 [&>td]:pb-0 [&>td]:pt-1">
               <td>Paid days off value</td>
               <td></td>
-              <td>
+              <td class="text-green-700">
                 <Show
                   when={hasMax()}
                   fallback={<div>+{formatCompactSalary(paidDaysOffValueAnnual() / MONTHS_PER_YEAR)}</div>}
                 >
                   <div>
-                    {formatCompactSalary(paidDaysOffValueAnnual() / MONTHS_PER_YEAR)} -{" "}
+                    +{formatCompactSalary(paidDaysOffValueAnnual() / MONTHS_PER_YEAR)} - +
                     {formatCompactSalary(paidDaysOffValueAnnualMax()! / MONTHS_PER_YEAR)}
                   </div>
                 </Show>
               </td>
-              <td>
+              <td class="text-green-700">
                 <Show when={hasMax()} fallback={<div>+{formatCompactSalary(paidDaysOffValueAnnual())}</div>}>
                   <div>
-                    {formatCompactSalary(paidDaysOffValueAnnual())} -{" "}
+                    +{formatCompactSalary(paidDaysOffValueAnnual())} - +
                     {formatCompactSalary(paidDaysOffValueAnnualMax()!)}
                   </div>
                 </Show>
@@ -171,25 +172,54 @@ export default function SalaryOutput() {
             <tr class="align-top text-sm text-gray-500 [&>td]:pb-1 [&>td]:pt-1">
               <td>Yearly bonus</td>
               <td></td>
-              <td>
+              <td class="text-green-700">
                 <Show when={hasMax()} fallback={<div>+{formatCompactSalary(yearlyBonusPLN() / MONTHS_PER_YEAR)}</div>}>
                   <div>
-                    +{formatCompactSalary(yearlyBonusPLN() / MONTHS_PER_YEAR)} -{" "}
+                    +{formatCompactSalary(yearlyBonusPLN() / MONTHS_PER_YEAR)} - +
                     {formatCompactSalary(yearlyBonusPLNMax()! / MONTHS_PER_YEAR)}
                   </div>
                 </Show>
               </td>
-              <td>
+              <td class="text-green-700">
                 <Show when={hasMax()} fallback={<div>+{formatCompactSalary(yearlyBonusPLN())}</div>}>
                   <div>
-                    +{formatCompactSalary(yearlyBonusPLN())} - {formatCompactSalary(yearlyBonusPLNMax()!)}
+                    +{formatCompactSalary(yearlyBonusPLN())} - +{formatCompactSalary(yearlyBonusPLNMax()!)}
                   </div>
                 </Show>
               </td>
             </tr>
           </Show>
-          <Show when={!userInput().contractType || userInput().contractType === "all" || userInput().contractType === "flat"}>
-            <tr class="align-top border-t border-gray-400">
+          <Show when={(userInput().benefits || 0) > 0}>
+            <tr class="align-top text-sm text-gray-500 [&>td]:pb-1 [&>td]:pt-1">
+              <td>Benefits</td>
+              <td></td>
+              <td class="text-green-700">
+                <Show
+                  when={hasMax()}
+                  fallback={<div>+{formatCompactSalary((userInput().benefits || 0) / MONTHS_PER_YEAR)}</div>}
+                >
+                  <div>
+                    +{formatCompactSalary((userInput().benefits || 0) / MONTHS_PER_YEAR)} - +
+                    {formatCompactSalary((userInput().benefits || 0) / MONTHS_PER_YEAR)}
+                  </div>
+                </Show>
+              </td>
+              <td class="text-green-700">
+                <Show when={hasMax()} fallback={<div>+{formatCompactSalary(userInput().benefits || 0)}</div>}>
+                  <div>
+                    +{formatCompactSalary(userInput().benefits || 0)} - +
+                    {formatCompactSalary(userInput().benefits || 0)}
+                  </div>
+                </Show>
+              </td>
+            </tr>
+          </Show>
+          <Show
+            when={
+              !userInput().contractType || userInput().contractType === "all" || userInput().contractType === "flat"
+            }
+          >
+            <tr class="align-top">
               <td>Flat 12%</td>
               <td>{renderValue(flatTax12().hourly, flatTax12Max()?.hourly)}</td>
               <td>
@@ -202,7 +232,11 @@ export default function SalaryOutput() {
               </td>
             </tr>
           </Show>
-          <Show when={!userInput().contractType || userInput().contractType === "all" || userInput().contractType === "linear"}>
+          <Show
+            when={
+              !userInput().contractType || userInput().contractType === "all" || userInput().contractType === "linear"
+            }
+          >
             <tr class="align-top">
               <td>Linear 19%</td>
               <td>{renderValue(linearTax19().hourly, linearTax19Max()?.hourly)}</td>
@@ -216,7 +250,9 @@ export default function SalaryOutput() {
               </td>
             </tr>
           </Show>
-          <Show when={!userInput().contractType || userInput().contractType === "all" || userInput().contractType === "uop"}>
+          <Show
+            when={!userInput().contractType || userInput().contractType === "all" || userInput().contractType === "uop"}
+          >
             <tr class="align-top">
               <td>
                 Employment (UoP)
@@ -235,7 +271,6 @@ export default function SalaryOutput() {
           </Show>
         </tbody>
       </table>
-
     </div>
   );
 }
