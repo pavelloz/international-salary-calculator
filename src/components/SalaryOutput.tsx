@@ -18,8 +18,11 @@ export default function SalaryOutput() {
   const salaries = () =>
     calculateSalaries(userInput().salary, userInput().period, ratesStore().rates[userInput().currency]);
 
+  const yearlyBonusPLN = () => (salaries().yearly * (userInput().yearlyBonus || 0)) / 100;
+  const yearlyBonusPLNMax = () => (hasMax() ? (salariesMax()!.yearly * (userInput().yearlyBonus || 0)) / 100 : null);
+
   // Apply days off deduction to the annual salary
-  const grossReducedAnnual = () => deductDaysOff(salaries().yearly, userInput().daysOff);
+  const grossReducedAnnual = () => deductDaysOff(salaries().yearly, userInput().daysOff) + yearlyBonusPLN();
 
   // Convert reduced annual back to all periods
   const reducedSalaries = () => convertToAllPeriods(grossReducedAnnual());
@@ -37,9 +40,13 @@ export default function SalaryOutput() {
       : null;
 
   const grossReducedAnnualMax = () =>
-    salariesMax() ? deductDaysOff(salariesMax()!.yearly, userInput().daysOff) : null;
+    salariesMax() ? deductDaysOff(salariesMax()!.yearly, userInput().daysOff) + yearlyBonusPLNMax()! : null;
   const reducedSalariesMax = () =>
     grossReducedAnnualMax() !== null ? convertToAllPeriods(grossReducedAnnualMax()!) : null;
+
+  const daysOffCostAnnual = () => salaries().yearly - deductDaysOff(salaries().yearly, userInput().daysOff);
+  const daysOffCostAnnualMax = () =>
+    hasMax() ? salariesMax()!.yearly - deductDaysOff(salariesMax()!.yearly, userInput().daysOff) : null;
 
   const flatTax12Max = () => (reducedSalariesMax() ? calculateFlatTax12(reducedSalariesMax()!.monthly) : null);
   const linearTax19Max = () => (reducedSalariesMax() ? calculateLineartax19(reducedSalariesMax()!.monthly) : null);
@@ -107,22 +114,18 @@ export default function SalaryOutput() {
               <td>
                 <Show
                   when={hasMax()}
-                  fallback={<div>-{formatCompactSalary(salaries().monthly - reducedSalaries().monthly)}</div>}
+                  fallback={<div>-{formatCompactSalary(daysOffCostAnnual() / MONTHS_PER_YEAR)}</div>}
                 >
                   <div>
-                    -{formatCompactSalary(salaries().monthly - reducedSalaries().monthly)} -{" "}
-                    {formatCompactSalary(salariesMax()!.monthly - reducedSalariesMax()!.monthly)}
+                    -{formatCompactSalary(daysOffCostAnnual() / MONTHS_PER_YEAR)} -{" "}
+                    {formatCompactSalary(daysOffCostAnnualMax()! / MONTHS_PER_YEAR)}
                   </div>
                 </Show>
               </td>
               <td>
-                <Show
-                  when={hasMax()}
-                  fallback={<div>-{formatCompactSalary(salaries().yearly - reducedSalaries().yearly)}</div>}
-                >
+                <Show when={hasMax()} fallback={<div>-{formatCompactSalary(daysOffCostAnnual())}</div>}>
                   <div>
-                    -{formatCompactSalary(salaries().yearly - reducedSalaries().yearly)} -{" "}
-                    {formatCompactSalary(salariesMax()!.yearly - reducedSalariesMax()!.yearly)}
+                    -{formatCompactSalary(daysOffCostAnnual())} - {formatCompactSalary(daysOffCostAnnualMax()!)}
                   </div>
                 </Show>
               </td>
@@ -148,6 +151,27 @@ export default function SalaryOutput() {
                   <div>
                     {formatCompactSalary(paidDaysOffValueAnnual())} -{" "}
                     {formatCompactSalary(paidDaysOffValueAnnualMax()!)}
+                  </div>
+                </Show>
+              </td>
+            </tr>
+          </Show>
+          <Show when={(userInput().yearlyBonus || 0) > 0}>
+            <tr class="align-top text-gray-500">
+              <td>Yearly bonus</td>
+              <td></td>
+              <td>
+                <Show when={hasMax()} fallback={<div>+{formatCompactSalary(yearlyBonusPLN() / MONTHS_PER_YEAR)}</div>}>
+                  <div>
+                    +{formatCompactSalary(yearlyBonusPLN() / MONTHS_PER_YEAR)} -{" "}
+                    {formatCompactSalary(yearlyBonusPLNMax()! / MONTHS_PER_YEAR)}
+                  </div>
+                </Show>
+              </td>
+              <td>
+                <Show when={hasMax()} fallback={<div>+{formatCompactSalary(yearlyBonusPLN())}</div>}>
+                  <div>
+                    +{formatCompactSalary(yearlyBonusPLN())} - {formatCompactSalary(yearlyBonusPLNMax()!)}
                   </div>
                 </Show>
               </td>

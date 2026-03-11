@@ -7,6 +7,7 @@ const userInputSchema = v.object({
     period: v.string(),
     daysOff: v.number(),
     paidDaysOff: v.optional(v.number()),
+    yearlyBonus: v.optional(v.number()),
     showGold: v.optional(v.boolean()),
 });
 

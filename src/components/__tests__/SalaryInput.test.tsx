@@ -22,7 +22,7 @@ describe("SalaryInput Component", () => {
     expect(screen.getAllByRole("combobox")[0]).toBeInTheDocument(); // Period
     expect(screen.getAllByRole("combobox")[1]).toBeInTheDocument(); // Currency
 
-    expect(screen.getAllByRole("textbox")).toHaveLength(4); // salary, salaryMax, daysOff, paidDaysOff
+    expect(screen.getAllByRole("textbox")).toHaveLength(5); // salary, salaryMax, daysOff, paidDaysOff, yearlyBonus
   });
 
   test("has correct initial values", () => {
@@ -33,12 +33,14 @@ describe("SalaryInput Component", () => {
     const maxSalaryInput = screen.getAllByRole("textbox")[1];
     const daysOffInput = screen.getByLabelText("Unpaid days off per year");
     const paidDaysOffInput = screen.getByLabelText("Paid days off per year");
+    const yearlyBonusInput = screen.getByLabelText("Yearly bonus (%)");
 
     expect(salaryInput).toHaveValue("30000");
     // store max starts undefined, but effect computes 1.2 * 30000 = 36000
     expect(maxSalaryInput).toHaveValue("36000");
     expect(daysOffInput).toHaveValue("0");
     expect(paidDaysOffInput).toHaveValue("0");
+    expect(yearlyBonusInput).toHaveValue("0");
   });
 
   test("renders all period options", () => {
@@ -47,9 +49,9 @@ describe("SalaryInput Component", () => {
     const periodSelect = screen.getAllByRole("combobox")[0];
     expect(periodSelect).toBeInTheDocument();
 
-    expect(screen.getByText(/hourly/i)).toBeInTheDocument();
-    expect(screen.getByText(/monthly/i)).toBeInTheDocument();
-    expect(screen.getByText(/yearly/i)).toBeInTheDocument();
+    expect(screen.getByRole("option", { name: "Hourly" })).toBeInTheDocument();
+    expect(screen.getByRole("option", { name: "Monthly" })).toBeInTheDocument();
+    expect(screen.getByRole("option", { name: "Yearly" })).toBeInTheDocument();
   });
 
   test("renders all currency options", () => {
@@ -110,7 +112,7 @@ describe("SalaryInput Component", () => {
     });
     render(() => <SalaryInput />);
     // hourly => no max salary
-    expect(screen.getAllByRole("textbox")).toHaveLength(3); // salary, daysOff, paidDaysOff
+    expect(screen.getAllByRole("textbox")).toHaveLength(4); // salary, daysOff, paidDaysOff, yearlyBonus
   });
 
   test("max amount resets to min amount if user inputs a smaller number and blurs", () => {

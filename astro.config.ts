@@ -15,7 +15,6 @@ export default defineConfig({
   integrations: [solidJs()],
   adapter,
   vite: {
-    // @ts-expect-error
     plugins: [tailwindcss()]
   },
   security: {

@@ -13,6 +13,7 @@ import {
   setSalary,
   setSalaryMax,
   setPaidDaysOff,
+  setYearlyBonus,
 } from "../stores/userInput";
 
 export const cleanNumericInput = (val: string) => val.replace(/\D/g, "");
@@ -222,6 +223,26 @@ export default function SalaryInput() {
               setPaidDaysOff(cleanValue);
             }}
           />
+        </div>
+
+        <div class="flex flex-col">
+          <label class="text-xs text-gray-500 mb-1" for="yearlyBonus">
+            Yearly bonus (%)
+          </label>
+          <div class="flex items-center">
+            <input
+              class="w-24"
+              id="yearlyBonus"
+              name="yearlyBonus"
+              value={store().yearlyBonus ?? 0}
+              onInput={e => {
+                const cleanValue = cleanNumericInput(e.currentTarget.value);
+                e.currentTarget.value = cleanValue;
+                setYearlyBonus(cleanValue);
+              }}
+            />
+            <span class="text-gray-500">&nbsp;%</span>
+          </div>
         </div>
       </div>
     </div>
