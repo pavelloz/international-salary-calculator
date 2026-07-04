@@ -1,8 +1,8 @@
-import { Show } from "solid-js";
+import { Show, onMount } from "solid-js";
 import { useHydratedStore } from "../lib/useHydratedStore";
 
 import { $userInputStore } from "../stores/userInput";
-import { $ratesStore } from "../stores/rates";
+import { $ratesStore, fetchRates } from "../stores/rates";
 
 import { defaultUserInput } from "../stores/userInput";
 import { defaultRates } from "../stores/rates";
@@ -10,6 +10,10 @@ import { defaultRates } from "../stores/rates";
 export default function ExchangeRatesList() {
   const userInput = useHydratedStore($userInputStore, defaultUserInput);
   const ratesStore = useHydratedStore($ratesStore, defaultRates);
+
+  onMount(() => {
+    fetchRates();
+  });
 
   const selectedRate = () =>
     ratesStore().rates && userInput().currency ? ratesStore().rates[userInput().currency] : null;

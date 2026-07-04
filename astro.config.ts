@@ -1,9 +1,9 @@
 // @ts-check
-import { defineConfig } from 'astro/config';
+import { defineConfig } from "astro/config";
 import node from "@astrojs/node";
-import solidJs from '@astrojs/solid-js';
-import vercel from '@astrojs/vercel';
-import tailwindcss from '@tailwindcss/vite';
+import solidJs from "@astrojs/solid-js";
+import vercel from "@astrojs/vercel";
+import tailwindcss from "@tailwindcss/vite";
 
 let adapter = vercel();
 
@@ -12,12 +12,13 @@ if (process.argv[3] === "--node" || process.argv[4] === "--node") {
 }
 
 export default defineConfig({
+  output: "static",
   integrations: [solidJs()],
   adapter,
   vite: {
-    plugins: [tailwindcss()]
+    plugins: [tailwindcss()],
   },
   security: {
-    checkOrigin: false
-  }
+    checkOrigin: false,
+  },
 });
