@@ -31,19 +31,13 @@ export default function SalaryInput() {
   // This prevents setting salaryMax from re-triggering effects that watch the whole store object.
   const salary = createMemo<number>(() => store().salary);
   const period = createMemo<string>(() => store().period);
-  const salaryMax = createMemo<number | undefined>(() => store().salaryMax);
+  const salaryMax = createMemo<number>(() => store().salaryMax);
 
   // Set default max salary when period changes to monthly/yearly and max is not set.
   createEffect(
     on(period, p => {
-      if (p === "monthly" || p === "yearly") {
-        if (!untrack(salaryMax) && untrack(salary) > 0) {
-          setSalaryMax(Math.round(untrack(salary) * 1.2));
-        }
-      } else {
-        if (untrack(salaryMax) !== undefined) {
-          setSalaryMax(undefined);
-        }
+      if ((p === "monthly" || p === "yearly") && !untrack(salaryMax) && untrack(salary) > 0) {
+        setSalaryMax(Math.round(untrack(salary) * 1.2));
       }
     })
   );
@@ -76,15 +70,13 @@ export default function SalaryInput() {
               const newSalary = convertSalaryPeriod(store().salary, oldPeriod, newPeriod);
               setSalary(newSalary);
 
-              if (store().salaryMax !== undefined) {
+              if (store().salaryMax > 0) {
                 if (newPeriod === "monthly" || newPeriod === "yearly") {
-                  let newMax = convertSalaryPeriod(store().salaryMax as number, oldPeriod, newPeriod);
+                  let newMax = convertSalaryPeriod(store().salaryMax, oldPeriod, newPeriod);
                   if (newMax < newSalary) {
                     newMax = newSalary;
                   }
                   setSalaryMax(newMax);
-                } else {
-                  setSalaryMax(undefined);
                 }
               } else if (newPeriod === "monthly" || newPeriod === "yearly") {
                 // Auto-guess if it was undefined but we are entering a range-enabled period
@@ -115,11 +107,11 @@ export default function SalaryInput() {
           onInput={e => {
             const cleanValue = cleanNumericInput(e.currentTarget.value);
             e.currentTarget.value = cleanValue;
-            setSalary(cleanValue);
+            setSalary(Number(cleanValue));
           }}
           onBlur={() => {
             const currentMax = store().salaryMax;
-            if (currentMax !== undefined && currentMax < store().salary) {
+            if (currentMax > 0 && currentMax < store().salary) {
               setSalaryMax(store().salary);
             }
           }}
@@ -139,12 +131,12 @@ export default function SalaryInput() {
             onInput={e => {
               const cleanValue = cleanNumericInput(e.currentTarget.value);
               e.currentTarget.value = cleanValue;
-              setSalaryMax(cleanValue === "" ? undefined : cleanValue);
+              setSalaryMax(cleanValue === "" ? 0 : Number(cleanValue));
             }}
             onBlur={() => {
               const currentMax = store().salaryMax;
               // Only snap back to min salary if max is explicitly defined and less than min salary
-              if (currentMax !== undefined && currentMax < store().salary) {
+              if (currentMax > 0 && currentMax < store().salary) {
                 setSalaryMax(store().salary);
               }
             }}
@@ -172,9 +164,8 @@ export default function SalaryInput() {
               const newSalary = convertSalaryCurrency(store().salary, oldRate, newRate);
               setSalary(newSalary);
 
-              if (store().salaryMax !== undefined) {
-                // we know store().salaryMax is not undefined here
-                let newMax = convertSalaryCurrency(store().salaryMax as number, oldRate, newRate);
+              if (store().salaryMax > 0) {
+                let newMax = convertSalaryCurrency(store().salaryMax, oldRate, newRate);
                 if (newMax < newSalary) {
                   newMax = newSalary;
                 }
@@ -208,7 +199,7 @@ export default function SalaryInput() {
             onInput={e => {
               const cleanValue = cleanNumericInput(e.currentTarget.value);
               e.currentTarget.value = cleanValue;
-              setDaysOff(cleanValue);
+              setDaysOff(Number(cleanValue));
             }}
           />
         </div>
@@ -225,7 +216,7 @@ export default function SalaryInput() {
             onInput={e => {
               const cleanValue = cleanNumericInput(e.currentTarget.value);
               e.currentTarget.value = cleanValue;
-              setPaidDaysOff(cleanValue);
+              setPaidDaysOff(Number(cleanValue));
             }}
           />
           <div class="flex flex-1 items-center pb-1 mt-2">
@@ -254,7 +245,7 @@ export default function SalaryInput() {
             onInput={e => {
               const cleanValue = cleanNumericInput(e.currentTarget.value);
               e.currentTarget.value = cleanValue;
-              setYearlyBonus(cleanValue);
+              setYearlyBonus(Number(cleanValue));
             }}
           />
           <div class="flex flex-1 items-center pb-1 mt-2">
@@ -283,7 +274,7 @@ export default function SalaryInput() {
             onInput={e => {
               const cleanValue = cleanNumericInput(e.currentTarget.value);
               e.currentTarget.value = cleanValue;
-              setBenefits(cleanValue);
+              setBenefits(Number(cleanValue));
             }}
           />
         </div>

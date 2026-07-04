@@ -105,7 +105,7 @@ describe("SalaryInput Component", () => {
   test("hides max amount when period is hourly", () => {
     $userInputStore.set({
       salary: 100,
-      salaryMax: undefined,
+      salaryMax: 0,
       currency: "pln",
       period: "hourly",
       daysOff: 0,
@@ -232,7 +232,7 @@ describe("SalaryInput Component", () => {
     expect(inputs[1]).toHaveValue("8000");
   });
 
-  test("clears max amount when input is emptied", () => {
+  test("resets max amount to 0 when input is emptied", () => {
     $userInputStore.set({
       ...defaultUserInput,
       salary: 10000,
@@ -246,6 +246,6 @@ describe("SalaryInput Component", () => {
     const maxSalaryInput = screen.getAllByRole("textbox")[1];
     fireEvent.input(maxSalaryInput, { target: { value: "" } });
 
-    expect($userInputStore.get().salaryMax).toBeUndefined();
+    expect($userInputStore.get().salaryMax).toBe(0);
   });
 });
