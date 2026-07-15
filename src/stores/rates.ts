@@ -61,3 +61,9 @@ export async function fetchRates() {
     console.warn("Rates fetch or validation failed, using cached fallback data if available.", e);
   }
 }
+
+// Force persistentMap to load from localStorage during module import
+if (typeof window !== "undefined") {
+  const unsub = $ratesStore.subscribe(() => {});
+  unsub();
+}

@@ -7,6 +7,9 @@ import type { Store } from "nanostores";
  * persistent client-side data (like localStorage) until AFTER hydration
  * has successfully matched the SSR payload.
  *
+ * On the client, reads synchronously from the nanostore (which loads from
+ * localStorage at module-import time) to avoid a post-hydration flicker.
+ *
  * @param store The nanostore to subscribe to
  * @param fallback The default data structure to render during SSR and initial hydration pass
  */
@@ -19,9 +22,6 @@ export function useHydratedStore<T>(store: Store<T>, fallback: T) {
         const realStoreProxy = useStore(store);
 
         // Subscribe our faked signal to mirror the exact nanostore value
-        // (We cast to `any` quickly to extract the wrapped proxy execution because
-        // useStore returns an accessor function wrapper, not direct data).
-        // The effect wrapper guarantees it stays in sync.
         const syncData = () => {
             setData(() => realStoreProxy());
         };

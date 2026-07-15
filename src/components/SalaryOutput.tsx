@@ -104,7 +104,7 @@ export default function SalaryOutput() {
 
   return (
     <div class="mt-8 p-4 md:p-10 rounded-lg bg-white">
-      <h3 class="w-full mt-0 text-xl md:text-2xl">Salary in PLN</h3>
+      <h3 class="w-full mt-0 text-xl md:text-2xl">Salary in {userInput().currency.toUpperCase()}</h3>
 
       <table class="w-full table-auto">
         <thead>

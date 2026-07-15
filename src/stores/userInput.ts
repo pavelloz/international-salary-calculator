@@ -41,3 +41,10 @@ export const setContractType = (contractType: string) => $userInputStore.setKey(
 export const setIsCreative = (isCreative: boolean) => $userInputStore.setKey("isCreative", isCreative);
 export const setOnlyUopForPaidDaysOff = (val: boolean) => $userInputStore.setKey("onlyUopForPaidDaysOff", val);
 export const setOnlyUopForYearlyBonus = (val: boolean) => $userInputStore.setKey("onlyUopForYearlyBonus", val);
+
+// Force persistentMap to load from localStorage during module import
+// (persistentMap's restore() only runs on first subscription)
+if (typeof window !== "undefined") {
+  const unsub = $userInputStore.subscribe(() => {});
+  unsub();
+}
