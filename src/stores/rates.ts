@@ -62,6 +62,7 @@ export async function fetchRates() {
   }
 }
 
+
 // Force persistentMap to load from localStorage during module import
 if (typeof window !== "undefined") {
   const unsub = $ratesStore.subscribe(() => {});

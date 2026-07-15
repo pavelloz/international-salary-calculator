@@ -6,9 +6,17 @@ describe("UserInput Store Validation", () => {
   beforeEach(() => {
     $userInputStore.set({
       salary: 30000,
+      salaryMax: 0,
       currency: "pln",
       period: "monthly",
       daysOff: 0,
+      paidDaysOff: 0,
+      yearlyBonus: 0,
+      benefits: 0,
+      contractType: "all",
+      isCreative: false,
+      onlyUopForPaidDaysOff: false,
+      onlyUopForYearlyBonus: false,
     });
   });
 

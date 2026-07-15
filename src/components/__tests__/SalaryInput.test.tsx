@@ -103,6 +103,7 @@ describe("SalaryInput Component", () => {
 
   test("hides max amount when period is hourly", () => {
     $userInputStore.set({
+      ...defaultUserInput,
       salary: 100,
       salaryMax: 0,
       currency: "pln",
@@ -117,6 +118,7 @@ describe("SalaryInput Component", () => {
 
   test("max amount resets to min amount if user inputs a smaller number and blurs", () => {
     $userInputStore.set({
+      ...defaultUserInput,
       salary: 10000,
       salaryMax: 12000,
       currency: "pln",
