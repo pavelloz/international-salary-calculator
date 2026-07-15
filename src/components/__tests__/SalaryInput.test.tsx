@@ -15,7 +15,6 @@ describe("SalaryInput Component", () => {
   test("renders input fields correctly", () => {
     render(() => <SalaryInput />);
 
-    expect(screen.getByText(/salary in pln/i)).toBeInTheDocument();
     expect(screen.getByText("Unpaid days off / year")).toBeInTheDocument();
     expect(screen.getByText("Paid days off / year")).toBeInTheDocument();
     expect(screen.getAllByRole("combobox")[0]).toBeInTheDocument(); // Period

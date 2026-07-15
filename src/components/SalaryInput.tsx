@@ -54,8 +54,6 @@ export default function SalaryInput() {
 
   return (
     <div class="flex justify-between flex-wrap p-4 md:p-10 gap-x-6 rounded-lg bg-white items-end">
-      <h3 class="w-full text-gray-700 mt-0 text-xl md:text-2xl">Salary in {store().currency.toUpperCase()}</h3>
-
       <div class="flex-1 flex flex-col mt-4">
         <label class="text-xs text-gray-500 mb-1" for="period">
           Period

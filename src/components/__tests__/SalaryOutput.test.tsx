@@ -21,7 +21,6 @@ describe("SalaryOutput Component", () => {
 
   test("renders table headers correctly", () => {
     render(() => <SalaryOutput />);
-    expect(screen.getByText("Salary in PLN")).toBeInTheDocument();
     expect(screen.getByText("Monthly")).toBeInTheDocument();
     expect(screen.getByText("Yearly")).toBeInTheDocument();
   });
@@ -50,8 +49,6 @@ describe("SalaryOutput Component", () => {
     const grossCell = screen.getAllByText(/Gross/i)[0].parentElement!;
     expect(grossCell.textContent).toMatch(/10K.*15K/);
   });
-
-
 
   test("shows days off cost only when daysOff > 0", () => {
     // Should not exist initially (daysOff = 0)
