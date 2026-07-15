@@ -1,10 +1,12 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-echo "🔍 Running type check..."
-bun run check 2>&1
+echo "🔍 Running type check and tests in parallel..."
 
-echo "🧪 Running tests..."
-bun run test 2>&1
+bunx concurrently \
+  --names "check,test" \
+  --prefix-colors "cyan,green" \
+  "bun run check" \
+  "bun run test"
 
 echo "✅ All checks passed!"
